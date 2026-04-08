@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package therapist;
+
+option go_package = "therapist/pkg/proto/therapistpb;therapistpb";
+
+// ─────────────────────────────────────────────
+// Service
+// ─────────────────────────────────────────────
+
+service TherapistService {
+  // Called after Supabase auth. Upserts the therapist and returns their state.
+  rpc AuthCallback (AuthCallbackRequest) returns (AuthCallbackResponse);
+
+  // Returns the current state for an already-authenticated therapist.
+  rpc GetStatus (GetStatusRequest) returns (GetStatusResponse);
+
+  // Saves the full onboarding form (sets status = pending).
+  rpc CompleteOnboarding (CompleteOnboardingRequest) returns (CompleteOnboardingResponse);
+
+  // Admin: approve a therapist (generates referral ID, sets status = verified).
+  rpc ApproveTherapist (ApproveTherapistRequest) returns (ApproveTherapistResponse);
+
+  // Admin: reject a therapist with an optional reason.
+  rpc RejectTherapist (RejectTherapistRequest) returns (RejectTherapistResponse);
+}
+
+// ─────────────────────────────────────────────
+// AuthCallback
+// ─────────────────────────────────────────────
+
+message AuthCallbackRequest {
+  string supabase_token = 1;
+}
+
+message AuthCallbackResponse {
+  string therapist_id          = 1;
+  // "needs_onboarding" | "pending" | "verified" | "rejected"
+  string status                = 2;
+  bool   onboarding_completed  = 3;
+  string referral_id           = 4;
+  string rejection_reason      = 5;
+}
+
+// ─────────────────────────────────────────────
+// GetStatus
+// ─────────────────────────────────────────────
+
+message GetStatusRequest {
+  string supabase_token = 1;
+}
+
+message GetStatusResponse {
+  string therapist_id          = 1;
+  string status                = 2;
+  bool   onboarding_completed  = 3;
+  string referral_id           = 4;
+  string rejection_reason      = 5;
+}
+
+// ─────────────────────────────────────────────
+// CompleteOnboarding
+// ─────────────────────────────────────────────
+
+message CompleteOnboardingRequest {
+  string            therapist_id        = 1;
+
+  // Required
+  string            full_name           = 2;
+  repeated string   languages_spoken    = 3;
+  repeated string   specializations     = 4;
+  int32             years_of_experience = 5;
+  string            session_fee         = 6; // decimal string e.g. "1500.00"
+  repeated string   session_types       = 7; // "chat" | "audio" | "video"
+  string            degree_certificate  = 8;
+  string            registration_number = 9;
+  string            issuing_body        = 10;
+
+  // Optional
+  string            gender              = 11;
+  string            bio                 = 12;
+  string            profile_photo       = 13;
+  string            phone_number        = 14;
+  string            government_id       = 15;
+}
+
+message CompleteOnboardingResponse {
+  bool success = 1;
+}
+
+// ─────────────────────────────────────────────
+// Admin: Approve / Reject
+// ─────────────────────────────────────────────
+
+message ApproveTherapistRequest {
+  string therapist_id = 1;
+}
+
+message ApproveTherapistResponse {
+  string referral_id = 1;
+}
+
+message RejectTherapistRequest {
+  string therapist_id = 1;
+  string reason       = 2;
+}
+
+message RejectTherapistResponse {
+  bool success = 1;
+}

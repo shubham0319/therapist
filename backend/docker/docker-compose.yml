@@ -1,0 +1,62 @@
+version: '3.9'
+
+services:
+  highcollege_service:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    volumes:
+      - ../pkg:/usr/src/app/pkg
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      eredis:
+        condition: service_started
+    environment:
+      DATABASE_URL: "postgres://root:admin@db:5432/influmart_db?sslmode=disable"
+      REDIS_HOST: "eredis"
+      REDIS_PORT: "6379"
+      REDIS_USERNAME: "default"
+      REDIS_PASSWORD: "admin"
+    networks:
+      - influmart-net
+    restart: always
+
+  db:
+    image: postgres:14
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: influmart_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - influmart-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d influmart_db -U root"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  eredis:
+    image: redis:7
+    container_name: eredis
+    command: redis-server --requirepass admin
+    ports:
+      - "6379:6379"
+    networks:
+      - influmart-net
+    restart: always
+
+volumes:
+  postgres_data:
+
+networks:
+  influmart-net:
+    driver: bridge

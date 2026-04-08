@@ -1,0 +1,64 @@
+name: therapist
+description: Therapist platform mobile app.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ── State Management ───────────────────────────────────────────────────────
+  flutter_bloc: ^9.1.1        # BLoC pattern
+  equatable: ^2.0.7           # Value equality for BLoC states/events
+
+  # ── Navigation ─────────────────────────────────────────────────────────────
+  go_router: ^14.8.1          # Declarative routing
+
+  # ── Dependency Injection ───────────────────────────────────────────────────
+  get_it: ^8.0.3              # Service locator
+
+  # ── Network / gRPC ─────────────────────────────────────────────────────────
+  grpc: ^4.0.2                # gRPC client (connects to backend)
+  protobuf: ^3.1.0            # Protobuf runtime
+
+  # ── Supabase Auth ──────────────────────────────────────────────────────────
+  supabase_flutter: ^2.9.1    # Auth (Google OAuth, Email OTP, Phone OTP)
+
+  # ── Storage ────────────────────────────────────────────────────────────────
+  flutter_secure_storage: ^9.2.4   # Secure token storage (Keychain / Keystore)
+  shared_preferences: ^2.5.3       # Lightweight key-value store
+
+  # ── UI ─────────────────────────────────────────────────────────────────────
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1        # Typography
+  cached_network_image: ^3.4.1
+  shimmer: ^3.0.0             # Loading skeletons
+  flutter_svg: ^2.0.17
+
+  # ── Utilities ──────────────────────────────────────────────────────────────
+  freezed_annotation: ^2.4.4  # Immutable data classes
+  json_annotation: ^4.9.0     # JSON serialisation
+  intl: ^0.20.2               # Internationalisation / date formatting
+  logger: ^2.5.0              # Structured logging
+  dio: ^5.8.0+1               # HTTP client (for REST / file uploads)
+  connectivity_plus: ^6.1.4   # Network connectivity checks
+  image_picker: ^1.1.2        # Profile photo / document upload
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.15       # Code generation
+  freezed: ^2.5.7             # Generates immutable classes
+  json_serializable: ^6.9.4   # Generates fromJson/toJson
+  mocktail: ^1.0.4            # Mocking in tests
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/env/
