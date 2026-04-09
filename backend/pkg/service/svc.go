@@ -8,17 +8,19 @@ import (
 )
 
 type Service struct {
-	db    dbHelper
-	cache cacheHelper
-	cfg   *config.App
-	log   *zap.Logger
+	db      dbHelper
+	cache   cacheHelper
+	storage storageHelper
+	cfg     *config.App
+	log     *zap.Logger
 }
 
-func New(db dbHelper, cache cacheHelper, cfg *config.App) *Service {
+func New(db dbHelper, cache cacheHelper, storage storageHelper, cfg *config.App) *Service {
 	return &Service{
-		db:    db,
-		cache: cache,
-		cfg:   cfg,
-		log:   logger.Named("service"),
+		db:      db,
+		cache:   cache,
+		storage: storage,
+		cfg:     cfg,
+		log:     logger.Named("service"),
 	}
 }

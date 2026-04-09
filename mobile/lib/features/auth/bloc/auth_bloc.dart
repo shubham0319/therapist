@@ -11,7 +11,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthStarted>(_onStarted);
     on<AuthGoogleSignInRequested>(_onGoogleSignIn);
     on<AuthEmailOtpRequested>(_onEmailOtp);
-    on<AuthPhoneOtpRequested>(_onPhoneOtp);
     on<AuthOtpVerified>(_onOtpVerified);
     on<AuthSignOutRequested>(_onSignOut);
   }
@@ -50,16 +49,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthError(failure.message)),
       (_) => emit(AuthOtpSent(contact: event.email)),
-    );
-  }
-
-  Future<void> _onPhoneOtp(
-      AuthPhoneOtpRequested event, Emitter<AuthState> emit) async {
-    emit(const AuthLoading());
-    final result = await _repo.sendPhoneOtp(event.phone);
-    result.fold(
-      (failure) => emit(AuthError(failure.message)),
-      (_) => emit(AuthOtpSent(contact: event.phone)),
     );
   }
 

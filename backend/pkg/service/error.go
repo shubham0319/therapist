@@ -43,9 +43,11 @@ var (
 	ErrBadGateway     = errors.New("bad gateway or upstream error")
 
 	// File / IO
-	ErrFileNotFound = errors.New("file not found")
-	ErrFileRead     = errors.New("error reading file")
-	ErrFileWrite    = errors.New("error writing file")
+	ErrFileNotFound  = errors.New("file not found")
+	ErrFileRead      = errors.New("error reading file")
+	ErrFileWrite     = errors.New("error writing file")
+	ErrFileTooLarge  = errors.New("file exceeds 3 MB limit")
+	ErrFileTypeInvalid = errors.New("unsupported file type")
 
 	// Rate limiting / Throttling
 	ErrRateLimitExceeded = errors.New("rate limit exceeded")

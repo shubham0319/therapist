@@ -18,14 +18,15 @@ type Postgres struct {
 }
 type RedisConfig struct {
 	ConnectionString string `required:"true" split_words:"true"`
-	Username         string `required:"true" split_words:"true"`
-	Password         string `required:"true" split_words:"true"`
+	Username         string `split_words:"true"`
+	Password         string `split_words:"true"`
 }
 type Redis struct {
 	RedisConfig RedisConfig
 }
 type WebServer struct {
-	GrpcPort int `required:"true" split_words:"true"`
+	GrpcPort    int `required:"true" split_words:"true"`
+	GrpcWebPort int `required:"true" split_words:"true"` // gRPC-web for browser clients
 }
 
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Primary filled button used across the app.
+enum _AppButtonStyle { filled, outlined }
+
 class AppButton extends StatelessWidget {
   const AppButton({
     super.key,
@@ -8,23 +9,21 @@ class AppButton extends StatelessWidget {
     this.onPressed,
     this.loading = false,
     this.icon,
-  });
+  }) : _style = _AppButtonStyle.filled;
 
-  /// Outlined variant — for secondary actions like Google sign-in.
   const AppButton.outlined({
     super.key,
     required this.label,
     this.onPressed,
     this.loading = false,
     this.icon,
-  }) : _outlined = true;
+  }) : _style = _AppButtonStyle.outlined;
 
   final String label;
   final VoidCallback? onPressed;
   final bool loading;
   final IconData? icon;
-  // ignore: prefer_final_fields
-  bool _outlined = false;
+  final _AppButtonStyle _style;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +41,7 @@ class AppButton extends StatelessWidget {
             ],
           );
 
-    if (_outlined) {
+    if (_style == _AppButtonStyle.outlined) {
       return OutlinedButton(
         onPressed: loading ? null : onPressed,
         child: child,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:therapist/core/theme/app_theme.dart';
 import 'package:therapist/features/auth/bloc/auth_bloc.dart';
-import 'package:therapist/shared/widgets/app_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

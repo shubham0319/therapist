@@ -7,13 +7,15 @@ import (
 	caching "therapist/pkg/repo/cache"
 	"therapist/pkg/repo/db"
 	"therapist/pkg/service"
+	"therapist/pkg/storage"
 
 	"go.uber.org/zap"
 )
 
 type server struct {
-	grpc Booter
-	log  *zap.Logger
+	grpc        Booter
+	grpcWebPort int
+	log         *zap.Logger
 }
 
 func NewServer(ctx context.Context, appCfg *config.App) (*server, error) {
@@ -33,12 +35,14 @@ func NewServer(ctx context.Context, appCfg *config.App) (*server, error) {
 		return nil, err
 	}
 
-	svc := service.New(dbInstance, cache, appCfg)
+	store := storage.New(logger.Named("storage"))
+	svc := service.New(dbInstance, cache, store, appCfg)
 	log.Info("service layer ready")
 
 	return &server{
-		grpc: NewGRPCServer(appCfg.WebServer, svc),
-		log:  log,
+		grpc:        NewGRPCServer(appCfg.WebServer, svc),
+		grpcWebPort: appCfg.WebServer.GrpcWebPort,
+		log:         log,
 	}, nil
 }
 
@@ -48,8 +52,30 @@ func (s *server) Initialize(ctx context.Context) error {
 }
 
 func (s *server) Run(ctx context.Context) error {
-	s.log.Info("starting gRPC server")
-	return s.grpc.Run(ctx)
+	s.log.Info("starting gRPC + gRPC-web servers")
+
+	errCh := make(chan error, 2)
+
+	// Native gRPC (port 50051) — for mobile/desktop/server clients
+	go func() {
+		if err := s.grpc.Run(ctx); err != nil {
+			errCh <- err
+		}
+	}()
+
+	// gRPC-web (port 8080) — for Flutter web / browser clients
+	go func() {
+		if err := s.grpc.RunWeb(ctx, s.grpcWebPort); err != nil {
+			errCh <- err
+		}
+	}()
+
+	select {
+	case err := <-errCh:
+		return err
+	case <-ctx.Done():
+		return nil
+	}
 }
 
 func (s *server) Shutdown(ctx context.Context) error {

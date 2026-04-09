@@ -21,8 +21,8 @@ dependencies:
   get_it: ^8.0.3              # Service locator
 
   # ── Network / gRPC ─────────────────────────────────────────────────────────
-  grpc: ^4.0.2                # gRPC client (connects to backend)
-  protobuf: ^3.1.0            # Protobuf runtime
+  grpc: ^5.1.0                # gRPC client (connects to backend)
+  protobuf: ^6.0.0            # Protobuf runtime (matches protoc_plugin 25.x)
 
   # ── Supabase Auth ──────────────────────────────────────────────────────────
   supabase_flutter: ^2.9.1    # Auth (Google OAuth, Email OTP, Phone OTP)
@@ -45,7 +45,8 @@ dependencies:
   logger: ^2.5.0              # Structured logging
   dio: ^5.8.0+1               # HTTP client (for REST / file uploads)
   connectivity_plus: ^6.1.4   # Network connectivity checks
-  image_picker: ^1.1.2        # Profile photo / document upload
+  image_picker: ^1.1.2        # Profile photo picker (camera / gallery)
+  file_picker: ^8.1.7         # PDF / document picker (degree cert, gov ID)
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:therapist/features/auth/presentation/login_page.dart';
 import 'package:therapist/features/home/presentation/home_page.dart';
 import 'package:therapist/features/onboarding/presentation/onboarding_page.dart';
@@ -43,15 +42,8 @@ final appRouter = GoRouter(
   ],
 );
 
-String? _globalRedirect(BuildContext ctx, GoRouterState state) {
-  final session = Supabase.instance.client.auth.currentSession;
-  final isLoggedIn = session != null;
-  final onLoginPage = state.matchedLocation == AppRoutes.login;
-
-  if (!isLoggedIn && !onLoginPage) return AppRoutes.login;
-  if (isLoggedIn && onLoginPage) return AppRoutes.home;
-  return null;
-}
+// TODO: restore Supabase session check when auth is re-enabled
+String? _globalRedirect(BuildContext ctx, GoRouterState state) => null;
 
 CustomTransitionPage<void> _fade(Widget child) => CustomTransitionPage<void>(
       child: child,

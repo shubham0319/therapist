@@ -14,8 +14,12 @@ func grpcError(err error) error {
 		errors.Is(err, service.ErrImportantFieldMissing),
 		errors.Is(err, service.ErrInvalidFormat),
 		errors.Is(err, service.ErrMissingField),
-		errors.Is(err, service.ErrValidationFailed):
+		errors.Is(err, service.ErrValidationFailed),
+		errors.Is(err, service.ErrFileTypeInvalid):
 		return status.Error(codes.InvalidArgument, "invalid or missing arguments")
+
+	case errors.Is(err, service.ErrFileTooLarge):
+		return status.Error(codes.InvalidArgument, "file exceeds 3 MB limit")
 
 	case errors.Is(err, service.ErrNoData),
 		errors.Is(err, service.ErrDBRecordNotFound),

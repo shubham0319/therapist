@@ -23,6 +23,10 @@ service TherapistService {
 
   // Admin: reject a therapist with an optional reason.
   rpc RejectTherapist (RejectTherapistRequest) returns (RejectTherapistResponse);
+
+  // Upload a file (profile photo, degree certificate, government ID).
+  // Returns a URL string. Max 3 MB enforced server-side.
+  rpc UploadFile (UploadFileRequest) returns (UploadFileResponse);
 }
 
 // ─────────────────────────────────────────────
@@ -107,4 +111,19 @@ message RejectTherapistRequest {
 
 message RejectTherapistResponse {
   bool success = 1;
+}
+
+// ─────────────────────────────────────────────
+// UploadFile
+// ─────────────────────────────────────────────
+
+message UploadFileRequest {
+  bytes  data      = 1; // raw file bytes (max 3 MB)
+  string file_name = 2;
+  // "profile_photo" | "degree_certificate" | "government_id"
+  string file_type = 3;
+}
+
+message UploadFileResponse {
+  string url = 1; // storage URL (stub for now)
 }

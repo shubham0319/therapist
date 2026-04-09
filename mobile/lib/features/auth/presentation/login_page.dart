@@ -16,11 +16,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _emailCtrl = TextEditingController();
-  bool _useEmail = true;
+  final _otpCtrl = TextEditingController();
+  bool _otpSent = false;
 
   @override
   void dispose() {
     _emailCtrl.dispose();
+    _otpCtrl.dispose();
     super.dispose();
   }
 
@@ -29,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (ctx, state) {
         if (state is AuthOtpSent) {
-          ctx.push('/otp', extra: state.contact);
+          setState(() => _otpSent = true);
         }
         if (state is AuthAuthenticated) {
           if (state.status == 'needs_onboarding') {
@@ -40,61 +42,126 @@ class _LoginPageState extends State<LoginPage> {
         }
         if (state is AuthError) {
           ScaffoldMessenger.of(ctx).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: AppColors.error),
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: AppColors.error,
+            ),
           );
         }
       },
       child: Scaffold(
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Spacer(),
-                Text('Welcome back',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        )),
+
+                // Header
+                Text(
+                  _otpSent ? 'Check your email' : 'Welcome',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 8),
-                Text('Sign in to continue',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: AppColors.subtle)),
+                Text(
+                  _otpSent
+                      ? 'Enter the 6-digit code sent to ${_emailCtrl.text}'
+                      : 'Sign in with your email to continue',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: AppColors.subtle),
+                ),
                 const SizedBox(height: 40),
 
-                // Google sign-in
-                BlocBuilder<AuthBloc, AuthState>(builder: (ctx, state) {
-                  return AppButton.outlined(
-                    label: 'Continue with Google',
-                    icon: Icons.g_mobiledata,
-                    loading: state is AuthLoading,
-                    onPressed: () =>
-                        ctx.read<AuthBloc>().add(const AuthGoogleSignInRequested()),
-                  );
-                }),
+                if (!_otpSent) ...[
+                  // Google sign-in
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (ctx, state) => AppButton.outlined(
+                      label: 'Continue with Google',
+                      icon: Icons.g_mobiledata,
+                      loading: state is AuthLoading,
+                      onPressed: () =>
+                          ctx.read<AuthBloc>().add(AuthGoogleSignInRequested()),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
 
-                const SizedBox(height: 16),
-                const Divider(),
-                const SizedBox(height: 16),
-
-                // Email OTP
-                AppTextField(
-                  controller: _emailCtrl,
-                  label: 'Email address',
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 16),
-                BlocBuilder<AuthBloc, AuthState>(builder: (ctx, state) {
-                  return AppButton(
-                    label: 'Send OTP',
-                    loading: state is AuthLoading,
-                    onPressed: () => ctx.read<AuthBloc>().add(
-                          AuthEmailOtpRequested(email: _emailCtrl.text.trim()),
+                  // Divider
+                  Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          'or',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: AppColors.subtle),
                         ),
-                  );
-                }),
+                      ),
+                      const Expanded(child: Divider()),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Email field
+                  AppTextField(
+                    controller: _emailCtrl,
+                    label: 'Email address',
+                    keyboardType: TextInputType.emailAddress,
+                    hint: 'you@example.com',
+                  ),
+                  const SizedBox(height: 16),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (ctx, state) => AppButton(
+                      label: 'Send OTP',
+                      loading: state is AuthLoading,
+                      onPressed: () {
+                        final email = _emailCtrl.text.trim();
+                        if (email.isEmpty) return;
+                        ctx.read<AuthBloc>().add(
+                              AuthEmailOtpRequested(email: email),
+                            );
+                      },
+                    ),
+                  ),
+                ] else ...[
+                  // OTP input
+                  AppTextField(
+                    controller: _otpCtrl,
+                    label: '6-digit OTP',
+                    keyboardType: TextInputType.number,
+                    hint: '123456',
+                  ),
+                  const SizedBox(height: 16),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (ctx, state) => AppButton(
+                      label: 'Verify OTP',
+                      loading: state is AuthLoading,
+                      onPressed: () {
+                        ctx.read<AuthBloc>().add(AuthOtpVerified(
+                              contact: _emailCtrl.text.trim(),
+                              otp: _otpCtrl.text.trim(),
+                              isEmail: true,
+                            ));
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextButton(
+                    onPressed: () => setState(() {
+                      _otpSent = false;
+                      _otpCtrl.clear();
+                    }),
+                    child: const Text('Use a different email'),
+                  ),
+                ],
 
                 const Spacer(flex: 2),
               ],

@@ -13,4 +13,5 @@ type therapistService interface {
 	CompleteOnboarding(ctx context.Context, therapistID string, in service.OnboardingInput) error
 	ApproveTherapist(ctx context.Context, therapistID string) error
 	RejectTherapist(ctx context.Context, therapistID, reason string) error
+	UploadFile(ctx context.Context, fileName, fileType string, data []byte) (string, error)
 }

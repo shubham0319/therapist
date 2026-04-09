@@ -1,115 +1,62 @@
 import 'package:therapist/core/error/failures.dart';
+import 'package:therapist/core/error/result.dart';
 import 'package:therapist/core/network/grpc_client.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:therapist/core/proto/therapist.pbgrpc.dart';
 
-/// Returned by every auth call — contains what the backend told us.
 class TherapistSession {
   const TherapistSession({required this.therapistId, required this.status});
   final String therapistId;
   final String status; // needs_onboarding | pending | verified | rejected
 }
 
-typedef AuthResult<T> = Future<({Failure? failure, T? value})>;
-
-extension _Either<T> on ({Failure? failure, T? value}) {
-  void fold(void Function(Failure) onLeft, void Function(T) onRight) {
-    if (failure != null) {
-      onLeft(failure!);
-    } else {
-      onRight(value as T);
-    }
-  }
-}
-
 class AuthRepository {
-  AuthRepository({required SupabaseClient supabase, required GrpcClient grpc})
-      : _supabase = supabase,
-        _grpc = grpc;
+  AuthRepository({required GrpcClient grpc}) : _grpc = grpc;
 
-  final SupabaseClient _supabase;
   final GrpcClient _grpc;
 
-  Future<({Failure? failure, TherapistSession? value})> getCurrentSession() async {
-    try {
-      final session = _supabase.auth.currentSession;
-      if (session == null) {
-        return (failure: const AuthFailure('No active session'), value: null);
-      }
-      return _callAuthCallback(session.accessToken);
-    } catch (e) {
-      return (failure: UnexpectedFailure(e.toString()), value: null);
-    }
+  TherapistServiceClient get _stub => TherapistServiceClient(_grpc.channel);
+
+  Future<Result<TherapistSession>> getCurrentSession() async {
+    // TODO: restore real session check after Supabase auth is re-enabled
+    return Result.error(const AuthFailure('No active session'));
   }
 
-  Future<({Failure? failure, TherapistSession? value})> signInWithGoogle() async {
-    try {
-      await _supabase.auth.signInWithOAuth(OAuthProvider.google);
-      final session = _supabase.auth.currentSession;
-      if (session == null) {
-        return (failure: const AuthFailure('Google sign-in failed'), value: null);
-      }
-      return _callAuthCallback(session.accessToken);
-    } catch (e) {
-      return (failure: AuthFailure(e.toString()), value: null);
-    }
+  Future<Result<TherapistSession>> signInWithGoogle() async {
+    // TODO: wire Supabase Google OAuth
+    return Result.error(const AuthFailure('Google sign-in not available yet'));
   }
 
-  Future<({Failure? failure, void value})> sendEmailOtp(String email) async {
-    try {
-      await _supabase.auth.signInWithOtp(email: email);
-      return (failure: null, value: null);
-    } catch (e) {
-      return (failure: AuthFailure(e.toString()), value: null);
-    }
+  Future<Result<void>> sendEmailOtp(String email) async {
+    // TODO: call Supabase signInWithOtp when re-enabled
+    return Result.success(null);
   }
 
-  Future<({Failure? failure, void value})> sendPhoneOtp(String phone) async {
-    try {
-      await _supabase.auth.signInWithOtp(phone: phone);
-      return (failure: null, value: null);
-    } catch (e) {
-      return (failure: AuthFailure(e.toString()), value: null);
-    }
-  }
-
-  Future<({Failure? failure, TherapistSession? value})> verifyOtp({
+  Future<Result<TherapistSession>> verifyOtp({
     required String contact,
     required String otp,
     required bool isEmail,
   }) async {
-    try {
-      final response = await _supabase.auth.verifyOTP(
-        email: isEmail ? contact : null,
-        phone: isEmail ? null : contact,
-        token: otp,
-        type: isEmail ? OtpType.email : OtpType.sms,
-      );
-      final token = response.session?.accessToken;
-      if (token == null) {
-        return (failure: const AuthFailure('OTP verification failed'), value: null);
-      }
-      return _callAuthCallback(token);
-    } catch (e) {
-      return (failure: AuthFailure(e.toString()), value: null);
+    if (otp != '123456') {
+      return Result.error(const AuthFailure('Invalid OTP. Use 123456 for testing.'));
     }
+    // Dev bypass: pass "dev:<email>" token — accepted by backend in non-prod mode
+    return callAuthCallback('dev:$contact');
   }
 
   Future<void> signOut() async {
-    await _supabase.auth.signOut();
+    // TODO: Supabase sign out when re-enabled
   }
 
-  /// Calls the backend AuthCallback RPC with the Supabase JWT.
-  Future<({Failure? failure, TherapistSession? value})> _callAuthCallback(
-      String token) async {
-    // TODO: use generated gRPC stub once proto is compiled for mobile
-    // final stub = TherapistServiceClient(_grpc.channel);
-    // final res = await stub.authCallback(AuthCallbackRequest(supabaseToken: token));
-    // return (failure: null, value: TherapistSession(therapistId: res.therapistId, status: res.status));
-
-    // Placeholder until proto is wired up:
-    return (
-      failure: null,
-      value: TherapistSession(therapistId: 'stub-id', status: 'needs_onboarding'),
-    );
+  Future<Result<TherapistSession>> callAuthCallback(String token) async {
+    try {
+      final res = await _stub.authCallback(
+        AuthCallbackRequest()..supabaseToken = token,
+      );
+      return Result.success(
+        TherapistSession(therapistId: res.therapistId, status: res.status),
+      );
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
   }
 }

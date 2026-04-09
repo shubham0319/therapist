@@ -648,6 +648,111 @@ func (x *RejectTherapistResponse) GetSuccess() bool {
 	return false
 }
 
+type UploadFileRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Data     []byte                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"` // raw file bytes (max 3 MB)
+	FileName string                 `protobuf:"bytes,2,opt,name=file_name,json=fileName,proto3" json:"file_name,omitempty"`
+	// "profile_photo" | "degree_certificate" | "government_id"
+	FileType      string `protobuf:"bytes,3,opt,name=file_type,json=fileType,proto3" json:"file_type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UploadFileRequest) Reset() {
+	*x = UploadFileRequest{}
+	mi := &file_proto_therapist_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadFileRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadFileRequest) ProtoMessage() {}
+
+func (x *UploadFileRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadFileRequest.ProtoReflect.Descriptor instead.
+func (*UploadFileRequest) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *UploadFileRequest) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *UploadFileRequest) GetFileName() string {
+	if x != nil {
+		return x.FileName
+	}
+	return ""
+}
+
+func (x *UploadFileRequest) GetFileType() string {
+	if x != nil {
+		return x.FileType
+	}
+	return ""
+}
+
+type UploadFileResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"` // storage URL (stub for now)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UploadFileResponse) Reset() {
+	*x = UploadFileResponse{}
+	mi := &file_proto_therapist_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadFileResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadFileResponse) ProtoMessage() {}
+
+func (x *UploadFileResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadFileResponse.ProtoReflect.Descriptor instead.
+func (*UploadFileResponse) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *UploadFileResponse) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
 var File_proto_therapist_proto protoreflect.FileDescriptor
 
 const file_proto_therapist_proto_rawDesc = "" +
@@ -700,13 +805,21 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x16\n" +
 	"\x06reason\x18\x02 \x01(\tR\x06reason\"3\n" +
 	"\x17RejectTherapistResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\xc5\x03\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"a\n" +
+	"\x11UploadFileRequest\x12\x12\n" +
+	"\x04data\x18\x01 \x01(\fR\x04data\x12\x1b\n" +
+	"\tfile_name\x18\x02 \x01(\tR\bfileName\x12\x1b\n" +
+	"\tfile_type\x18\x03 \x01(\tR\bfileType\"&\n" +
+	"\x12UploadFileResponse\x12\x10\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url2\x90\x04\n" +
 	"\x10TherapistService\x12O\n" +
 	"\fAuthCallback\x12\x1e.therapist.AuthCallbackRequest\x1a\x1f.therapist.AuthCallbackResponse\x12F\n" +
 	"\tGetStatus\x12\x1b.therapist.GetStatusRequest\x1a\x1c.therapist.GetStatusResponse\x12a\n" +
 	"\x12CompleteOnboarding\x12$.therapist.CompleteOnboardingRequest\x1a%.therapist.CompleteOnboardingResponse\x12[\n" +
 	"\x10ApproveTherapist\x12\".therapist.ApproveTherapistRequest\x1a#.therapist.ApproveTherapistResponse\x12X\n" +
-	"\x0fRejectTherapist\x12!.therapist.RejectTherapistRequest\x1a\".therapist.RejectTherapistResponseB-Z+therapist/pkg/proto/therapistpb;therapistpbb\x06proto3"
+	"\x0fRejectTherapist\x12!.therapist.RejectTherapistRequest\x1a\".therapist.RejectTherapistResponse\x12I\n" +
+	"\n" +
+	"UploadFile\x12\x1c.therapist.UploadFileRequest\x1a\x1d.therapist.UploadFileResponseB-Z+therapist/pkg/proto/therapistpb;therapistpbb\x06proto3"
 
 var (
 	file_proto_therapist_proto_rawDescOnce sync.Once
@@ -720,7 +833,7 @@ func file_proto_therapist_proto_rawDescGZIP() []byte {
 	return file_proto_therapist_proto_rawDescData
 }
 
-var file_proto_therapist_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_proto_therapist_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_proto_therapist_proto_goTypes = []any{
 	(*AuthCallbackRequest)(nil),        // 0: therapist.AuthCallbackRequest
 	(*AuthCallbackResponse)(nil),       // 1: therapist.AuthCallbackResponse
@@ -732,23 +845,27 @@ var file_proto_therapist_proto_goTypes = []any{
 	(*ApproveTherapistResponse)(nil),   // 7: therapist.ApproveTherapistResponse
 	(*RejectTherapistRequest)(nil),     // 8: therapist.RejectTherapistRequest
 	(*RejectTherapistResponse)(nil),    // 9: therapist.RejectTherapistResponse
+	(*UploadFileRequest)(nil),          // 10: therapist.UploadFileRequest
+	(*UploadFileResponse)(nil),         // 11: therapist.UploadFileResponse
 }
 var file_proto_therapist_proto_depIdxs = []int32{
-	0, // 0: therapist.TherapistService.AuthCallback:input_type -> therapist.AuthCallbackRequest
-	2, // 1: therapist.TherapistService.GetStatus:input_type -> therapist.GetStatusRequest
-	4, // 2: therapist.TherapistService.CompleteOnboarding:input_type -> therapist.CompleteOnboardingRequest
-	6, // 3: therapist.TherapistService.ApproveTherapist:input_type -> therapist.ApproveTherapistRequest
-	8, // 4: therapist.TherapistService.RejectTherapist:input_type -> therapist.RejectTherapistRequest
-	1, // 5: therapist.TherapistService.AuthCallback:output_type -> therapist.AuthCallbackResponse
-	3, // 6: therapist.TherapistService.GetStatus:output_type -> therapist.GetStatusResponse
-	5, // 7: therapist.TherapistService.CompleteOnboarding:output_type -> therapist.CompleteOnboardingResponse
-	7, // 8: therapist.TherapistService.ApproveTherapist:output_type -> therapist.ApproveTherapistResponse
-	9, // 9: therapist.TherapistService.RejectTherapist:output_type -> therapist.RejectTherapistResponse
-	5, // [5:10] is the sub-list for method output_type
-	0, // [0:5] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0,  // 0: therapist.TherapistService.AuthCallback:input_type -> therapist.AuthCallbackRequest
+	2,  // 1: therapist.TherapistService.GetStatus:input_type -> therapist.GetStatusRequest
+	4,  // 2: therapist.TherapistService.CompleteOnboarding:input_type -> therapist.CompleteOnboardingRequest
+	6,  // 3: therapist.TherapistService.ApproveTherapist:input_type -> therapist.ApproveTherapistRequest
+	8,  // 4: therapist.TherapistService.RejectTherapist:input_type -> therapist.RejectTherapistRequest
+	10, // 5: therapist.TherapistService.UploadFile:input_type -> therapist.UploadFileRequest
+	1,  // 6: therapist.TherapistService.AuthCallback:output_type -> therapist.AuthCallbackResponse
+	3,  // 7: therapist.TherapistService.GetStatus:output_type -> therapist.GetStatusResponse
+	5,  // 8: therapist.TherapistService.CompleteOnboarding:output_type -> therapist.CompleteOnboardingResponse
+	7,  // 9: therapist.TherapistService.ApproveTherapist:output_type -> therapist.ApproveTherapistResponse
+	9,  // 10: therapist.TherapistService.RejectTherapist:output_type -> therapist.RejectTherapistResponse
+	11, // 11: therapist.TherapistService.UploadFile:output_type -> therapist.UploadFileResponse
+	6,  // [6:12] is the sub-list for method output_type
+	0,  // [0:6] is the sub-list for method input_type
+	0,  // [0:0] is the sub-list for extension type_name
+	0,  // [0:0] is the sub-list for extension extendee
+	0,  // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_proto_therapist_proto_init() }
@@ -762,7 +879,7 @@ func file_proto_therapist_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_therapist_proto_rawDesc), len(file_proto_therapist_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -24,6 +24,7 @@ const (
 	TherapistService_CompleteOnboarding_FullMethodName = "/therapist.TherapistService/CompleteOnboarding"
 	TherapistService_ApproveTherapist_FullMethodName   = "/therapist.TherapistService/ApproveTherapist"
 	TherapistService_RejectTherapist_FullMethodName    = "/therapist.TherapistService/RejectTherapist"
+	TherapistService_UploadFile_FullMethodName         = "/therapist.TherapistService/UploadFile"
 )
 
 // TherapistServiceClient is the client API for TherapistService service.
@@ -40,6 +41,9 @@ type TherapistServiceClient interface {
 	ApproveTherapist(ctx context.Context, in *ApproveTherapistRequest, opts ...grpc.CallOption) (*ApproveTherapistResponse, error)
 	// Admin: reject a therapist with an optional reason.
 	RejectTherapist(ctx context.Context, in *RejectTherapistRequest, opts ...grpc.CallOption) (*RejectTherapistResponse, error)
+	// Upload a file (profile photo, degree certificate, government ID).
+	// Returns a URL string. Max 3 MB enforced server-side.
+	UploadFile(ctx context.Context, in *UploadFileRequest, opts ...grpc.CallOption) (*UploadFileResponse, error)
 }
 
 type therapistServiceClient struct {
@@ -100,6 +104,16 @@ func (c *therapistServiceClient) RejectTherapist(ctx context.Context, in *Reject
 	return out, nil
 }
 
+func (c *therapistServiceClient) UploadFile(ctx context.Context, in *UploadFileRequest, opts ...grpc.CallOption) (*UploadFileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UploadFileResponse)
+	err := c.cc.Invoke(ctx, TherapistService_UploadFile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TherapistServiceServer is the server API for TherapistService service.
 // All implementations must embed UnimplementedTherapistServiceServer
 // for forward compatibility.
@@ -114,6 +128,9 @@ type TherapistServiceServer interface {
 	ApproveTherapist(context.Context, *ApproveTherapistRequest) (*ApproveTherapistResponse, error)
 	// Admin: reject a therapist with an optional reason.
 	RejectTherapist(context.Context, *RejectTherapistRequest) (*RejectTherapistResponse, error)
+	// Upload a file (profile photo, degree certificate, government ID).
+	// Returns a URL string. Max 3 MB enforced server-side.
+	UploadFile(context.Context, *UploadFileRequest) (*UploadFileResponse, error)
 	mustEmbedUnimplementedTherapistServiceServer()
 }
 
@@ -138,6 +155,9 @@ func (UnimplementedTherapistServiceServer) ApproveTherapist(context.Context, *Ap
 }
 func (UnimplementedTherapistServiceServer) RejectTherapist(context.Context, *RejectTherapistRequest) (*RejectTherapistResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RejectTherapist not implemented")
+}
+func (UnimplementedTherapistServiceServer) UploadFile(context.Context, *UploadFileRequest) (*UploadFileResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UploadFile not implemented")
 }
 func (UnimplementedTherapistServiceServer) mustEmbedUnimplementedTherapistServiceServer() {}
 func (UnimplementedTherapistServiceServer) testEmbeddedByValue()                          {}
@@ -250,6 +270,24 @@ func _TherapistService_RejectTherapist_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TherapistService_UploadFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadFileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).UploadFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_UploadFile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).UploadFile(ctx, req.(*UploadFileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TherapistService_ServiceDesc is the grpc.ServiceDesc for TherapistService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -276,6 +314,10 @@ var TherapistService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RejectTherapist",
 			Handler:    _TherapistService_RejectTherapist_Handler,
+		},
+		{
+			MethodName: "UploadFile",
+			Handler:    _TherapistService_UploadFile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

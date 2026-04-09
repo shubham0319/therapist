@@ -152,6 +152,38 @@ func (h *TherapistHandler) RejectTherapist(ctx context.Context, req *therapistpb
 	return &therapistpb.RejectTherapistResponse{Success: true}, nil
 }
 
+func (h *TherapistHandler) UploadFile(ctx context.Context, req *therapistpb.UploadFileRequest) (*therapistpb.UploadFileResponse, error) {
+	h.log.Debug("UploadFile called",
+		zap.String("file_type", req.FileType),
+		zap.String("file_name", req.FileName),
+		zap.Int("bytes", len(req.Data)),
+	)
+
+	if req.FileName == "" || req.FileType == "" {
+		h.log.Warn("UploadFile: missing file_name or file_type")
+		return nil, status.Error(codes.InvalidArgument, "file_name and file_type are required")
+	}
+	if len(req.Data) == 0 {
+		h.log.Warn("UploadFile: empty file data")
+		return nil, status.Error(codes.InvalidArgument, "file data must not be empty")
+	}
+
+	url, err := h.svc.UploadFile(ctx, req.FileName, req.FileType, req.Data)
+	if err != nil {
+		h.log.Error("UploadFile failed",
+			zap.String("file_type", req.FileType),
+			zap.Error(err),
+		)
+		return nil, grpcError(err)
+	}
+
+	h.log.Info("UploadFile succeeded",
+		zap.String("file_type", req.FileType),
+		zap.String("url", url),
+	)
+	return &therapistpb.UploadFileResponse{Url: url}, nil
+}
+
 func toAuthCallbackResponse(r *service.AuthResult) *therapistpb.AuthCallbackResponse {
 	return &therapistpb.AuthCallbackResponse{
 		TherapistId:         r.TherapistID,

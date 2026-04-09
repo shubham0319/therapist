@@ -4,10 +4,13 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/hex"
+	"errors"
 	"fmt"
+	"strings"
 	"therapist/pkg/auth"
 	"therapist/pkg/repo/db"
 	schema "therapist/pkg/repo/db/schema/gen"
+	"therapist/pkg/storage"
 
 	"github.com/jackc/pgx/v5/pgtype"
 	"go.uber.org/zap"
@@ -43,8 +46,27 @@ type OnboardingInput struct {
 
 // HandleAuthCallback is called after Supabase authenticates the therapist.
 // Upserts the therapist record and returns their current state.
+//
+// Dev bypass: if IsProdEnv=false, tokens prefixed with "dev:" are accepted
+// without JWT verification. The email is taken from the token itself, e.g.
+// "dev:jane@example.com". Never accepted in production.
 func (s *Service) HandleAuthCallback(ctx context.Context, supabaseToken string) (*AuthResult, error) {
 	s.log.Debug("auth callback started")
+
+	// ── Dev bypass ───────────────────────────────────────────────────────────
+	if !s.cfg.IsProdEnv && strings.HasPrefix(supabaseToken, "dev:") {
+		email := strings.TrimPrefix(supabaseToken, "dev:")
+		if email == "" {
+			return nil, ErrBadInput
+		}
+		s.log.Warn("dev auth bypass used — NOT safe for production", zap.String("email", email))
+		t, err := s.db.CreateTherapist(ctx, "dev:"+email, email)
+		if err != nil {
+			s.log.Error("dev auth: failed to upsert therapist", zap.Error(err))
+			return nil, fmt.Errorf("%w: %v", ErrDBQuery, err)
+		}
+		return toAuthResult(t), nil
+	}
 
 	claims, err := auth.VerifySupabaseToken(supabaseToken, s.cfg.SupabaseJWTSecret)
 	if err != nil {
@@ -94,7 +116,18 @@ func (s *Service) GetTherapistStatus(ctx context.Context, supabaseToken string) 
 
 // CompleteOnboarding saves the full onboarding form.
 func (s *Service) CompleteOnboarding(ctx context.Context, therapistID string, in OnboardingInput) error {
-	s.log.Debug("complete onboarding started", zap.String("therapist_id", therapistID))
+	s.log.Debug("complete onboarding started",
+		zap.String("therapist_id", therapistID),
+		zap.String("full_name", in.FullName),
+		zap.Strings("languages", in.LanguagesSpoken),
+		zap.Strings("specializations", in.Specializations),
+		zap.Strings("session_types", in.SessionTypes),
+		zap.Int32("years_exp", in.YearsOfExperience),
+		zap.String("session_fee", in.SessionFee),
+		zap.String("degree_cert", in.DegreeCertificate),
+		zap.String("reg_number", in.RegistrationNumber),
+		zap.String("issuing_body", in.IssuingBody),
+	)
 
 	if err := validateOnboarding(in); err != nil {
 		s.log.Warn("onboarding validation failed",
@@ -204,6 +237,47 @@ func (s *Service) RejectTherapist(ctx context.Context, therapistID, reason strin
 	return nil
 }
 
+// UploadFile validates and stores a file, returning its URL.
+// Accepts raw bytes; size is enforced here (max 3 MB).
+func (s *Service) UploadFile(ctx context.Context, fileName, fileType string, data []byte) (string, error) {
+	s.log.Debug("upload file started",
+		zap.String("file_type", fileType),
+		zap.String("file_name", fileName),
+		zap.Int("bytes", len(data)),
+	)
+
+	if !storage.AllowedFileTypes[fileType] {
+		s.log.Warn("invalid file type", zap.String("file_type", fileType))
+		return "", ErrFileTypeInvalid
+	}
+	if len(data) == 0 {
+		s.log.Warn("empty file upload attempt")
+		return "", ErrBadInput
+	}
+	if len(data) > storage.MaxFileSize {
+		s.log.Warn("file too large",
+			zap.Int("bytes", len(data)),
+			zap.Int("max", storage.MaxFileSize),
+		)
+		return "", ErrFileTooLarge
+	}
+
+	url, err := s.storage.Upload(ctx, fileName, fileType, data)
+	if err != nil {
+		if errors.Is(err, storage.ErrFileTooLarge) {
+			return "", ErrFileTooLarge
+		}
+		s.log.Error("storage upload failed", zap.Error(err))
+		return "", ErrUnexpected
+	}
+
+	s.log.Info("file uploaded successfully",
+		zap.String("file_type", fileType),
+		zap.String("url", url),
+	)
+	return url, nil
+}
+
 // --- internal helpers ---
 
 func toAuthResult(t schema.Therapist) *AuthResult {
@@ -226,16 +300,24 @@ func toAuthResult(t schema.Therapist) *AuthResult {
 
 func validateOnboarding(in OnboardingInput) error {
 	switch {
-	case in.FullName == "",
-		len(in.LanguagesSpoken) == 0,
-		len(in.Specializations) == 0,
-		len(in.SessionTypes) == 0,
-		in.YearsOfExperience < 0,
-		in.SessionFee == "",
-		in.DegreeCertificate == "",
-		in.RegistrationNumber == "",
-		in.IssuingBody == "":
-		return ErrImportantFieldMissing
+	case in.FullName == "":
+		return fmt.Errorf("%w: full_name", ErrImportantFieldMissing)
+	case len(in.LanguagesSpoken) == 0:
+		return fmt.Errorf("%w: languages_spoken", ErrImportantFieldMissing)
+	case len(in.Specializations) == 0:
+		return fmt.Errorf("%w: specializations", ErrImportantFieldMissing)
+	case len(in.SessionTypes) == 0:
+		return fmt.Errorf("%w: session_types", ErrImportantFieldMissing)
+	case in.YearsOfExperience < 0:
+		return fmt.Errorf("%w: years_of_experience must be >= 0", ErrImportantFieldMissing)
+	case in.SessionFee == "":
+		return fmt.Errorf("%w: session_fee", ErrImportantFieldMissing)
+	case in.DegreeCertificate == "":
+		return fmt.Errorf("%w: degree_certificate", ErrImportantFieldMissing)
+	case in.RegistrationNumber == "":
+		return fmt.Errorf("%w: registration_number", ErrImportantFieldMissing)
+	case in.IssuingBody == "":
+		return fmt.Errorf("%w: issuing_body", ErrImportantFieldMissing)
 	}
 	return nil
 }
