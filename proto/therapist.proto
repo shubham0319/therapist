@@ -215,6 +215,7 @@ message Blog {
   string     created_at      = 12;
   string     updated_at      = 13;
   string     published_at    = 14;
+  repeated string tags       = 15; // e.g. ["anxiety","depression","stress"]
 }
 
 // CreateBlog — verified therapists only; creates a draft.
@@ -224,6 +225,7 @@ message CreateBlogRequest {
   string          content         = 3;
   string          cover_image_url = 4;
   repeated string image_urls      = 5;
+  repeated string tags            = 6; // optional topic tags
 }
 message CreateBlogResponse { Blog blog = 1; }
 
@@ -235,6 +237,7 @@ message UpdateBlogRequest {
   string          content         = 4;
   string          cover_image_url = 5;
   repeated string image_urls      = 6;
+  repeated string tags            = 7; // optional topic tags
 }
 message UpdateBlogResponse { Blog blog = 1; }
 

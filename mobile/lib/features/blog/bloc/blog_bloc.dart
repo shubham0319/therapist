@@ -90,6 +90,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
             content: e.content,
             coverImageUrl: e.coverImageUrl,
             imageUrls: e.imageUrls,
+            tags: e.tags,
           )
         : await _repo.createBlog(
             therapistId: e.therapistId,
@@ -97,6 +98,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
             content: e.content,
             coverImageUrl: e.coverImageUrl,
             imageUrls: e.imageUrls,
+            tags: e.tags,
           );
     result.fold(
       (f) => emit(BlogError(f.message)),

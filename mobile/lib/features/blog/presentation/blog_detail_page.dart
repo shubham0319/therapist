@@ -182,6 +182,22 @@ class _BlogDetailPageState extends State<BlogDetailPage> {
                   // Content
                   Text(blog.content, style: theme.textTheme.bodyMedium?.copyWith(height: 1.6)),
 
+                  // Tags
+                  if (blog.tags.isNotEmpty) ...[
+                    const SizedBox(height: 20),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 4,
+                      children: blog.tags.map((t) => Chip(
+                        label: Text(t, style: theme.textTheme.labelSmall),
+                        padding: EdgeInsets.zero,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        backgroundColor: cs.secondaryContainer,
+                        side: BorderSide.none,
+                      )).toList(),
+                    ),
+                  ],
+
                   // Inline images
                   if (blog.imageUrls.isNotEmpty) ...[
                     const SizedBox(height: 24),

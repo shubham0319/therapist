@@ -166,6 +166,7 @@ type Blog struct {
 	CoverImageURL pgtype.Text
 	Content       string
 	ImageURLs     []string
+	Tags          []string
 	Status        BlogStatusEnum
 	Views         int64
 	PublishedAt   pgtype.Timestamptz

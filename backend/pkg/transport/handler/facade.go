@@ -20,8 +20,8 @@ type therapistService interface {
 	Logout(ctx context.Context, refreshToken string) error
 	LogoutAll(ctx context.Context, therapistID pgtype.UUID) error
 	// Blog
-	CreateBlog(ctx context.Context, therapistID, title, content, coverImageURL string, imageURLs []string) (*service.BlogResult, error)
-	UpdateBlog(ctx context.Context, therapistID, blogID, title, content, coverImageURL string, imageURLs []string) (*service.BlogResult, error)
+	CreateBlog(ctx context.Context, therapistID, title, content, coverImageURL string, imageURLs, tags []string) (*service.BlogResult, error)
+	UpdateBlog(ctx context.Context, therapistID, blogID, title, content, coverImageURL string, imageURLs, tags []string) (*service.BlogResult, error)
 	PublishBlog(ctx context.Context, therapistID, blogID string) (*service.BlogResult, error)
 	DeleteBlog(ctx context.Context, therapistID, blogID string) error
 	GetBlog(ctx context.Context, blogID, viewerID string) (*service.BlogResult, error)

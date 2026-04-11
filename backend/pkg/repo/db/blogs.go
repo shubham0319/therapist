@@ -15,7 +15,8 @@ type CreateBlogParams struct {
 	Slug          string
 	CoverImageURL string // empty = NULL
 	Content       string
-	ImageURLs     []string
+	ImageURLs     []string // nil treated as empty
+	Tags          []string // nil treated as empty
 }
 
 // UpdateBlogParams is the application-facing input for updating a draft blog.
@@ -24,7 +25,8 @@ type UpdateBlogParams struct {
 	Title         string
 	CoverImageURL string
 	Content       string
-	ImageURLs     []string
+	ImageURLs     []string // nil treated as empty
+	Tags          []string // nil treated as empty
 }
 
 func (d *DB) CreateBlog(ctx context.Context, p CreateBlogParams) (schema.Blog, error) {
@@ -36,6 +38,7 @@ func (d *DB) CreateBlog(ctx context.Context, p CreateBlogParams) (schema.Blog, e
 		CoverImageURL: nullText(p.CoverImageURL),
 		Content:       p.Content,
 		ImageURLs:     p.ImageURLs,
+		Tags:          p.Tags,
 	})
 	if err != nil {
 		d.log.Error("CreateBlog failed", zap.Error(err))
@@ -64,6 +67,7 @@ func (d *DB) UpdateBlog(ctx context.Context, p UpdateBlogParams) (schema.Blog, e
 		CoverImageURL: nullText(p.CoverImageURL),
 		Content:       p.Content,
 		ImageURLs:     p.ImageURLs,
+		Tags:          p.Tags,
 	})
 	if err != nil {
 		d.log.Error("UpdateBlog failed", zap.Error(err))

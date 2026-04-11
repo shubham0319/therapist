@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v4.24.3
-// source: therapist.proto
+// source: proto/therapist.proto
 
 package therapistpb
 
@@ -54,11 +54,11 @@ func (x BlogStatus) String() string {
 }
 
 func (BlogStatus) Descriptor() protoreflect.EnumDescriptor {
-	return file_therapist_proto_enumTypes[0].Descriptor()
+	return file_proto_therapist_proto_enumTypes[0].Descriptor()
 }
 
 func (BlogStatus) Type() protoreflect.EnumType {
-	return &file_therapist_proto_enumTypes[0]
+	return &file_proto_therapist_proto_enumTypes[0]
 }
 
 func (x BlogStatus) Number() protoreflect.EnumNumber {
@@ -67,7 +67,7 @@ func (x BlogStatus) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use BlogStatus.Descriptor instead.
 func (BlogStatus) EnumDescriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{0}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{0}
 }
 
 type AuthCallbackRequest struct {
@@ -79,7 +79,7 @@ type AuthCallbackRequest struct {
 
 func (x *AuthCallbackRequest) Reset() {
 	*x = AuthCallbackRequest{}
-	mi := &file_therapist_proto_msgTypes[0]
+	mi := &file_proto_therapist_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -91,7 +91,7 @@ func (x *AuthCallbackRequest) String() string {
 func (*AuthCallbackRequest) ProtoMessage() {}
 
 func (x *AuthCallbackRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[0]
+	mi := &file_proto_therapist_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -104,7 +104,7 @@ func (x *AuthCallbackRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthCallbackRequest.ProtoReflect.Descriptor instead.
 func (*AuthCallbackRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{0}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *AuthCallbackRequest) GetSupabaseToken() string {
@@ -132,7 +132,7 @@ type AuthCallbackResponse struct {
 
 func (x *AuthCallbackResponse) Reset() {
 	*x = AuthCallbackResponse{}
-	mi := &file_therapist_proto_msgTypes[1]
+	mi := &file_proto_therapist_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -144,7 +144,7 @@ func (x *AuthCallbackResponse) String() string {
 func (*AuthCallbackResponse) ProtoMessage() {}
 
 func (x *AuthCallbackResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[1]
+	mi := &file_proto_therapist_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -157,7 +157,7 @@ func (x *AuthCallbackResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthCallbackResponse.ProtoReflect.Descriptor instead.
 func (*AuthCallbackResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{1}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *AuthCallbackResponse) GetTherapistId() string {
@@ -225,7 +225,7 @@ type GetStatusRequest struct {
 
 func (x *GetStatusRequest) Reset() {
 	*x = GetStatusRequest{}
-	mi := &file_therapist_proto_msgTypes[2]
+	mi := &file_proto_therapist_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -237,7 +237,7 @@ func (x *GetStatusRequest) String() string {
 func (*GetStatusRequest) ProtoMessage() {}
 
 func (x *GetStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[2]
+	mi := &file_proto_therapist_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -250,7 +250,7 @@ func (x *GetStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetStatusRequest.ProtoReflect.Descriptor instead.
 func (*GetStatusRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{2}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetStatusRequest) GetSupabaseToken() string {
@@ -273,7 +273,7 @@ type GetStatusResponse struct {
 
 func (x *GetStatusResponse) Reset() {
 	*x = GetStatusResponse{}
-	mi := &file_therapist_proto_msgTypes[3]
+	mi := &file_proto_therapist_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -285,7 +285,7 @@ func (x *GetStatusResponse) String() string {
 func (*GetStatusResponse) ProtoMessage() {}
 
 func (x *GetStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[3]
+	mi := &file_proto_therapist_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -298,7 +298,7 @@ func (x *GetStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetStatusResponse.ProtoReflect.Descriptor instead.
 func (*GetStatusResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{3}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetStatusResponse) GetTherapistId() string {
@@ -366,7 +366,7 @@ type CompleteOnboardingRequest struct {
 
 func (x *CompleteOnboardingRequest) Reset() {
 	*x = CompleteOnboardingRequest{}
-	mi := &file_therapist_proto_msgTypes[4]
+	mi := &file_proto_therapist_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -378,7 +378,7 @@ func (x *CompleteOnboardingRequest) String() string {
 func (*CompleteOnboardingRequest) ProtoMessage() {}
 
 func (x *CompleteOnboardingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[4]
+	mi := &file_proto_therapist_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -391,7 +391,7 @@ func (x *CompleteOnboardingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CompleteOnboardingRequest.ProtoReflect.Descriptor instead.
 func (*CompleteOnboardingRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{4}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CompleteOnboardingRequest) GetTherapistId() string {
@@ -536,7 +536,7 @@ type CompleteOnboardingResponse struct {
 
 func (x *CompleteOnboardingResponse) Reset() {
 	*x = CompleteOnboardingResponse{}
-	mi := &file_therapist_proto_msgTypes[5]
+	mi := &file_proto_therapist_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -548,7 +548,7 @@ func (x *CompleteOnboardingResponse) String() string {
 func (*CompleteOnboardingResponse) ProtoMessage() {}
 
 func (x *CompleteOnboardingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[5]
+	mi := &file_proto_therapist_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -561,7 +561,7 @@ func (x *CompleteOnboardingResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CompleteOnboardingResponse.ProtoReflect.Descriptor instead.
 func (*CompleteOnboardingResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{5}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *CompleteOnboardingResponse) GetSuccess() bool {
@@ -580,7 +580,7 @@ type ApproveTherapistRequest struct {
 
 func (x *ApproveTherapistRequest) Reset() {
 	*x = ApproveTherapistRequest{}
-	mi := &file_therapist_proto_msgTypes[6]
+	mi := &file_proto_therapist_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -592,7 +592,7 @@ func (x *ApproveTherapistRequest) String() string {
 func (*ApproveTherapistRequest) ProtoMessage() {}
 
 func (x *ApproveTherapistRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[6]
+	mi := &file_proto_therapist_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -605,7 +605,7 @@ func (x *ApproveTherapistRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApproveTherapistRequest.ProtoReflect.Descriptor instead.
 func (*ApproveTherapistRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{6}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ApproveTherapistRequest) GetTherapistId() string {
@@ -624,7 +624,7 @@ type ApproveTherapistResponse struct {
 
 func (x *ApproveTherapistResponse) Reset() {
 	*x = ApproveTherapistResponse{}
-	mi := &file_therapist_proto_msgTypes[7]
+	mi := &file_proto_therapist_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -636,7 +636,7 @@ func (x *ApproveTherapistResponse) String() string {
 func (*ApproveTherapistResponse) ProtoMessage() {}
 
 func (x *ApproveTherapistResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[7]
+	mi := &file_proto_therapist_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -649,7 +649,7 @@ func (x *ApproveTherapistResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApproveTherapistResponse.ProtoReflect.Descriptor instead.
 func (*ApproveTherapistResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{7}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ApproveTherapistResponse) GetReferralId() string {
@@ -669,7 +669,7 @@ type RejectTherapistRequest struct {
 
 func (x *RejectTherapistRequest) Reset() {
 	*x = RejectTherapistRequest{}
-	mi := &file_therapist_proto_msgTypes[8]
+	mi := &file_proto_therapist_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -681,7 +681,7 @@ func (x *RejectTherapistRequest) String() string {
 func (*RejectTherapistRequest) ProtoMessage() {}
 
 func (x *RejectTherapistRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[8]
+	mi := &file_proto_therapist_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -694,7 +694,7 @@ func (x *RejectTherapistRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RejectTherapistRequest.ProtoReflect.Descriptor instead.
 func (*RejectTherapistRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{8}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *RejectTherapistRequest) GetTherapistId() string {
@@ -720,7 +720,7 @@ type RejectTherapistResponse struct {
 
 func (x *RejectTherapistResponse) Reset() {
 	*x = RejectTherapistResponse{}
-	mi := &file_therapist_proto_msgTypes[9]
+	mi := &file_proto_therapist_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -732,7 +732,7 @@ func (x *RejectTherapistResponse) String() string {
 func (*RejectTherapistResponse) ProtoMessage() {}
 
 func (x *RejectTherapistResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[9]
+	mi := &file_proto_therapist_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -745,7 +745,7 @@ func (x *RejectTherapistResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RejectTherapistResponse.ProtoReflect.Descriptor instead.
 func (*RejectTherapistResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{9}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *RejectTherapistResponse) GetSuccess() bool {
@@ -767,7 +767,7 @@ type UploadFileRequest struct {
 
 func (x *UploadFileRequest) Reset() {
 	*x = UploadFileRequest{}
-	mi := &file_therapist_proto_msgTypes[10]
+	mi := &file_proto_therapist_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -779,7 +779,7 @@ func (x *UploadFileRequest) String() string {
 func (*UploadFileRequest) ProtoMessage() {}
 
 func (x *UploadFileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[10]
+	mi := &file_proto_therapist_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -792,7 +792,7 @@ func (x *UploadFileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadFileRequest.ProtoReflect.Descriptor instead.
 func (*UploadFileRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{10}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UploadFileRequest) GetData() []byte {
@@ -825,7 +825,7 @@ type UploadFileResponse struct {
 
 func (x *UploadFileResponse) Reset() {
 	*x = UploadFileResponse{}
-	mi := &file_therapist_proto_msgTypes[11]
+	mi := &file_proto_therapist_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -837,7 +837,7 @@ func (x *UploadFileResponse) String() string {
 func (*UploadFileResponse) ProtoMessage() {}
 
 func (x *UploadFileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[11]
+	mi := &file_proto_therapist_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -850,7 +850,7 @@ func (x *UploadFileResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadFileResponse.ProtoReflect.Descriptor instead.
 func (*UploadFileResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{11}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UploadFileResponse) GetUrl() string {
@@ -869,7 +869,7 @@ type RefreshSessionRequest struct {
 
 func (x *RefreshSessionRequest) Reset() {
 	*x = RefreshSessionRequest{}
-	mi := &file_therapist_proto_msgTypes[12]
+	mi := &file_proto_therapist_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -881,7 +881,7 @@ func (x *RefreshSessionRequest) String() string {
 func (*RefreshSessionRequest) ProtoMessage() {}
 
 func (x *RefreshSessionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[12]
+	mi := &file_proto_therapist_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -894,7 +894,7 @@ func (x *RefreshSessionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefreshSessionRequest.ProtoReflect.Descriptor instead.
 func (*RefreshSessionRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{12}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *RefreshSessionRequest) GetRefreshToken() string {
@@ -917,7 +917,7 @@ type RefreshSessionResponse struct {
 
 func (x *RefreshSessionResponse) Reset() {
 	*x = RefreshSessionResponse{}
-	mi := &file_therapist_proto_msgTypes[13]
+	mi := &file_proto_therapist_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -929,7 +929,7 @@ func (x *RefreshSessionResponse) String() string {
 func (*RefreshSessionResponse) ProtoMessage() {}
 
 func (x *RefreshSessionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[13]
+	mi := &file_proto_therapist_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -942,7 +942,7 @@ func (x *RefreshSessionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefreshSessionResponse.ProtoReflect.Descriptor instead.
 func (*RefreshSessionResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{13}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *RefreshSessionResponse) GetTherapistId() string {
@@ -989,7 +989,7 @@ type LogoutRequest struct {
 
 func (x *LogoutRequest) Reset() {
 	*x = LogoutRequest{}
-	mi := &file_therapist_proto_msgTypes[14]
+	mi := &file_proto_therapist_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1001,7 +1001,7 @@ func (x *LogoutRequest) String() string {
 func (*LogoutRequest) ProtoMessage() {}
 
 func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[14]
+	mi := &file_proto_therapist_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1014,7 +1014,7 @@ func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutRequest.ProtoReflect.Descriptor instead.
 func (*LogoutRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{14}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *LogoutRequest) GetRefreshToken() string {
@@ -1033,7 +1033,7 @@ type LogoutResponse struct {
 
 func (x *LogoutResponse) Reset() {
 	*x = LogoutResponse{}
-	mi := &file_therapist_proto_msgTypes[15]
+	mi := &file_proto_therapist_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1045,7 +1045,7 @@ func (x *LogoutResponse) String() string {
 func (*LogoutResponse) ProtoMessage() {}
 
 func (x *LogoutResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[15]
+	mi := &file_proto_therapist_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1058,7 +1058,7 @@ func (x *LogoutResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutResponse.ProtoReflect.Descriptor instead.
 func (*LogoutResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{15}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *LogoutResponse) GetSuccess() bool {
@@ -1084,13 +1084,14 @@ type Blog struct {
 	CreatedAt     string                 `protobuf:"bytes,12,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt     string                 `protobuf:"bytes,13,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	PublishedAt   string                 `protobuf:"bytes,14,opt,name=published_at,json=publishedAt,proto3" json:"published_at,omitempty"`
+	Tags          []string               `protobuf:"bytes,15,rep,name=tags,proto3" json:"tags,omitempty"` // e.g. ["anxiety","depression","stress"]
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Blog) Reset() {
 	*x = Blog{}
-	mi := &file_therapist_proto_msgTypes[16]
+	mi := &file_proto_therapist_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1102,7 +1103,7 @@ func (x *Blog) String() string {
 func (*Blog) ProtoMessage() {}
 
 func (x *Blog) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[16]
+	mi := &file_proto_therapist_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1115,7 +1116,7 @@ func (x *Blog) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Blog.ProtoReflect.Descriptor instead.
 func (*Blog) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{16}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *Blog) GetId() string {
@@ -1216,6 +1217,13 @@ func (x *Blog) GetPublishedAt() string {
 	return ""
 }
 
+func (x *Blog) GetTags() []string {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
+}
+
 // CreateBlog — verified therapists only; creates a draft.
 type CreateBlogRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1224,13 +1232,14 @@ type CreateBlogRequest struct {
 	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
 	CoverImageUrl string                 `protobuf:"bytes,4,opt,name=cover_image_url,json=coverImageUrl,proto3" json:"cover_image_url,omitempty"`
 	ImageUrls     []string               `protobuf:"bytes,5,rep,name=image_urls,json=imageUrls,proto3" json:"image_urls,omitempty"`
+	Tags          []string               `protobuf:"bytes,6,rep,name=tags,proto3" json:"tags,omitempty"` // optional topic tags
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateBlogRequest) Reset() {
 	*x = CreateBlogRequest{}
-	mi := &file_therapist_proto_msgTypes[17]
+	mi := &file_proto_therapist_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1242,7 +1251,7 @@ func (x *CreateBlogRequest) String() string {
 func (*CreateBlogRequest) ProtoMessage() {}
 
 func (x *CreateBlogRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[17]
+	mi := &file_proto_therapist_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1255,7 +1264,7 @@ func (x *CreateBlogRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateBlogRequest.ProtoReflect.Descriptor instead.
 func (*CreateBlogRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{17}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *CreateBlogRequest) GetTherapistId() string {
@@ -1293,6 +1302,13 @@ func (x *CreateBlogRequest) GetImageUrls() []string {
 	return nil
 }
 
+func (x *CreateBlogRequest) GetTags() []string {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
+}
+
 type CreateBlogResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Blog          *Blog                  `protobuf:"bytes,1,opt,name=blog,proto3" json:"blog,omitempty"`
@@ -1302,7 +1318,7 @@ type CreateBlogResponse struct {
 
 func (x *CreateBlogResponse) Reset() {
 	*x = CreateBlogResponse{}
-	mi := &file_therapist_proto_msgTypes[18]
+	mi := &file_proto_therapist_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1314,7 +1330,7 @@ func (x *CreateBlogResponse) String() string {
 func (*CreateBlogResponse) ProtoMessage() {}
 
 func (x *CreateBlogResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[18]
+	mi := &file_proto_therapist_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1327,7 +1343,7 @@ func (x *CreateBlogResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateBlogResponse.ProtoReflect.Descriptor instead.
 func (*CreateBlogResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{18}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *CreateBlogResponse) GetBlog() *Blog {
@@ -1346,13 +1362,14 @@ type UpdateBlogRequest struct {
 	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
 	CoverImageUrl string                 `protobuf:"bytes,5,opt,name=cover_image_url,json=coverImageUrl,proto3" json:"cover_image_url,omitempty"`
 	ImageUrls     []string               `protobuf:"bytes,6,rep,name=image_urls,json=imageUrls,proto3" json:"image_urls,omitempty"`
+	Tags          []string               `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty"` // optional topic tags
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdateBlogRequest) Reset() {
 	*x = UpdateBlogRequest{}
-	mi := &file_therapist_proto_msgTypes[19]
+	mi := &file_proto_therapist_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1364,7 +1381,7 @@ func (x *UpdateBlogRequest) String() string {
 func (*UpdateBlogRequest) ProtoMessage() {}
 
 func (x *UpdateBlogRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[19]
+	mi := &file_proto_therapist_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1377,7 +1394,7 @@ func (x *UpdateBlogRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateBlogRequest.ProtoReflect.Descriptor instead.
 func (*UpdateBlogRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{19}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *UpdateBlogRequest) GetTherapistId() string {
@@ -1422,6 +1439,13 @@ func (x *UpdateBlogRequest) GetImageUrls() []string {
 	return nil
 }
 
+func (x *UpdateBlogRequest) GetTags() []string {
+	if x != nil {
+		return x.Tags
+	}
+	return nil
+}
+
 type UpdateBlogResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Blog          *Blog                  `protobuf:"bytes,1,opt,name=blog,proto3" json:"blog,omitempty"`
@@ -1431,7 +1455,7 @@ type UpdateBlogResponse struct {
 
 func (x *UpdateBlogResponse) Reset() {
 	*x = UpdateBlogResponse{}
-	mi := &file_therapist_proto_msgTypes[20]
+	mi := &file_proto_therapist_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1443,7 +1467,7 @@ func (x *UpdateBlogResponse) String() string {
 func (*UpdateBlogResponse) ProtoMessage() {}
 
 func (x *UpdateBlogResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[20]
+	mi := &file_proto_therapist_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1456,7 +1480,7 @@ func (x *UpdateBlogResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateBlogResponse.ProtoReflect.Descriptor instead.
 func (*UpdateBlogResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{20}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *UpdateBlogResponse) GetBlog() *Blog {
@@ -1477,7 +1501,7 @@ type PublishBlogRequest struct {
 
 func (x *PublishBlogRequest) Reset() {
 	*x = PublishBlogRequest{}
-	mi := &file_therapist_proto_msgTypes[21]
+	mi := &file_proto_therapist_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1489,7 +1513,7 @@ func (x *PublishBlogRequest) String() string {
 func (*PublishBlogRequest) ProtoMessage() {}
 
 func (x *PublishBlogRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[21]
+	mi := &file_proto_therapist_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1502,7 +1526,7 @@ func (x *PublishBlogRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishBlogRequest.ProtoReflect.Descriptor instead.
 func (*PublishBlogRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{21}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *PublishBlogRequest) GetTherapistId() string {
@@ -1528,7 +1552,7 @@ type PublishBlogResponse struct {
 
 func (x *PublishBlogResponse) Reset() {
 	*x = PublishBlogResponse{}
-	mi := &file_therapist_proto_msgTypes[22]
+	mi := &file_proto_therapist_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1540,7 +1564,7 @@ func (x *PublishBlogResponse) String() string {
 func (*PublishBlogResponse) ProtoMessage() {}
 
 func (x *PublishBlogResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[22]
+	mi := &file_proto_therapist_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1553,7 +1577,7 @@ func (x *PublishBlogResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishBlogResponse.ProtoReflect.Descriptor instead.
 func (*PublishBlogResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{22}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *PublishBlogResponse) GetBlog() *Blog {
@@ -1574,7 +1598,7 @@ type DeleteBlogRequest struct {
 
 func (x *DeleteBlogRequest) Reset() {
 	*x = DeleteBlogRequest{}
-	mi := &file_therapist_proto_msgTypes[23]
+	mi := &file_proto_therapist_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1586,7 +1610,7 @@ func (x *DeleteBlogRequest) String() string {
 func (*DeleteBlogRequest) ProtoMessage() {}
 
 func (x *DeleteBlogRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[23]
+	mi := &file_proto_therapist_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1599,7 +1623,7 @@ func (x *DeleteBlogRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteBlogRequest.ProtoReflect.Descriptor instead.
 func (*DeleteBlogRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{23}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *DeleteBlogRequest) GetTherapistId() string {
@@ -1625,7 +1649,7 @@ type DeleteBlogResponse struct {
 
 func (x *DeleteBlogResponse) Reset() {
 	*x = DeleteBlogResponse{}
-	mi := &file_therapist_proto_msgTypes[24]
+	mi := &file_proto_therapist_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1637,7 +1661,7 @@ func (x *DeleteBlogResponse) String() string {
 func (*DeleteBlogResponse) ProtoMessage() {}
 
 func (x *DeleteBlogResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[24]
+	mi := &file_proto_therapist_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1650,7 +1674,7 @@ func (x *DeleteBlogResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteBlogResponse.ProtoReflect.Descriptor instead.
 func (*DeleteBlogResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{24}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *DeleteBlogResponse) GetSuccess() bool {
@@ -1671,7 +1695,7 @@ type GetBlogRequest struct {
 
 func (x *GetBlogRequest) Reset() {
 	*x = GetBlogRequest{}
-	mi := &file_therapist_proto_msgTypes[25]
+	mi := &file_proto_therapist_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1683,7 +1707,7 @@ func (x *GetBlogRequest) String() string {
 func (*GetBlogRequest) ProtoMessage() {}
 
 func (x *GetBlogRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[25]
+	mi := &file_proto_therapist_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1696,7 +1720,7 @@ func (x *GetBlogRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBlogRequest.ProtoReflect.Descriptor instead.
 func (*GetBlogRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{25}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *GetBlogRequest) GetBlogId() string {
@@ -1722,7 +1746,7 @@ type GetBlogResponse struct {
 
 func (x *GetBlogResponse) Reset() {
 	*x = GetBlogResponse{}
-	mi := &file_therapist_proto_msgTypes[26]
+	mi := &file_proto_therapist_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1734,7 +1758,7 @@ func (x *GetBlogResponse) String() string {
 func (*GetBlogResponse) ProtoMessage() {}
 
 func (x *GetBlogResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[26]
+	mi := &file_proto_therapist_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1747,7 +1771,7 @@ func (x *GetBlogResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBlogResponse.ProtoReflect.Descriptor instead.
 func (*GetBlogResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{26}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *GetBlogResponse) GetBlog() *Blog {
@@ -1770,7 +1794,7 @@ type ListBlogsRequest struct {
 
 func (x *ListBlogsRequest) Reset() {
 	*x = ListBlogsRequest{}
-	mi := &file_therapist_proto_msgTypes[27]
+	mi := &file_proto_therapist_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1782,7 +1806,7 @@ func (x *ListBlogsRequest) String() string {
 func (*ListBlogsRequest) ProtoMessage() {}
 
 func (x *ListBlogsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[27]
+	mi := &file_proto_therapist_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1795,7 +1819,7 @@ func (x *ListBlogsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListBlogsRequest.ProtoReflect.Descriptor instead.
 func (*ListBlogsRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{27}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *ListBlogsRequest) GetTherapistId() string {
@@ -1836,7 +1860,7 @@ type ListBlogsResponse struct {
 
 func (x *ListBlogsResponse) Reset() {
 	*x = ListBlogsResponse{}
-	mi := &file_therapist_proto_msgTypes[28]
+	mi := &file_proto_therapist_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1848,7 +1872,7 @@ func (x *ListBlogsResponse) String() string {
 func (*ListBlogsResponse) ProtoMessage() {}
 
 func (x *ListBlogsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[28]
+	mi := &file_proto_therapist_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1861,7 +1885,7 @@ func (x *ListBlogsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListBlogsResponse.ProtoReflect.Descriptor instead.
 func (*ListBlogsResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{28}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *ListBlogsResponse) GetBlogs() []*Blog {
@@ -1889,7 +1913,7 @@ type ToggleLikeBlogRequest struct {
 
 func (x *ToggleLikeBlogRequest) Reset() {
 	*x = ToggleLikeBlogRequest{}
-	mi := &file_therapist_proto_msgTypes[29]
+	mi := &file_proto_therapist_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1901,7 +1925,7 @@ func (x *ToggleLikeBlogRequest) String() string {
 func (*ToggleLikeBlogRequest) ProtoMessage() {}
 
 func (x *ToggleLikeBlogRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[29]
+	mi := &file_proto_therapist_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1914,7 +1938,7 @@ func (x *ToggleLikeBlogRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ToggleLikeBlogRequest.ProtoReflect.Descriptor instead.
 func (*ToggleLikeBlogRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{29}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *ToggleLikeBlogRequest) GetTherapistId() string {
@@ -1941,7 +1965,7 @@ type ToggleLikeBlogResponse struct {
 
 func (x *ToggleLikeBlogResponse) Reset() {
 	*x = ToggleLikeBlogResponse{}
-	mi := &file_therapist_proto_msgTypes[30]
+	mi := &file_proto_therapist_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1953,7 +1977,7 @@ func (x *ToggleLikeBlogResponse) String() string {
 func (*ToggleLikeBlogResponse) ProtoMessage() {}
 
 func (x *ToggleLikeBlogResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[30]
+	mi := &file_proto_therapist_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1966,7 +1990,7 @@ func (x *ToggleLikeBlogResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ToggleLikeBlogResponse.ProtoReflect.Descriptor instead.
 func (*ToggleLikeBlogResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{30}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *ToggleLikeBlogResponse) GetLiked() bool {
@@ -1996,7 +2020,7 @@ type UploadBlogImageRequest struct {
 
 func (x *UploadBlogImageRequest) Reset() {
 	*x = UploadBlogImageRequest{}
-	mi := &file_therapist_proto_msgTypes[31]
+	mi := &file_proto_therapist_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2008,7 +2032,7 @@ func (x *UploadBlogImageRequest) String() string {
 func (*UploadBlogImageRequest) ProtoMessage() {}
 
 func (x *UploadBlogImageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[31]
+	mi := &file_proto_therapist_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2021,7 +2045,7 @@ func (x *UploadBlogImageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadBlogImageRequest.ProtoReflect.Descriptor instead.
 func (*UploadBlogImageRequest) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{31}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *UploadBlogImageRequest) GetTherapistId() string {
@@ -2061,7 +2085,7 @@ type UploadBlogImageResponse struct {
 
 func (x *UploadBlogImageResponse) Reset() {
 	*x = UploadBlogImageResponse{}
-	mi := &file_therapist_proto_msgTypes[32]
+	mi := &file_proto_therapist_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2073,7 +2097,7 @@ func (x *UploadBlogImageResponse) String() string {
 func (*UploadBlogImageResponse) ProtoMessage() {}
 
 func (x *UploadBlogImageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_therapist_proto_msgTypes[32]
+	mi := &file_proto_therapist_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2086,7 +2110,7 @@ func (x *UploadBlogImageResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadBlogImageResponse.ProtoReflect.Descriptor instead.
 func (*UploadBlogImageResponse) Descriptor() ([]byte, []int) {
-	return file_therapist_proto_rawDescGZIP(), []int{32}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *UploadBlogImageResponse) GetUrl() string {
@@ -2096,11 +2120,11 @@ func (x *UploadBlogImageResponse) GetUrl() string {
 	return ""
 }
 
-var File_therapist_proto protoreflect.FileDescriptor
+var File_proto_therapist_proto protoreflect.FileDescriptor
 
-const file_therapist_proto_rawDesc = "" +
+const file_proto_therapist_proto_rawDesc = "" +
 	"\n" +
-	"\x0ftherapist.proto\x12\ttherapist\"<\n" +
+	"\x15proto/therapist.proto\x12\ttherapist\"<\n" +
 	"\x13AuthCallbackRequest\x12%\n" +
 	"\x0esupabase_token\x18\x01 \x01(\tR\rsupabaseToken\"\xb7\x02\n" +
 	"\x14AuthCallbackResponse\x12!\n" +
@@ -2175,7 +2199,7 @@ const file_therapist_proto_rawDesc = "" +
 	"\rLogoutRequest\x12#\n" +
 	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"*\n" +
 	"\x0eLogoutResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"\xa0\x03\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\xb4\x03\n" +
 	"\x04Blog\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\ftherapist_id\x18\x02 \x01(\tR\vtherapistId\x12\x14\n" +
@@ -2194,16 +2218,18 @@ const file_therapist_proto_rawDesc = "" +
 	"created_at\x18\f \x01(\tR\tcreatedAt\x12\x1d\n" +
 	"\n" +
 	"updated_at\x18\r \x01(\tR\tupdatedAt\x12!\n" +
-	"\fpublished_at\x18\x0e \x01(\tR\vpublishedAt\"\xad\x01\n" +
+	"\fpublished_at\x18\x0e \x01(\tR\vpublishedAt\x12\x12\n" +
+	"\x04tags\x18\x0f \x03(\tR\x04tags\"\xc1\x01\n" +
 	"\x11CreateBlogRequest\x12!\n" +
 	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x18\n" +
 	"\acontent\x18\x03 \x01(\tR\acontent\x12&\n" +
 	"\x0fcover_image_url\x18\x04 \x01(\tR\rcoverImageUrl\x12\x1d\n" +
 	"\n" +
-	"image_urls\x18\x05 \x03(\tR\timageUrls\"9\n" +
+	"image_urls\x18\x05 \x03(\tR\timageUrls\x12\x12\n" +
+	"\x04tags\x18\x06 \x03(\tR\x04tags\"9\n" +
 	"\x12CreateBlogResponse\x12#\n" +
-	"\x04blog\x18\x01 \x01(\v2\x0f.therapist.BlogR\x04blog\"\xc6\x01\n" +
+	"\x04blog\x18\x01 \x01(\v2\x0f.therapist.BlogR\x04blog\"\xda\x01\n" +
 	"\x11UpdateBlogRequest\x12!\n" +
 	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x17\n" +
 	"\ablog_id\x18\x02 \x01(\tR\x06blogId\x12\x14\n" +
@@ -2211,7 +2237,8 @@ const file_therapist_proto_rawDesc = "" +
 	"\acontent\x18\x04 \x01(\tR\acontent\x12&\n" +
 	"\x0fcover_image_url\x18\x05 \x01(\tR\rcoverImageUrl\x12\x1d\n" +
 	"\n" +
-	"image_urls\x18\x06 \x03(\tR\timageUrls\"9\n" +
+	"image_urls\x18\x06 \x03(\tR\timageUrls\x12\x12\n" +
+	"\x04tags\x18\a \x03(\tR\x04tags\"9\n" +
 	"\x12UpdateBlogResponse\x12#\n" +
 	"\x04blog\x18\x01 \x01(\v2\x0f.therapist.BlogR\x04blog\"P\n" +
 	"\x12PublishBlogRequest\x12!\n" +
@@ -2279,20 +2306,20 @@ const file_therapist_proto_rawDesc = "" +
 	"\x0fUploadBlogImage\x12!.therapist.UploadBlogImageRequest\x1a\".therapist.UploadBlogImageResponseB-Z+therapist/pkg/proto/therapistpb;therapistpbb\x06proto3"
 
 var (
-	file_therapist_proto_rawDescOnce sync.Once
-	file_therapist_proto_rawDescData []byte
+	file_proto_therapist_proto_rawDescOnce sync.Once
+	file_proto_therapist_proto_rawDescData []byte
 )
 
-func file_therapist_proto_rawDescGZIP() []byte {
-	file_therapist_proto_rawDescOnce.Do(func() {
-		file_therapist_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_therapist_proto_rawDesc), len(file_therapist_proto_rawDesc)))
+func file_proto_therapist_proto_rawDescGZIP() []byte {
+	file_proto_therapist_proto_rawDescOnce.Do(func() {
+		file_proto_therapist_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_therapist_proto_rawDesc), len(file_proto_therapist_proto_rawDesc)))
 	})
-	return file_therapist_proto_rawDescData
+	return file_proto_therapist_proto_rawDescData
 }
 
-var file_therapist_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_therapist_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
-var file_therapist_proto_goTypes = []any{
+var file_proto_therapist_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_proto_therapist_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
+var file_proto_therapist_proto_goTypes = []any{
 	(BlogStatus)(0),                    // 0: therapist.BlogStatus
 	(*AuthCallbackRequest)(nil),        // 1: therapist.AuthCallbackRequest
 	(*AuthCallbackResponse)(nil),       // 2: therapist.AuthCallbackResponse
@@ -2328,7 +2355,7 @@ var file_therapist_proto_goTypes = []any{
 	(*UploadBlogImageRequest)(nil),     // 32: therapist.UploadBlogImageRequest
 	(*UploadBlogImageResponse)(nil),    // 33: therapist.UploadBlogImageResponse
 }
-var file_therapist_proto_depIdxs = []int32{
+var file_proto_therapist_proto_depIdxs = []int32{
 	0,  // 0: therapist.Blog.status:type_name -> therapist.BlogStatus
 	17, // 1: therapist.CreateBlogResponse.blog:type_name -> therapist.Blog
 	17, // 2: therapist.UpdateBlogResponse.blog:type_name -> therapist.Blog
@@ -2374,27 +2401,27 @@ var file_therapist_proto_depIdxs = []int32{
 	0,  // [0:6] is the sub-list for field type_name
 }
 
-func init() { file_therapist_proto_init() }
-func file_therapist_proto_init() {
-	if File_therapist_proto != nil {
+func init() { file_proto_therapist_proto_init() }
+func file_proto_therapist_proto_init() {
+	if File_proto_therapist_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_therapist_proto_rawDesc), len(file_therapist_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_therapist_proto_rawDesc), len(file_proto_therapist_proto_rawDesc)),
 			NumEnums:      1,
 			NumMessages:   33,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_therapist_proto_goTypes,
-		DependencyIndexes: file_therapist_proto_depIdxs,
-		EnumInfos:         file_therapist_proto_enumTypes,
-		MessageInfos:      file_therapist_proto_msgTypes,
+		GoTypes:           file_proto_therapist_proto_goTypes,
+		DependencyIndexes: file_proto_therapist_proto_depIdxs,
+		EnumInfos:         file_proto_therapist_proto_enumTypes,
+		MessageInfos:      file_proto_therapist_proto_msgTypes,
 	}.Build()
-	File_therapist_proto = out.File
-	file_therapist_proto_goTypes = nil
-	file_therapist_proto_depIdxs = nil
+	File_proto_therapist_proto = out.File
+	file_proto_therapist_proto_goTypes = nil
+	file_proto_therapist_proto_depIdxs = nil
 }

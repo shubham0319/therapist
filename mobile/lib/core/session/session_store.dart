@@ -18,13 +18,17 @@ class SessionStore {
 
   /// Persist all session fields atomically.
   Future<void> save(StoredSession session) async {
-    await Future.wait([
-      _storage.write(key: _Keys.therapistId,  value: session.therapistId),
-      _storage.write(key: _Keys.status,       value: session.status),
-      _storage.write(key: _Keys.accessToken,  value: session.accessToken),
-      _storage.write(key: _Keys.refreshToken, value: session.refreshToken),
-      _storage.write(key: _Keys.expiresAt,    value: session.expiresAt.toString()),
-    ]);
+    try {
+      await Future.wait([
+        _storage.write(key: _Keys.therapistId,  value: session.therapistId),
+        _storage.write(key: _Keys.status,       value: session.status),
+        _storage.write(key: _Keys.accessToken,  value: session.accessToken),
+        _storage.write(key: _Keys.refreshToken, value: session.refreshToken),
+        _storage.write(key: _Keys.expiresAt,    value: session.expiresAt.toString()),
+      ]);
+    } catch (_) {
+      // Storage write failure is non-fatal — session lives in memory for this run.
+    }
   }
 
   /// Update status only (after background status poll / onboarding submit).
@@ -47,37 +51,47 @@ class SessionStore {
     ]);
   }
 
-  /// Returns null when no session exists.
+  /// Returns null when no session exists or if secure storage is unavailable.
   Future<StoredSession?> load() async {
-    final therapistId  = await _storage.read(key: _Keys.therapistId);
-    final status       = await _storage.read(key: _Keys.status);
-    final accessToken  = await _storage.read(key: _Keys.accessToken);
-    final refreshToken = await _storage.read(key: _Keys.refreshToken);
-    final expiresAtStr = await _storage.read(key: _Keys.expiresAt);
+    try {
+      final therapistId  = await _storage.read(key: _Keys.therapistId);
+      final status       = await _storage.read(key: _Keys.status);
+      final accessToken  = await _storage.read(key: _Keys.accessToken);
+      final refreshToken = await _storage.read(key: _Keys.refreshToken);
+      final expiresAtStr = await _storage.read(key: _Keys.expiresAt);
 
-    if (therapistId == null || status == null ||
-        accessToken == null || refreshToken == null || expiresAtStr == null) {
+      if (therapistId == null || status == null ||
+          accessToken == null || refreshToken == null || expiresAtStr == null) {
+        return null;
+      }
+
+      return StoredSession(
+        therapistId:  therapistId,
+        status:       status,
+        accessToken:  accessToken,
+        refreshToken: refreshToken,
+        expiresAt:    int.parse(expiresAtStr),
+      );
+    } catch (_) {
+      // WebCrypto OperationError on Flutter web (corrupted / missing key).
+      // Treat as no session — user will be sent to login.
       return null;
     }
-
-    return StoredSession(
-      therapistId:  therapistId,
-      status:       status,
-      accessToken:  accessToken,
-      refreshToken: refreshToken,
-      expiresAt:    int.parse(expiresAtStr),
-    );
   }
 
   /// Wipe all stored session data (logout).
   Future<void> clear() async {
-    await Future.wait([
-      _storage.delete(key: _Keys.therapistId),
-      _storage.delete(key: _Keys.status),
-      _storage.delete(key: _Keys.accessToken),
-      _storage.delete(key: _Keys.refreshToken),
-      _storage.delete(key: _Keys.expiresAt),
-    ]);
+    try {
+      await Future.wait([
+        _storage.delete(key: _Keys.therapistId),
+        _storage.delete(key: _Keys.status),
+        _storage.delete(key: _Keys.accessToken),
+        _storage.delete(key: _Keys.refreshToken),
+        _storage.delete(key: _Keys.expiresAt),
+      ]);
+    } catch (_) {
+      // Best-effort clear — ignore storage errors.
+    }
   }
 }
 

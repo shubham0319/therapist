@@ -1334,6 +1334,7 @@ class Blog extends $pb.GeneratedMessage {
     $core.String? createdAt,
     $core.String? updatedAt,
     $core.String? publishedAt,
+    $core.Iterable<$core.String>? tags,
   }) {
     final result = create();
     if (id != null) result.id = id;
@@ -1350,6 +1351,7 @@ class Blog extends $pb.GeneratedMessage {
     if (createdAt != null) result.createdAt = createdAt;
     if (updatedAt != null) result.updatedAt = updatedAt;
     if (publishedAt != null) result.publishedAt = publishedAt;
+    if (tags != null) result.tags.addAll(tags);
     return result;
   }
 
@@ -1381,6 +1383,7 @@ class Blog extends $pb.GeneratedMessage {
     ..aOS(12, _omitFieldNames ? '' : 'createdAt')
     ..aOS(13, _omitFieldNames ? '' : 'updatedAt')
     ..aOS(14, _omitFieldNames ? '' : 'publishedAt')
+    ..pPS(15, _omitFieldNames ? '' : 'tags')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1520,6 +1523,9 @@ class Blog extends $pb.GeneratedMessage {
   $core.bool hasPublishedAt() => $_has(13);
   @$pb.TagNumber(14)
   void clearPublishedAt() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $pb.PbList<$core.String> get tags => $_getList(14);
 }
 
 /// CreateBlog — verified therapists only; creates a draft.
@@ -1530,6 +1536,7 @@ class CreateBlogRequest extends $pb.GeneratedMessage {
     $core.String? content,
     $core.String? coverImageUrl,
     $core.Iterable<$core.String>? imageUrls,
+    $core.Iterable<$core.String>? tags,
   }) {
     final result = create();
     if (therapistId != null) result.therapistId = therapistId;
@@ -1537,6 +1544,7 @@ class CreateBlogRequest extends $pb.GeneratedMessage {
     if (content != null) result.content = content;
     if (coverImageUrl != null) result.coverImageUrl = coverImageUrl;
     if (imageUrls != null) result.imageUrls.addAll(imageUrls);
+    if (tags != null) result.tags.addAll(tags);
     return result;
   }
 
@@ -1558,6 +1566,7 @@ class CreateBlogRequest extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'content')
     ..aOS(4, _omitFieldNames ? '' : 'coverImageUrl')
     ..pPS(5, _omitFieldNames ? '' : 'imageUrls')
+    ..pPS(6, _omitFieldNames ? '' : 'tags')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1617,6 +1626,9 @@ class CreateBlogRequest extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(5)
   $pb.PbList<$core.String> get imageUrls => $_getList(4);
+
+  @$pb.TagNumber(6)
+  $pb.PbList<$core.String> get tags => $_getList(5);
 }
 
 class CreateBlogResponse extends $pb.GeneratedMessage {
@@ -1684,6 +1696,7 @@ class UpdateBlogRequest extends $pb.GeneratedMessage {
     $core.String? content,
     $core.String? coverImageUrl,
     $core.Iterable<$core.String>? imageUrls,
+    $core.Iterable<$core.String>? tags,
   }) {
     final result = create();
     if (therapistId != null) result.therapistId = therapistId;
@@ -1692,6 +1705,7 @@ class UpdateBlogRequest extends $pb.GeneratedMessage {
     if (content != null) result.content = content;
     if (coverImageUrl != null) result.coverImageUrl = coverImageUrl;
     if (imageUrls != null) result.imageUrls.addAll(imageUrls);
+    if (tags != null) result.tags.addAll(tags);
     return result;
   }
 
@@ -1714,6 +1728,7 @@ class UpdateBlogRequest extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'content')
     ..aOS(5, _omitFieldNames ? '' : 'coverImageUrl')
     ..pPS(6, _omitFieldNames ? '' : 'imageUrls')
+    ..pPS(7, _omitFieldNames ? '' : 'tags')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1782,6 +1797,9 @@ class UpdateBlogRequest extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(6)
   $pb.PbList<$core.String> get imageUrls => $_getList(5);
+
+  @$pb.TagNumber(7)
+  $pb.PbList<$core.String> get tags => $_getList(6);
 }
 
 class UpdateBlogResponse extends $pb.GeneratedMessage {

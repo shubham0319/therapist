@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:grpc/grpc.dart';
+import 'package:grpc/service_api.dart';
 import 'package:therapist/core/error/failures.dart';
 import 'package:therapist/core/error/result.dart';
 import 'package:therapist/core/network/grpc_client.dart';
@@ -18,6 +18,7 @@ class BlogModel {
     required this.coverImageUrl,
     required this.content,
     required this.imageUrls,
+    required this.tags,
     required this.status,
     required this.views,
     required this.likes,
@@ -34,6 +35,7 @@ class BlogModel {
   final String coverImageUrl;
   final String content;
   final List<String> imageUrls;
+  final List<String> tags;
   final String status; // "draft" | "published"
   final int views;
   final int likes;
@@ -53,6 +55,7 @@ class BlogModel {
         coverImageUrl: pb.coverImageUrl,
         content: pb.content,
         imageUrls: List.unmodifiable(pb.imageUrls),
+        tags: List.unmodifiable(pb.tags),
         status: pb.status == BlogStatus.BLOG_STATUS_PUBLISHED ? 'published' : 'draft',
         views: pb.views.toInt(),
         likes: pb.likes.toInt(),
@@ -78,6 +81,7 @@ class BlogRepository {
     required String content,
     String coverImageUrl = '',
     List<String> imageUrls = const [],
+    List<String> tags = const [],
   }) async {
     try {
       final res = await _stub.createBlog(
@@ -86,7 +90,8 @@ class BlogRepository {
           ..title = title
           ..content = content
           ..coverImageUrl = coverImageUrl
-          ..imageUrls.addAll(imageUrls),
+          ..imageUrls.addAll(imageUrls)
+          ..tags.addAll(tags),
         options: CallOptions(timeout: _kRpcTimeout),
       );
       return Result.success(BlogModel.fromProto(res.blog));
@@ -104,6 +109,7 @@ class BlogRepository {
     required String content,
     String coverImageUrl = '',
     List<String> imageUrls = const [],
+    List<String> tags = const [],
   }) async {
     try {
       final res = await _stub.updateBlog(
@@ -113,7 +119,8 @@ class BlogRepository {
           ..title = title
           ..content = content
           ..coverImageUrl = coverImageUrl
-          ..imageUrls.addAll(imageUrls),
+          ..imageUrls.addAll(imageUrls)
+          ..tags.addAll(tags),
         options: CallOptions(timeout: _kRpcTimeout),
       );
       return Result.success(BlogModel.fromProto(res.blog));

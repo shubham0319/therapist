@@ -1,9 +1,12 @@
 import 'dart:typed_data';
 
+import 'package:grpc/service_api.dart';
 import 'package:therapist/core/error/failures.dart';
 import 'package:therapist/core/error/result.dart';
 import 'package:therapist/core/network/grpc_client.dart';
 import 'package:therapist/core/proto/therapist.pbgrpc.dart';
+
+const _kRpcTimeout = Duration(seconds: 15);
 
 class OnboardingFormData {
   const OnboardingFormData({
@@ -74,6 +77,7 @@ class OnboardingRepository {
           ..fileName = fileName
           ..fileType = fileType
           ..data = bytes,
+        options: CallOptions(timeout: const Duration(seconds: 30)),
       );
       return Result.success(res.url);
     } catch (e) {
@@ -144,6 +148,7 @@ class OnboardingRepository {
           ..latitude = data.latitude
           ..longitude = data.longitude
           ..placeId = data.placeId,
+        options: CallOptions(timeout: _kRpcTimeout),
       );
 
       return Result.success(null);

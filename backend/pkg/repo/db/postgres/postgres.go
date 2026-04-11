@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 )
 
-const connTimeout = 10 * time.Second
+const connTimeout = 30 * time.Second
 
 // customEnums are the PostgreSQL enum types we need to register so that pgx
 // knows their OIDs and can scan them (including array variants like session_type_enum[]).
@@ -20,6 +20,7 @@ var customEnums = []string{
 	"gender_enum",
 	"session_type_enum",
 	"verification_status_enum",
+	"blog_status_enum",
 }
 
 type Config struct {
@@ -33,9 +34,6 @@ type DB struct {
 
 func New(ctx context.Context, cfg Config) (*DB, error) {
 	log := logger.Named("db.postgres")
-
-	ctx, cancel := context.WithTimeout(ctx, connTimeout)
-	defer cancel()
 
 	poolCfg, err := pgxpool.ParseConfig(cfg.ConnectionString)
 	if err != nil {
@@ -55,25 +53,42 @@ func New(ctx context.Context, cfg Config) (*DB, error) {
 		return nil
 	}
 
-	pool, err := pgxpool.NewWithConfig(ctx, poolCfg)
-	if err != nil {
-		log.Error("failed to create connection pool", zap.Error(err))
-		return nil, err
+	// Retry up to 3 times — Supabase connections can be slow on cold start.
+	const maxAttempts = 3
+	for attempt := 1; attempt <= maxAttempts; attempt++ {
+		tctx, cancel := context.WithTimeout(ctx, connTimeout)
+		pool, poolErr := pgxpool.NewWithConfig(tctx, poolCfg)
+		if poolErr != nil {
+			cancel()
+			log.Warn("failed to create connection pool", zap.Int("attempt", attempt), zap.Error(poolErr))
+			if attempt == maxAttempts {
+				return nil, poolErr
+			}
+			time.Sleep(time.Duration(attempt) * 2 * time.Second)
+			continue
+		}
+
+		if pingErr := pool.Ping(tctx); pingErr != nil {
+			cancel()
+			pool.Close()
+			log.Warn("postgres ping failed", zap.Int("attempt", attempt), zap.Error(pingErr))
+			if attempt == maxAttempts {
+				return nil, pingErr
+			}
+			time.Sleep(time.Duration(attempt) * 2 * time.Second)
+			continue
+		}
+
+		cancel()
+		stat := pool.Stat()
+		log.Info("postgres pool ready",
+			zap.Int32("total_conns", stat.TotalConns()),
+			zap.Int32("idle_conns", stat.IdleConns()),
+		)
+		return &DB{conn: pool, log: log}, nil
 	}
 
-	if err = pool.Ping(ctx); err != nil {
-		log.Error("postgres ping failed", zap.Error(err))
-		pool.Close()
-		return nil, err
-	}
-
-	stat := pool.Stat()
-	log.Info("postgres pool ready",
-		zap.Int32("total_conns", stat.TotalConns()),
-		zap.Int32("idle_conns", stat.IdleConns()),
-	)
-
-	return &DB{conn: pool, log: log}, nil
+	return nil, fmt.Errorf("failed to connect to postgres after %d attempts", maxAttempts)
 }
 
 // registerEnum looks up the OID of a custom enum from pg_type and registers

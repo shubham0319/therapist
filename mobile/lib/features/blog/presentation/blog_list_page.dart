@@ -200,6 +200,23 @@ class _BlogCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
+                  if (blog.tags.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 4,
+                      children: (blog.tags as List<String>).take(4).map((t) => Chip(
+                        label: Text(t),
+                        labelStyle: theme.textTheme.labelSmall?.copyWith(
+                          color: cs.onSecondaryContainer,
+                        ),
+                        backgroundColor: cs.secondaryContainer,
+                        padding: EdgeInsets.zero,
+                        side: BorderSide.none,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      )).toList(),
+                    ),
+                  ],
                   const SizedBox(height: 12),
                   Row(
                     children: [

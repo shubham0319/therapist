@@ -11,9 +11,9 @@ import (
 // ─── blogs ────────────────────────────────────────────────────────────────────
 
 const createBlog = `-- name: CreateBlog :one
-INSERT INTO blogs (therapist_id, title, slug, cover_image_url, content, image_urls)
-VALUES ($1, $2, $3, $4, $5, $6)
-RETURNING id, therapist_id, title, slug, cover_image_url, content, image_urls, status, views, published_at, created_at, updated_at
+INSERT INTO blogs (therapist_id, title, slug, cover_image_url, content, image_urls, tags)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
+RETURNING id, therapist_id, title, slug, cover_image_url, content, image_urls, tags, status, views, published_at, created_at, updated_at
 `
 
 type CreateBlogParams struct {
@@ -23,17 +23,19 @@ type CreateBlogParams struct {
 	CoverImageURL pgtype.Text
 	Content       string
 	ImageURLs     []string
+	Tags          []string
 }
 
 func (q *Queries) CreateBlog(ctx context.Context, arg CreateBlogParams) (Blog, error) {
 	row := q.db.QueryRow(ctx, createBlog,
-		arg.TherapistID, arg.Title, arg.Slug, arg.CoverImageURL, arg.Content, arg.ImageURLs,
+		arg.TherapistID, arg.Title, arg.Slug, arg.CoverImageURL, arg.Content,
+		coalesceStrings(arg.ImageURLs), coalesceStrings(arg.Tags),
 	)
 	return scanBlog(row)
 }
 
 const getBlogByID = `-- name: GetBlogByID :one
-SELECT id, therapist_id, title, slug, cover_image_url, content, image_urls, status, views, published_at, created_at, updated_at
+SELECT id, therapist_id, title, slug, cover_image_url, content, image_urls, tags, status, views, published_at, created_at, updated_at
 FROM blogs WHERE id = $1
 `
 
@@ -43,7 +45,7 @@ func (q *Queries) GetBlogByID(ctx context.Context, id pgtype.UUID) (Blog, error)
 }
 
 const getBlogByTherapistAndSlug = `-- name: GetBlogByTherapistAndSlug :one
-SELECT id, therapist_id, title, slug, cover_image_url, content, image_urls, status, views, published_at, created_at, updated_at
+SELECT id, therapist_id, title, slug, cover_image_url, content, image_urls, tags, status, views, published_at, created_at, updated_at
 FROM blogs WHERE therapist_id = $1 AND slug = $2
 `
 
@@ -54,9 +56,9 @@ func (q *Queries) GetBlogByTherapistAndSlug(ctx context.Context, therapistID pgt
 
 const updateBlog = `-- name: UpdateBlog :one
 UPDATE blogs
-SET title = $2, cover_image_url = $3, content = $4, image_urls = $5, updated_at = NOW()
+SET title = $2, cover_image_url = $3, content = $4, image_urls = $5, tags = $6, updated_at = NOW()
 WHERE id = $1 AND status = 'draft'
-RETURNING id, therapist_id, title, slug, cover_image_url, content, image_urls, status, views, published_at, created_at, updated_at
+RETURNING id, therapist_id, title, slug, cover_image_url, content, image_urls, tags, status, views, published_at, created_at, updated_at
 `
 
 type UpdateBlogParams struct {
@@ -65,11 +67,13 @@ type UpdateBlogParams struct {
 	CoverImageURL pgtype.Text
 	Content       string
 	ImageURLs     []string
+	Tags          []string
 }
 
 func (q *Queries) UpdateBlog(ctx context.Context, arg UpdateBlogParams) (Blog, error) {
 	row := q.db.QueryRow(ctx, updateBlog,
-		arg.ID, arg.Title, arg.CoverImageURL, arg.Content, arg.ImageURLs,
+		arg.ID, arg.Title, arg.CoverImageURL, arg.Content,
+		coalesceStrings(arg.ImageURLs), coalesceStrings(arg.Tags),
 	)
 	return scanBlog(row)
 }
@@ -78,7 +82,7 @@ const publishBlog = `-- name: PublishBlog :one
 UPDATE blogs
 SET status = 'published', published_at = NOW(), updated_at = NOW()
 WHERE id = $1 AND status = 'draft'
-RETURNING id, therapist_id, title, slug, cover_image_url, content, image_urls, status, views, published_at, created_at, updated_at
+RETURNING id, therapist_id, title, slug, cover_image_url, content, image_urls, tags, status, views, published_at, created_at, updated_at
 `
 
 func (q *Queries) PublishBlog(ctx context.Context, id pgtype.UUID) (Blog, error) {
@@ -105,7 +109,7 @@ func (q *Queries) IncrementBlogViews(ctx context.Context, id pgtype.UUID) error 
 }
 
 const listPublishedBlogs = `-- name: ListPublishedBlogs :many
-SELECT id, therapist_id, title, slug, cover_image_url, content, image_urls, status, views, published_at, created_at, updated_at
+SELECT id, therapist_id, title, slug, cover_image_url, content, image_urls, tags, status, views, published_at, created_at, updated_at
 FROM blogs WHERE status = 'published'
 ORDER BY published_at DESC
 LIMIT $1 OFFSET $2
@@ -121,7 +125,7 @@ func (q *Queries) ListPublishedBlogs(ctx context.Context, limit, offset int32) (
 }
 
 const listPublishedBlogsByTherapist = `-- name: ListPublishedBlogsByTherapist :many
-SELECT id, therapist_id, title, slug, cover_image_url, content, image_urls, status, views, published_at, created_at, updated_at
+SELECT id, therapist_id, title, slug, cover_image_url, content, image_urls, tags, status, views, published_at, created_at, updated_at
 FROM blogs WHERE status = 'published' AND therapist_id = $1
 ORDER BY published_at DESC
 LIMIT $2 OFFSET $3
@@ -202,6 +206,15 @@ func (q *Queries) CountBlogLikes(ctx context.Context, blogID pgtype.UUID) (int64
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
+// coalesceStrings returns an empty non-nil slice when s is nil, preventing
+// NULL being sent to NOT NULL TEXT[] columns.
+func coalesceStrings(s []string) []string {
+	if s == nil {
+		return []string{}
+	}
+	return s
+}
+
 type blogScanner interface {
 	Scan(dest ...any) error
 }
@@ -216,12 +229,19 @@ func scanBlog(row blogScanner) (Blog, error) {
 		&b.CoverImageURL,
 		&b.Content,
 		&b.ImageURLs,
+		&b.Tags,
 		&b.Status,
 		&b.Views,
 		&b.PublishedAt,
 		&b.CreatedAt,
 		&b.UpdatedAt,
 	)
+	if b.ImageURLs == nil {
+		b.ImageURLs = []string{}
+	}
+	if b.Tags == nil {
+		b.Tags = []string{}
+	}
 	return b, err
 }
 

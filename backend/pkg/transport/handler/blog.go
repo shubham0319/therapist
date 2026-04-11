@@ -24,7 +24,7 @@ func (h *TherapistHandler) CreateBlog(ctx context.Context, req *therapistpb.Crea
 		return nil, status.Error(codes.InvalidArgument, "title is required")
 	}
 
-	blog, err := h.svc.CreateBlog(ctx, req.TherapistId, req.Title, req.Content, req.CoverImageUrl, req.ImageUrls)
+	blog, err := h.svc.CreateBlog(ctx, req.TherapistId, req.Title, req.Content, req.CoverImageUrl, req.ImageUrls, req.Tags)
 	if err != nil {
 		log.Error("CreateBlog failed", zap.Error(err))
 		return nil, grpcError(err)
@@ -45,7 +45,7 @@ func (h *TherapistHandler) UpdateBlog(ctx context.Context, req *therapistpb.Upda
 		return nil, status.Error(codes.InvalidArgument, "title is required")
 	}
 
-	blog, err := h.svc.UpdateBlog(ctx, req.TherapistId, req.BlogId, req.Title, req.Content, req.CoverImageUrl, req.ImageUrls)
+	blog, err := h.svc.UpdateBlog(ctx, req.TherapistId, req.BlogId, req.Title, req.Content, req.CoverImageUrl, req.ImageUrls, req.Tags)
 	if err != nil {
 		log.Error("UpdateBlog failed", zap.Error(err))
 		return nil, grpcError(err)
@@ -188,6 +188,7 @@ func toBlogProto(b *service.BlogResult) *therapistpb.Blog {
 		CoverImageUrl: b.CoverImageURL,
 		Content:       b.Content,
 		ImageUrls:     b.ImageURLs,
+		Tags:          b.Tags,
 		Status:        st,
 		Views:         b.Views,
 		Likes:         b.Likes,

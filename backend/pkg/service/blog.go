@@ -33,6 +33,7 @@ type BlogResult struct {
 	CoverImageURL string
 	Content       string
 	ImageURLs     []string
+	Tags          []string
 	Status        string // "draft" | "published"
 	Views         int64
 	Likes         int64
@@ -44,7 +45,7 @@ type BlogResult struct {
 
 // ─── CreateBlog ───────────────────────────────────────────────────────────────
 
-func (s *Service) CreateBlog(ctx context.Context, therapistID, title, content, coverImageURL string, imageURLs []string) (*BlogResult, error) {
+func (s *Service) CreateBlog(ctx context.Context, therapistID, title, content, coverImageURL string, imageURLs, tags []string) (*BlogResult, error) {
 	s.log.Debug("CreateBlog started", zap.String("therapist_id", therapistID))
 
 	id, err := parseUUID(therapistID)
@@ -83,6 +84,7 @@ func (s *Service) CreateBlog(ctx context.Context, therapistID, title, content, c
 		CoverImageURL: coverImageURL,
 		Content:       content,
 		ImageURLs:     imageURLs,
+		Tags:          tags,
 	})
 	if err != nil {
 		s.log.Error("CreateBlog db failed", zap.Error(err))
@@ -95,7 +97,7 @@ func (s *Service) CreateBlog(ctx context.Context, therapistID, title, content, c
 
 // ─── UpdateBlog ───────────────────────────────────────────────────────────────
 
-func (s *Service) UpdateBlog(ctx context.Context, therapistID, blogID, title, content, coverImageURL string, imageURLs []string) (*BlogResult, error) {
+func (s *Service) UpdateBlog(ctx context.Context, therapistID, blogID, title, content, coverImageURL string, imageURLs, tags []string) (*BlogResult, error) {
 	s.log.Debug("UpdateBlog started", zap.String("blog_id", blogID))
 
 	tid, err := parseUUID(therapistID)
@@ -128,6 +130,7 @@ func (s *Service) UpdateBlog(ctx context.Context, therapistID, blogID, title, co
 		CoverImageURL: coverImageURL,
 		Content:       content,
 		ImageURLs:     imageURLs,
+		Tags:          tags,
 	})
 	if err != nil {
 		s.log.Error("UpdateBlog db failed", zap.Error(err))
@@ -429,6 +432,7 @@ func toBlogResult(b schema.Blog, likes int64, likedByMe bool) *BlogResult {
 		Slug:        b.Slug,
 		Content:     b.Content,
 		ImageURLs:   b.ImageURLs,
+		Tags:        b.Tags,
 		Status:      string(b.Status),
 		Views:       b.Views,
 		Likes:       likes,
@@ -446,8 +450,14 @@ func toBlogResult(b schema.Blog, likes int64, likedByMe bool) *BlogResult {
 	if b.PublishedAt.Valid {
 		r.PublishedAt = b.PublishedAt.Time.UTC().Format("2006-01-02T15:04:05Z")
 	}
+	if r.Tags == nil {
+		r.Tags = []string{}
+	}
 	if r.ImageURLs == nil {
 		r.ImageURLs = []string{}
+	}
+	if r.Tags == nil {
+		r.Tags = []string{}
 	}
 	return r
 }

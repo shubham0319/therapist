@@ -33,6 +33,7 @@ class BlogSubmitted extends BlogEvent {
     required this.content,
     this.coverImageUrl = '',
     this.imageUrls = const [],
+    this.tags = const [],
     this.blogId, // non-null = update
   });
   final String therapistId;
@@ -40,6 +41,7 @@ class BlogSubmitted extends BlogEvent {
   final String content;
   final String coverImageUrl;
   final List<String> imageUrls;
+  final List<String> tags;
   final String? blogId;
 }
 

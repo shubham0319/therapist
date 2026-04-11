@@ -1,8 +1,11 @@
+import 'package:grpc/service_api.dart';
 import 'package:therapist/core/error/failures.dart';
 import 'package:therapist/core/error/result.dart';
 import 'package:therapist/core/network/grpc_client.dart';
 import 'package:therapist/core/proto/therapist.pbgrpc.dart';
 import 'package:therapist/core/session/session_store.dart';
+
+const _kRpcTimeout = Duration(seconds: 15);
 
 class TherapistSession {
   const TherapistSession({
@@ -57,6 +60,7 @@ class AuthRepository {
     try {
       final res = await _stub.refreshSession(
         RefreshSessionRequest()..refreshToken = refreshToken,
+        options: CallOptions(timeout: _kRpcTimeout),
       );
       await _store.rotateTokens(
         accessToken:  res.accessToken,
@@ -105,6 +109,7 @@ class AuthRepository {
     try {
       final res = await _stub.authCallback(
         AuthCallbackRequest()..supabaseToken = token,
+        options: CallOptions(timeout: _kRpcTimeout),
       );
       final session = TherapistSession(
         therapistId:  res.therapistId,
@@ -128,7 +133,8 @@ class AuthRepository {
 
   Future<void> signOut(String refreshToken) async {
     try {
-      await _stub.logout(LogoutRequest()..refreshToken = refreshToken);
+      await _stub.logout(LogoutRequest()..refreshToken = refreshToken,
+          options: CallOptions(timeout: _kRpcTimeout));
     } catch (_) {
       // Best-effort — always clear local storage
     }

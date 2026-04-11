@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v4.24.3
-// source: therapist.proto
+// source: proto/therapist.proto
 
 package therapistpb
 
@@ -723,5 +723,5 @@ var TherapistService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "therapist.proto",
+	Metadata: "proto/therapist.proto",
 }

@@ -348,6 +348,7 @@ const Blog$json = {
     {'1': 'created_at', '3': 12, '4': 1, '5': 9, '10': 'createdAt'},
     {'1': 'updated_at', '3': 13, '4': 1, '5': 9, '10': 'updatedAt'},
     {'1': 'published_at', '3': 14, '4': 1, '5': 9, '10': 'publishedAt'},
+    {'1': 'tags', '3': 15, '4': 3, '5': 9, '10': 'tags'},
   ],
 };
 
@@ -360,7 +361,7 @@ final $typed_data.Uint8List blogDescriptor = $convert.base64Decode(
     'c3QuQmxvZ1N0YXR1c1IGc3RhdHVzEhQKBXZpZXdzGAkgASgDUgV2aWV3cxIUCgVsaWtlcxgKIA'
     'EoA1IFbGlrZXMSHgoLbGlrZWRfYnlfbWUYCyABKAhSCWxpa2VkQnlNZRIdCgpjcmVhdGVkX2F0'
     'GAwgASgJUgljcmVhdGVkQXQSHQoKdXBkYXRlZF9hdBgNIAEoCVIJdXBkYXRlZEF0EiEKDHB1Ym'
-    'xpc2hlZF9hdBgOIAEoCVILcHVibGlzaGVkQXQ=');
+    'xpc2hlZF9hdBgOIAEoCVILcHVibGlzaGVkQXQSEgoEdGFncxgPIAMoCVIEdGFncw==');
 
 @$core.Deprecated('Use createBlogRequestDescriptor instead')
 const CreateBlogRequest$json = {
@@ -371,6 +372,7 @@ const CreateBlogRequest$json = {
     {'1': 'content', '3': 3, '4': 1, '5': 9, '10': 'content'},
     {'1': 'cover_image_url', '3': 4, '4': 1, '5': 9, '10': 'coverImageUrl'},
     {'1': 'image_urls', '3': 5, '4': 3, '5': 9, '10': 'imageUrls'},
+    {'1': 'tags', '3': 6, '4': 3, '5': 9, '10': 'tags'},
   ],
 };
 
@@ -379,7 +381,7 @@ final $typed_data.Uint8List createBlogRequestDescriptor = $convert.base64Decode(
     'ChFDcmVhdGVCbG9nUmVxdWVzdBIhCgx0aGVyYXBpc3RfaWQYASABKAlSC3RoZXJhcGlzdElkEh'
     'QKBXRpdGxlGAIgASgJUgV0aXRsZRIYCgdjb250ZW50GAMgASgJUgdjb250ZW50EiYKD2NvdmVy'
     'X2ltYWdlX3VybBgEIAEoCVINY292ZXJJbWFnZVVybBIdCgppbWFnZV91cmxzGAUgAygJUglpbW'
-    'FnZVVybHM=');
+    'FnZVVybHMSEgoEdGFncxgGIAMoCVIEdGFncw==');
 
 @$core.Deprecated('Use createBlogResponseDescriptor instead')
 const CreateBlogResponse$json = {
@@ -411,6 +413,7 @@ const UpdateBlogRequest$json = {
     {'1': 'content', '3': 4, '4': 1, '5': 9, '10': 'content'},
     {'1': 'cover_image_url', '3': 5, '4': 1, '5': 9, '10': 'coverImageUrl'},
     {'1': 'image_urls', '3': 6, '4': 3, '5': 9, '10': 'imageUrls'},
+    {'1': 'tags', '3': 7, '4': 3, '5': 9, '10': 'tags'},
   ],
 };
 
@@ -419,7 +422,7 @@ final $typed_data.Uint8List updateBlogRequestDescriptor = $convert.base64Decode(
     'ChFVcGRhdGVCbG9nUmVxdWVzdBIhCgx0aGVyYXBpc3RfaWQYASABKAlSC3RoZXJhcGlzdElkEh'
     'cKB2Jsb2dfaWQYAiABKAlSBmJsb2dJZBIUCgV0aXRsZRgDIAEoCVIFdGl0bGUSGAoHY29udGVu'
     'dBgEIAEoCVIHY29udGVudBImCg9jb3Zlcl9pbWFnZV91cmwYBSABKAlSDWNvdmVySW1hZ2VVcm'
-    'wSHQoKaW1hZ2VfdXJscxgGIAMoCVIJaW1hZ2VVcmxz');
+    'wSHQoKaW1hZ2VfdXJscxgGIAMoCVIJaW1hZ2VVcmxzEhIKBHRhZ3MYByADKAlSBHRhZ3M=');
 
 @$core.Deprecated('Use updateBlogResponseDescriptor instead')
 const UpdateBlogResponse$json = {

@@ -6,6 +6,7 @@ import 'package:therapist/core/di/injection.dart';
 import 'package:therapist/features/auth/bloc/auth_bloc.dart';
 import 'package:therapist/features/blog/bloc/blog_bloc.dart';
 import 'package:therapist/features/blog/data/blog_repository.dart';
+import 'package:therapist/features/blog/data/blog_tags.dart';
 
 // Max inline images allowed by the server.
 const _maxImages = 2;
@@ -30,6 +31,7 @@ class _CreateBlogPageState extends State<CreateBlogPage> {
 
   String _coverImageUrl = '';
   final List<String> _imageUrls = [];
+  final Set<String> _selectedTags = {};
 
   // Tracks upload-in-progress state per slot.
   bool _uploadingCover = false;
@@ -52,6 +54,7 @@ class _CreateBlogPageState extends State<CreateBlogPage> {
       _contentCtrl.text = widget.existingBlog!.content;
       _coverImageUrl = widget.existingBlog!.coverImageUrl;
       _imageUrls.addAll(widget.existingBlog!.imageUrls);
+      _selectedTags.addAll(widget.existingBlog!.tags);
     }
   }
 
@@ -160,6 +163,7 @@ class _CreateBlogPageState extends State<CreateBlogPage> {
       content: _contentCtrl.text.trim(),
       coverImageUrl: _coverImageUrl,
       imageUrls: List.from(_imageUrls),
+      tags: _selectedTags.toList(),
       blogId: widget.existingBlog?.id,
     ));
   }
@@ -290,6 +294,27 @@ class _CreateBlogPageState extends State<CreateBlogPage> {
                       label: const Text('Add image'),
                     ),
 
+                  const SizedBox(height: 24),
+
+                  // ── Tags ────────────────────────────────────────────────
+                  Row(
+                    children: [
+                      Text('Tags', style: theme.textTheme.labelLarge),
+                      const SizedBox(width: 8),
+                      Text(
+                        '(select topics)',
+                        style: theme.textTheme.labelSmall?.copyWith(color: cs.outline),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  _TagPicker(
+                    selected: _selectedTags,
+                    onChanged: (tag, selected) => setState(() {
+                      selected ? _selectedTags.add(tag) : _selectedTags.remove(tag);
+                    }),
+                  ),
+
                   const SizedBox(height: 48),
                 ],
               ),
@@ -414,6 +439,41 @@ class _InlineImageRow extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tag picker — wrapping chips from the hardcoded kBlogTags list
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _TagPicker extends StatelessWidget {
+  const _TagPicker({required this.selected, required this.onChanged});
+  final Set<String> selected;
+  final void Function(String tag, bool selected) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Wrap(
+      spacing: 8,
+      runSpacing: 4,
+      children: kBlogTags.map((tag) {
+        final isSelected = selected.contains(tag);
+        return FilterChip(
+          label: Text(tag),
+          selected: isSelected,
+          onSelected: (v) => onChanged(tag, v),
+          selectedColor: cs.primaryContainer,
+          checkmarkColor: cs.onPrimaryContainer,
+          labelStyle: TextStyle(
+            color: isSelected ? cs.onPrimaryContainer : cs.onSurface,
+            fontSize: 12,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        );
+      }).toList(),
     );
   }
 }
