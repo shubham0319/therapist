@@ -26,10 +26,17 @@ class AuthOtpSent extends AuthState {
 }
 
 class AuthAuthenticated extends AuthState {
-  const AuthAuthenticated({required this.therapistId, required this.status});
+  const AuthAuthenticated({
+    required this.therapistId,
+    required this.status,
+    required this.accessToken,
+    required this.refreshToken,
+  });
   final String therapistId;
   // "needs_onboarding" | "pending" | "verified" | "rejected"
   final String status;
+  final String accessToken;
+  final String refreshToken;
   @override
   List<Object?> get props => [therapistId, status];
 }

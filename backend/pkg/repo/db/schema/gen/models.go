@@ -57,9 +57,8 @@ func (ns NullGenderEnum) Value() (driver.Value, error) {
 type SessionTypeEnum string
 
 const (
-	SessionTypeEnumChat  SessionTypeEnum = "chat"
-	SessionTypeEnumAudio SessionTypeEnum = "audio"
-	SessionTypeEnumVideo SessionTypeEnum = "video"
+	SessionTypeEnumVideo    SessionTypeEnum = "video"
+	SessionTypeEnumInPerson SessionTypeEnum = "in_person"
 )
 
 func (e *SessionTypeEnum) Scan(src interface{}) error {
@@ -140,6 +139,47 @@ func (ns NullVerificationStatusEnum) Value() (driver.Value, error) {
 	return string(ns.VerificationStatusEnum), nil
 }
 
+type BlogStatusEnum string
+
+const (
+	BlogStatusEnumDraft     BlogStatusEnum = "draft"
+	BlogStatusEnumPublished BlogStatusEnum = "published"
+)
+
+func (e *BlogStatusEnum) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = BlogStatusEnum(s)
+	case string:
+		*e = BlogStatusEnum(s)
+	default:
+		return fmt.Errorf("unsupported scan type for BlogStatusEnum: %T", src)
+	}
+	return nil
+}
+
+type Blog struct {
+	ID            pgtype.UUID
+	TherapistID   pgtype.UUID
+	Title         string
+	Slug          string
+	CoverImageURL pgtype.Text
+	Content       string
+	ImageURLs     []string
+	Status        BlogStatusEnum
+	Views         int64
+	PublishedAt   pgtype.Timestamptz
+	CreatedAt     pgtype.Timestamptz
+	UpdatedAt     pgtype.Timestamptz
+}
+
+type BlogLike struct {
+	ID          pgtype.UUID
+	BlogID      pgtype.UUID
+	TherapistID pgtype.UUID
+	CreatedAt   pgtype.Timestamptz
+}
+
 type Therapist struct {
 	ID                  pgtype.UUID
 	SupabaseUid         string
@@ -166,4 +206,23 @@ type Therapist struct {
 	Rating              pgtype.Numeric
 	TotalSessions       int32
 	CreatedAt           pgtype.Timestamptz
+}
+
+type TherapistAddress struct {
+	ID          pgtype.UUID
+	TherapistID pgtype.UUID
+	AddressText string
+	Latitude    float64
+	Longitude   float64
+	PlaceID     string
+	CreatedAt   pgtype.Timestamptz
+	UpdatedAt   pgtype.Timestamptz
+}
+
+type TherapistSessionRow struct {
+	ID           pgtype.UUID
+	TherapistID  pgtype.UUID
+	RefreshToken string
+	ExpiresAt    pgtype.Timestamptz
+	CreatedAt    pgtype.Timestamptz
 }

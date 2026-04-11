@@ -9,7 +9,7 @@ option go_package = "therapist/pkg/proto/therapistpb;therapistpb";
 // ─────────────────────────────────────────────
 
 service TherapistService {
-  // Called after Supabase auth. Upserts the therapist and returns their state.
+  // Called after Supabase auth. Upserts the therapist and returns their state + tokens.
   rpc AuthCallback (AuthCallbackRequest) returns (AuthCallbackResponse);
 
   // Returns the current state for an already-authenticated therapist.
@@ -27,6 +27,30 @@ service TherapistService {
   // Upload a file (profile photo, degree certificate, government ID).
   // Returns a URL string. Max 3 MB enforced server-side.
   rpc UploadFile (UploadFileRequest) returns (UploadFileResponse);
+
+  // Exchange a valid refresh token for a new access + refresh token pair.
+  rpc RefreshSession (RefreshSessionRequest) returns (RefreshSessionResponse);
+
+  // Invalidate the refresh token (log out this device).
+  rpc Logout (LogoutRequest) returns (LogoutResponse);
+
+  // ── Blog ──────────────────────────────────────────────────────────────────
+  // Create a draft blog (verified therapists only).
+  rpc CreateBlog (CreateBlogRequest) returns (CreateBlogResponse);
+  // Update a draft blog (owner only).
+  rpc UpdateBlog (UpdateBlogRequest) returns (UpdateBlogResponse);
+  // Publish a draft blog (owner only).
+  rpc PublishBlog (PublishBlogRequest) returns (PublishBlogResponse);
+  // Delete a blog (owner only).
+  rpc DeleteBlog (DeleteBlogRequest) returns (DeleteBlogResponse);
+  // Fetch a single blog; increments view count for published blogs.
+  rpc GetBlog (GetBlogRequest) returns (GetBlogResponse);
+  // List published blogs (optionally filtered by therapist).
+  rpc ListBlogs (ListBlogsRequest) returns (ListBlogsResponse);
+  // Toggle like on a published blog.
+  rpc ToggleLikeBlog (ToggleLikeBlogRequest) returns (ToggleLikeBlogResponse);
+  // Upload a single inline blog image (max 2 MB).
+  rpc UploadBlogImage (UploadBlogImageRequest) returns (UploadBlogImageResponse);
 }
 
 // ─────────────────────────────────────────────
@@ -44,6 +68,10 @@ message AuthCallbackResponse {
   bool   onboarding_completed  = 3;
   string referral_id           = 4;
   string rejection_reason      = 5;
+  // Session tokens
+  string access_token          = 6;
+  string refresh_token         = 7;
+  int64  expires_at            = 8; // Unix timestamp — access token expiry
 }
 
 // ─────────────────────────────────────────────
@@ -75,7 +103,7 @@ message CompleteOnboardingRequest {
   repeated string   specializations     = 4;
   int32             years_of_experience = 5;
   string            session_fee         = 6; // decimal string e.g. "1500.00"
-  repeated string   session_types       = 7; // "chat" | "audio" | "video"
+  repeated string   session_types       = 7; // "video" | "in_person"
   string            degree_certificate  = 8;
   string            registration_number = 9;
   string            issuing_body        = 10;
@@ -86,6 +114,12 @@ message CompleteOnboardingRequest {
   string            profile_photo       = 13;
   string            phone_number        = 14;
   string            government_id       = 15;
+
+  // Required when session_types contains "in_person"
+  string            address_text        = 16;
+  double            latitude            = 17;
+  double            longitude           = 18;
+  string            place_id            = 19;
 }
 
 message CompleteOnboardingResponse {
@@ -127,3 +161,131 @@ message UploadFileRequest {
 message UploadFileResponse {
   string url = 1; // storage URL (stub for now)
 }
+
+// ─────────────────────────────────────────────
+// RefreshSession
+// ─────────────────────────────────────────────
+
+message RefreshSessionRequest {
+  string refresh_token = 1;
+}
+
+message RefreshSessionResponse {
+  string therapist_id   = 1;
+  string status         = 2;
+  string access_token   = 3;
+  string refresh_token  = 4;
+  int64  expires_at     = 5;
+}
+
+// ─────────────────────────────────────────────
+// Logout
+// ─────────────────────────────────────────────
+
+message LogoutRequest {
+  string refresh_token = 1;
+}
+
+message LogoutResponse {
+  bool success = 1;
+}
+
+// ─────────────────────────────────────────────
+// Blog
+// ─────────────────────────────────────────────
+
+enum BlogStatus {
+  BLOG_STATUS_UNSPECIFIED = 0;
+  BLOG_STATUS_DRAFT       = 1;
+  BLOG_STATUS_PUBLISHED   = 2;
+}
+
+message Blog {
+  string     id              = 1;
+  string     therapist_id    = 2;
+  string     title           = 3;
+  string     slug            = 4;
+  string     cover_image_url = 5;
+  string     content         = 6;  // plain text / markdown, max 50 000 chars
+  repeated string image_urls = 7;  // max 2 inline images
+  BlogStatus status          = 8;
+  int64      views           = 9;
+  int64      likes           = 10;
+  bool       liked_by_me     = 11;
+  string     created_at      = 12;
+  string     updated_at      = 13;
+  string     published_at    = 14;
+}
+
+// CreateBlog — verified therapists only; creates a draft.
+message CreateBlogRequest {
+  string          therapist_id    = 1;
+  string          title           = 2;
+  string          content         = 3;
+  string          cover_image_url = 4;
+  repeated string image_urls      = 5;
+}
+message CreateBlogResponse { Blog blog = 1; }
+
+// UpdateBlog — own draft only.
+message UpdateBlogRequest {
+  string          therapist_id    = 1;
+  string          blog_id         = 2;
+  string          title           = 3;
+  string          content         = 4;
+  string          cover_image_url = 5;
+  repeated string image_urls      = 6;
+}
+message UpdateBlogResponse { Blog blog = 1; }
+
+// PublishBlog — move draft → published.
+message PublishBlogRequest {
+  string therapist_id = 1;
+  string blog_id      = 2;
+}
+message PublishBlogResponse { Blog blog = 1; }
+
+// DeleteBlog — own blog (any status).
+message DeleteBlogRequest {
+  string therapist_id = 1;
+  string blog_id      = 2;
+}
+message DeleteBlogResponse { bool success = 1; }
+
+// GetBlog — fetch one blog; increments views when published.
+message GetBlogRequest {
+  string blog_id      = 1;
+  string viewer_id    = 2; // optional — therapist_id of the viewer, used for liked_by_me
+}
+message GetBlogResponse { Blog blog = 1; }
+
+// ListBlogs — paginated list of published blogs (optionally filtered by therapist).
+message ListBlogsRequest {
+  string therapist_id = 1; // optional filter
+  string viewer_id    = 2; // optional — for liked_by_me
+  int32  page         = 3; // 1-based
+  int32  page_size    = 4; // max 50
+}
+message ListBlogsResponse {
+  repeated Blog blogs = 1;
+  int32         total = 2;
+}
+
+// ToggleLikeBlog — like or unlike a published blog.
+message ToggleLikeBlogRequest {
+  string therapist_id = 1; // the liker
+  string blog_id      = 2;
+}
+message ToggleLikeBlogResponse {
+  bool  liked = 1;
+  int64 likes = 2;
+}
+
+// UploadBlogImage — upload one inline blog image (max 2 MB).
+message UploadBlogImageRequest {
+  string therapist_id  = 1;
+  bytes  data          = 2;
+  string file_name     = 3;
+  string content_type  = 4; // image/jpeg | image/png | image/webp
+}
+message UploadBlogImageResponse { string url = 1; }

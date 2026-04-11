@@ -33,7 +33,7 @@ func (h *TherapistHandler) AuthCallback(ctx context.Context, req *therapistpb.Au
 		return nil, status.Error(codes.InvalidArgument, "supabase_token is required")
 	}
 
-	result, err := h.svc.HandleAuthCallback(ctx, req.SupabaseToken)
+	result, pair, err := h.svc.HandleAuthCallback(ctx, req.SupabaseToken)
 	if err != nil {
 		h.log.Error("AuthCallback failed", zap.Error(err))
 		return nil, grpcError(err)
@@ -43,7 +43,7 @@ func (h *TherapistHandler) AuthCallback(ctx context.Context, req *therapistpb.Au
 		zap.String("therapist_id", result.TherapistID),
 		zap.String("status", result.Status),
 	)
-	return toAuthCallbackResponse(result), nil
+	return toAuthCallbackResponse(result, pair), nil
 }
 
 func (h *TherapistHandler) GetStatus(ctx context.Context, req *therapistpb.GetStatusRequest) (*therapistpb.GetStatusResponse, error) {
@@ -96,6 +96,10 @@ func (h *TherapistHandler) CompleteOnboarding(ctx context.Context, req *therapis
 		RegistrationNumber: req.RegistrationNumber,
 		IssuingBody:        req.IssuingBody,
 		GovernmentID:       req.GovernmentId,
+		AddressText:        req.AddressText,
+		Latitude:           req.Latitude,
+		Longitude:          req.Longitude,
+		PlaceID:            req.PlaceId,
 	})
 	if err != nil {
 		h.log.Error("CompleteOnboarding failed",
@@ -184,12 +188,45 @@ func (h *TherapistHandler) UploadFile(ctx context.Context, req *therapistpb.Uplo
 	return &therapistpb.UploadFileResponse{Url: url}, nil
 }
 
-func toAuthCallbackResponse(r *service.AuthResult) *therapistpb.AuthCallbackResponse {
+func (h *TherapistHandler) RefreshSession(ctx context.Context, req *therapistpb.RefreshSessionRequest) (*therapistpb.RefreshSessionResponse, error) {
+	if req.RefreshToken == "" {
+		return nil, status.Error(codes.InvalidArgument, "refresh_token is required")
+	}
+
+	result, pair, err := h.svc.RefreshSession(ctx, req.RefreshToken)
+	if err != nil {
+		h.log.Warn("RefreshSession failed", zap.Error(err))
+		return nil, grpcError(err)
+	}
+
+	h.log.Debug("RefreshSession succeeded", zap.String("therapist_id", result.TherapistID))
+	return &therapistpb.RefreshSessionResponse{
+		TherapistId:  result.TherapistID,
+		Status:       result.Status,
+		AccessToken:  pair.AccessToken,
+		RefreshToken: pair.RefreshToken,
+		ExpiresAt:    pair.ExpiresAt,
+	}, nil
+}
+
+func (h *TherapistHandler) Logout(ctx context.Context, req *therapistpb.LogoutRequest) (*therapistpb.LogoutResponse, error) {
+	if err := h.svc.Logout(ctx, req.RefreshToken); err != nil {
+		h.log.Warn("Logout failed", zap.Error(err))
+		return nil, grpcError(err)
+	}
+	h.log.Debug("Logout succeeded")
+	return &therapistpb.LogoutResponse{Success: true}, nil
+}
+
+func toAuthCallbackResponse(r *service.AuthResult, p service.TokenPair) *therapistpb.AuthCallbackResponse {
 	return &therapistpb.AuthCallbackResponse{
 		TherapistId:         r.TherapistID,
 		Status:              r.Status,
 		OnboardingCompleted: r.OnboardingCompleted,
 		ReferralId:          r.ReferralID,
 		RejectionReason:     r.RejectionReason,
+		AccessToken:         p.AccessToken,
+		RefreshToken:        p.RefreshToken,
+		ExpiresAt:           p.ExpiresAt,
 	}
 }

@@ -38,7 +38,10 @@ type App struct {
 	Postgres          Postgres
 	WebServer         WebServer
 	Redis             Redis
-	SupabaseJWTSecret string `required:"true" split_words:"true"`
+	SupabaseJWTSecret      string `required:"true" split_words:"true"`
+	JWTSecret              string `required:"true" split_words:"true"`
+	AccessTokenTTLMinutes  int    `default:"15"    split_words:"true"`
+	RefreshTokenTTLDays    int    `default:"30"    split_words:"true"`
 }
 
 func FromEnv() (*App, error) {

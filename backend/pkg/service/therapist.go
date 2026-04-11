@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 	"therapist/pkg/auth"
 	"therapist/pkg/repo/db"
@@ -42,6 +43,12 @@ type OnboardingInput struct {
 	RegistrationNumber string
 	IssuingBody        string
 	GovernmentID       string
+
+	// Address — required when session_types contains "in_person"
+	AddressText string
+	Latitude    float64
+	Longitude   float64
+	PlaceID     string
 }
 
 // HandleAuthCallback is called after Supabase authenticates the therapist.
@@ -50,28 +57,32 @@ type OnboardingInput struct {
 // Dev bypass: if IsProdEnv=false, tokens prefixed with "dev:" are accepted
 // without JWT verification. The email is taken from the token itself, e.g.
 // "dev:jane@example.com". Never accepted in production.
-func (s *Service) HandleAuthCallback(ctx context.Context, supabaseToken string) (*AuthResult, error) {
+func (s *Service) HandleAuthCallback(ctx context.Context, supabaseToken string) (*AuthResult, TokenPair, error) {
 	s.log.Debug("auth callback started")
 
 	// ── Dev bypass ───────────────────────────────────────────────────────────
 	if !s.cfg.IsProdEnv && strings.HasPrefix(supabaseToken, "dev:") {
 		email := strings.TrimPrefix(supabaseToken, "dev:")
 		if email == "" {
-			return nil, ErrBadInput
+			return nil, TokenPair{}, ErrBadInput
 		}
 		s.log.Warn("dev auth bypass used — NOT safe for production", zap.String("email", email))
 		t, err := s.db.CreateTherapist(ctx, "dev:"+email, email)
 		if err != nil {
 			s.log.Error("dev auth: failed to upsert therapist", zap.Error(err))
-			return nil, fmt.Errorf("%w: %v", ErrDBQuery, err)
+			return nil, TokenPair{}, fmt.Errorf("%w: %v", ErrDBQuery, err)
 		}
-		return toAuthResult(t), nil
+		pair, err := s.IssueTokens(ctx, t.ID)
+		if err != nil {
+			return nil, TokenPair{}, err
+		}
+		return toAuthResult(t), pair, nil
 	}
 
 	claims, err := auth.VerifySupabaseToken(supabaseToken, s.cfg.SupabaseJWTSecret)
 	if err != nil {
 		s.log.Warn("invalid supabase token", zap.Error(err))
-		return nil, ErrInvalidToken
+		return nil, TokenPair{}, ErrInvalidToken
 	}
 
 	s.log.Debug("token verified", zap.String("supabase_uid", claims.Sub))
@@ -79,7 +90,12 @@ func (s *Service) HandleAuthCallback(ctx context.Context, supabaseToken string) 
 	t, err := s.db.CreateTherapist(ctx, claims.Sub, claims.Email)
 	if err != nil {
 		s.log.Error("failed to upsert therapist", zap.String("supabase_uid", claims.Sub), zap.Error(err))
-		return nil, fmt.Errorf("%w: %v", ErrDBQuery, err)
+		return nil, TokenPair{}, fmt.Errorf("%w: %v", ErrDBQuery, err)
+	}
+
+	pair, err := s.IssueTokens(ctx, t.ID)
+	if err != nil {
+		return nil, TokenPair{}, err
 	}
 
 	result := toAuthResult(t)
@@ -87,7 +103,7 @@ func (s *Service) HandleAuthCallback(ctx context.Context, supabaseToken string) 
 		zap.String("therapist_id", result.TherapistID),
 		zap.String("status", result.Status),
 	)
-	return result, nil
+	return result, pair, nil
 }
 
 // GetTherapistStatus returns the current state for an authenticated therapist.
@@ -143,15 +159,25 @@ func (s *Service) CompleteOnboarding(ctx context.Context, therapistID string, in
 		return ErrBadInput
 	}
 
+	hasInPerson := false
 	sessionTypes := make([]schema.SessionTypeEnum, 0, len(in.SessionTypes))
 	for _, st := range in.SessionTypes {
 		switch schema.SessionTypeEnum(st) {
-		case schema.SessionTypeEnumChat, schema.SessionTypeEnumAudio, schema.SessionTypeEnumVideo:
+		case schema.SessionTypeEnumVideo, schema.SessionTypeEnumInPerson:
 			sessionTypes = append(sessionTypes, schema.SessionTypeEnum(st))
+			if schema.SessionTypeEnum(st) == schema.SessionTypeEnumInPerson {
+				hasInPerson = true
+			}
 		default:
 			s.log.Warn("invalid session type", zap.String("value", st))
 			return ErrBadInput
 		}
+	}
+
+	if hasInPerson && in.AddressText == "" {
+		s.log.Warn("in_person selected but address_text missing",
+			zap.String("therapist_id", therapistID))
+		return fmt.Errorf("%w: address_text required for in_person sessions", ErrImportantFieldMissing)
 	}
 
 	if err := s.db.CompleteOnboarding(ctx, id, db.OnboardingParams{
@@ -175,6 +201,22 @@ func (s *Service) CompleteOnboarding(ctx context.Context, therapistID string, in
 			zap.Error(err),
 		)
 		return err
+	}
+
+	// Upsert address when in_person is selected
+	if hasInPerson {
+		if err := s.db.UpsertTherapistAddress(ctx, id, db.AddressParams{
+			AddressText: in.AddressText,
+			Latitude:    in.Latitude,
+			Longitude:   in.Longitude,
+			PlaceID:     in.PlaceID,
+		}); err != nil {
+			s.log.Error("failed to save therapist address",
+				zap.String("therapist_id", therapistID),
+				zap.Error(err),
+			)
+			return err
+		}
 	}
 
 	s.log.Info("onboarding completed", zap.String("therapist_id", therapistID))
@@ -299,26 +341,81 @@ func toAuthResult(t schema.Therapist) *AuthResult {
 }
 
 func validateOnboarding(in OnboardingInput) error {
-	switch {
-	case in.FullName == "":
-		return fmt.Errorf("%w: full_name", ErrImportantFieldMissing)
-	case len(in.LanguagesSpoken) == 0:
-		return fmt.Errorf("%w: languages_spoken", ErrImportantFieldMissing)
-	case len(in.Specializations) == 0:
-		return fmt.Errorf("%w: specializations", ErrImportantFieldMissing)
-	case len(in.SessionTypes) == 0:
-		return fmt.Errorf("%w: session_types", ErrImportantFieldMissing)
-	case in.YearsOfExperience < 0:
-		return fmt.Errorf("%w: years_of_experience must be >= 0", ErrImportantFieldMissing)
-	case in.SessionFee == "":
-		return fmt.Errorf("%w: session_fee", ErrImportantFieldMissing)
-	case in.DegreeCertificate == "":
-		return fmt.Errorf("%w: degree_certificate", ErrImportantFieldMissing)
-	case in.RegistrationNumber == "":
-		return fmt.Errorf("%w: registration_number", ErrImportantFieldMissing)
-	case in.IssuingBody == "":
-		return fmt.Errorf("%w: issuing_body", ErrImportantFieldMissing)
+	// ── Required string fields ────────────────────────────────────────────────
+	type req struct {
+		name  string
+		value string
+		max   int
 	}
+	required := []req{
+		{"full_name", strings.TrimSpace(in.FullName), 100},
+		{"session_fee", strings.TrimSpace(in.SessionFee), 20},
+		{"degree_certificate", strings.TrimSpace(in.DegreeCertificate), 2048},
+		{"registration_number", strings.TrimSpace(in.RegistrationNumber), 100},
+		{"issuing_body", strings.TrimSpace(in.IssuingBody), 200},
+	}
+	for _, f := range required {
+		if f.value == "" {
+			return fmt.Errorf("%w: %s is required", ErrImportantFieldMissing, f.name)
+		}
+		if len(f.value) > f.max {
+			return fmt.Errorf("%w: %s exceeds %d characters", ErrInvalidFormat, f.name, f.max)
+		}
+	}
+
+	// ── full_name: at least 2 characters ─────────────────────────────────────
+	if len(strings.TrimSpace(in.FullName)) < 2 {
+		return fmt.Errorf("%w: full_name must be at least 2 characters", ErrInvalidFormat)
+	}
+
+	// ── session_fee: must be a positive decimal ───────────────────────────────
+	fee, err := strconv.ParseFloat(strings.TrimSpace(in.SessionFee), 64)
+	if err != nil {
+		return fmt.Errorf("%w: session_fee must be a valid number", ErrInvalidFormat)
+	}
+	if fee < 0 {
+		return fmt.Errorf("%w: session_fee must be >= 0", ErrInvalidFormat)
+	}
+	if fee > 1_000_000 {
+		return fmt.Errorf("%w: session_fee exceeds maximum allowed value", ErrInvalidFormat)
+	}
+
+	// ── years_of_experience ───────────────────────────────────────────────────
+	if in.YearsOfExperience < 0 {
+		return fmt.Errorf("%w: years_of_experience must be >= 0", ErrInvalidFormat)
+	}
+	if in.YearsOfExperience > 70 {
+		return fmt.Errorf("%w: years_of_experience exceeds maximum allowed value", ErrInvalidFormat)
+	}
+
+	// ── Required lists ────────────────────────────────────────────────────────
+	if len(in.LanguagesSpoken) == 0 {
+		return fmt.Errorf("%w: languages_spoken is required", ErrImportantFieldMissing)
+	}
+	if len(in.LanguagesSpoken) > 20 {
+		return fmt.Errorf("%w: languages_spoken exceeds 20 entries", ErrInvalidFormat)
+	}
+	if len(in.Specializations) == 0 {
+		return fmt.Errorf("%w: specializations is required", ErrImportantFieldMissing)
+	}
+	if len(in.Specializations) > 20 {
+		return fmt.Errorf("%w: specializations exceeds 20 entries", ErrInvalidFormat)
+	}
+	if len(in.SessionTypes) == 0 {
+		return fmt.Errorf("%w: session_types is required", ErrImportantFieldMissing)
+	}
+
+	// ── Optional fields: length caps ─────────────────────────────────────────
+	if len(strings.TrimSpace(in.Gender)) > 50 {
+		return fmt.Errorf("%w: gender exceeds 50 characters", ErrInvalidFormat)
+	}
+	if len(strings.TrimSpace(in.Bio)) > 2000 {
+		return fmt.Errorf("%w: bio exceeds 2000 characters", ErrInvalidFormat)
+	}
+	if len(strings.TrimSpace(in.PhoneNumber)) > 20 {
+		return fmt.Errorf("%w: phone_number exceeds 20 characters", ErrInvalidFormat)
+	}
+
 	return nil
 }
 

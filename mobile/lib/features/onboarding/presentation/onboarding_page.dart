@@ -11,6 +11,7 @@ import 'package:therapist/shared/widgets/app_chip_selector.dart';
 import 'package:therapist/shared/widgets/app_file_picker_field.dart';
 import 'package:therapist/shared/widgets/app_step_indicator.dart';
 import 'package:therapist/shared/widgets/app_text_field.dart';
+import 'package:therapist/shared/widgets/location_picker.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Data available for specializations, languages, session types
@@ -28,7 +29,7 @@ const _languages = [
   'Malayalam', 'Marathi', 'Bengali', 'Gujarati', 'Punjabi',
 ];
 
-const _sessionTypes = ['chat', 'audio', 'video'];
+const _sessionTypes = ['video', 'in_person'];
 
 const _genders = ['Male', 'Female', 'Non-binary', 'Prefer not to say'];
 
@@ -63,6 +64,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   String _sessionFee = '';
   String _registrationNumber = '';
   String _issuingBody = '';
+  PickedLocation? _practiceLocation;
 
   PickedFile? _profilePhoto;
   PickedFile? _degreeCert;
@@ -106,11 +108,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
     required String sessionFee,
     required String registrationNumber,
     required String issuingBody,
+    required PickedLocation? practiceLocation,
   }) {
     _sessionTypes = sessionTypes;
     _sessionFee = sessionFee;
     _registrationNumber = registrationNumber;
     _issuingBody = issuingBody;
+    _practiceLocation = practiceLocation;
     _goToStep(3);
   }
 
@@ -137,6 +141,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
       degreeCertName: _degreeCert?.name,
       govIdBytes: _govId?.bytes,
       govIdName: _govId?.name,
+      addressText: _practiceLocation?.addressText ?? '',
+      latitude: _practiceLocation?.latitude ?? 0.0,
+      longitude: _practiceLocation?.longitude ?? 0.0,
+      placeId: _practiceLocation?.placeId ?? '',
     );
 
     ctx.read<OnboardingBloc>().add(
@@ -407,6 +415,7 @@ class _Step3Sessions extends StatefulWidget {
     required String sessionFee,
     required String registrationNumber,
     required String issuingBody,
+    required PickedLocation? practiceLocation,
   }) onNext;
   final VoidCallback onBack;
 
@@ -421,6 +430,8 @@ class _Step3SessionsState extends State<_Step3Sessions> {
   final _bodyCtrl = TextEditingController();
   List<String> _types = [];
   String? _typesError;
+  PickedLocation? _location;
+  String? _locationError;
 
   @override
   void dispose() {
@@ -430,15 +441,27 @@ class _Step3SessionsState extends State<_Step3Sessions> {
     super.dispose();
   }
 
+  bool get _hasInPerson => _types.contains('in_person');
+
   void _next() {
-    setState(
-        () => _typesError = _types.isEmpty ? 'Select at least one session type' : null);
-    if (!_form.currentState!.validate() || _types.isEmpty) return;
+    setState(() {
+      _typesError = _types.isEmpty ? 'Select at least one session type' : null;
+      _locationError = (_hasInPerson && _location == null)
+          ? 'Practice location is required for in-person sessions'
+          : null;
+    });
+    if (!_form.currentState!.validate() ||
+        _types.isEmpty ||
+        (_hasInPerson && _location == null)) {
+      return;
+    }
+
     widget.onNext(
       sessionTypes: _types,
       sessionFee: _feeCtrl.text.trim(),
       registrationNumber: _regCtrl.text.trim(),
       issuingBody: _bodyCtrl.text.trim(),
+      practiceLocation: _location,
     );
   }
 
@@ -460,6 +483,8 @@ class _Step3SessionsState extends State<_Step3Sessions> {
               onChanged: (v) => setState(() {
                 _types = v;
                 _typesError = null;
+                // Clear location error when in_person is deselected
+                if (!v.contains('in_person')) _locationError = null;
               }),
               errorText: _typesError,
             ),
@@ -491,6 +516,19 @@ class _Step3SessionsState extends State<_Step3Sessions> {
               validator: (v) =>
                   (v == null || v.trim().isEmpty) ? 'Issuing body is required' : null,
             ),
+
+            // ── Location picker — shown only when in_person is selected ────
+            if (_hasInPerson) ...[
+              const SizedBox(height: 20),
+              LocationPickerField(
+                picked: _location,
+                errorText: _locationError,
+                onPicked: (loc) => setState(() {
+                  _location = loc;
+                  _locationError = null;
+                }),
+              ),
+            ],
           ],
         ),
       ),

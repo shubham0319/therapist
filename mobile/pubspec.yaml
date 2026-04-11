@@ -47,6 +47,9 @@ dependencies:
   connectivity_plus: ^6.1.4   # Network connectivity checks
   image_picker: ^1.1.2        # Profile photo picker (camera / gallery)
   file_picker: ^8.1.7         # PDF / document picker (degree cert, gov ID)
+  google_maps_flutter: ^2.10.0        # Map widget (Android / iOS / Web)
+  flutter_google_places_sdk: ^0.4.0  # Places Autocomplete API (all platforms)
+  url_launcher: ^6.3.1                # Open mailto: links on rejected screen
 
 dev_dependencies:
   flutter_test:

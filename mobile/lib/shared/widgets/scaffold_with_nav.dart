@@ -18,6 +18,7 @@ class ScaffoldWithNav extends StatelessWidget {
         onDestinationSelected: (i) => _onTap(context, i),
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
+          NavigationDestination(icon: Icon(Icons.article_outlined), label: 'Blog'),
           NavigationDestination(icon: Icon(Icons.person_outline), label: 'Profile'),
         ],
       ),
@@ -25,7 +26,8 @@ class ScaffoldWithNav extends StatelessWidget {
   }
 
   int _indexFromLocation(String location) {
-    if (location.startsWith(AppRoutes.profile)) return 1;
+    if (location.startsWith(AppRoutes.blog)) return 1;
+    if (location.startsWith(AppRoutes.profile)) return 2;
     return 0;
   }
 
@@ -34,6 +36,8 @@ class ScaffoldWithNav extends StatelessWidget {
       case 0:
         ctx.go(AppRoutes.home);
       case 1:
+        ctx.go(AppRoutes.blog);
+      case 2:
         ctx.go(AppRoutes.profile);
     }
   }

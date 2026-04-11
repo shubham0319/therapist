@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v4.24.3
-// source: proto/therapist.proto
+// source: therapist.proto
 
 package therapistpb
 
@@ -25,13 +25,23 @@ const (
 	TherapistService_ApproveTherapist_FullMethodName   = "/therapist.TherapistService/ApproveTherapist"
 	TherapistService_RejectTherapist_FullMethodName    = "/therapist.TherapistService/RejectTherapist"
 	TherapistService_UploadFile_FullMethodName         = "/therapist.TherapistService/UploadFile"
+	TherapistService_RefreshSession_FullMethodName     = "/therapist.TherapistService/RefreshSession"
+	TherapistService_Logout_FullMethodName             = "/therapist.TherapistService/Logout"
+	TherapistService_CreateBlog_FullMethodName         = "/therapist.TherapistService/CreateBlog"
+	TherapistService_UpdateBlog_FullMethodName         = "/therapist.TherapistService/UpdateBlog"
+	TherapistService_PublishBlog_FullMethodName        = "/therapist.TherapistService/PublishBlog"
+	TherapistService_DeleteBlog_FullMethodName         = "/therapist.TherapistService/DeleteBlog"
+	TherapistService_GetBlog_FullMethodName            = "/therapist.TherapistService/GetBlog"
+	TherapistService_ListBlogs_FullMethodName          = "/therapist.TherapistService/ListBlogs"
+	TherapistService_ToggleLikeBlog_FullMethodName     = "/therapist.TherapistService/ToggleLikeBlog"
+	TherapistService_UploadBlogImage_FullMethodName    = "/therapist.TherapistService/UploadBlogImage"
 )
 
 // TherapistServiceClient is the client API for TherapistService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TherapistServiceClient interface {
-	// Called after Supabase auth. Upserts the therapist and returns their state.
+	// Called after Supabase auth. Upserts the therapist and returns their state + tokens.
 	AuthCallback(ctx context.Context, in *AuthCallbackRequest, opts ...grpc.CallOption) (*AuthCallbackResponse, error)
 	// Returns the current state for an already-authenticated therapist.
 	GetStatus(ctx context.Context, in *GetStatusRequest, opts ...grpc.CallOption) (*GetStatusResponse, error)
@@ -44,6 +54,27 @@ type TherapistServiceClient interface {
 	// Upload a file (profile photo, degree certificate, government ID).
 	// Returns a URL string. Max 3 MB enforced server-side.
 	UploadFile(ctx context.Context, in *UploadFileRequest, opts ...grpc.CallOption) (*UploadFileResponse, error)
+	// Exchange a valid refresh token for a new access + refresh token pair.
+	RefreshSession(ctx context.Context, in *RefreshSessionRequest, opts ...grpc.CallOption) (*RefreshSessionResponse, error)
+	// Invalidate the refresh token (log out this device).
+	Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*LogoutResponse, error)
+	// ── Blog ──────────────────────────────────────────────────────────────────
+	// Create a draft blog (verified therapists only).
+	CreateBlog(ctx context.Context, in *CreateBlogRequest, opts ...grpc.CallOption) (*CreateBlogResponse, error)
+	// Update a draft blog (owner only).
+	UpdateBlog(ctx context.Context, in *UpdateBlogRequest, opts ...grpc.CallOption) (*UpdateBlogResponse, error)
+	// Publish a draft blog (owner only).
+	PublishBlog(ctx context.Context, in *PublishBlogRequest, opts ...grpc.CallOption) (*PublishBlogResponse, error)
+	// Delete a blog (owner only).
+	DeleteBlog(ctx context.Context, in *DeleteBlogRequest, opts ...grpc.CallOption) (*DeleteBlogResponse, error)
+	// Fetch a single blog; increments view count for published blogs.
+	GetBlog(ctx context.Context, in *GetBlogRequest, opts ...grpc.CallOption) (*GetBlogResponse, error)
+	// List published blogs (optionally filtered by therapist).
+	ListBlogs(ctx context.Context, in *ListBlogsRequest, opts ...grpc.CallOption) (*ListBlogsResponse, error)
+	// Toggle like on a published blog.
+	ToggleLikeBlog(ctx context.Context, in *ToggleLikeBlogRequest, opts ...grpc.CallOption) (*ToggleLikeBlogResponse, error)
+	// Upload a single inline blog image (max 2 MB).
+	UploadBlogImage(ctx context.Context, in *UploadBlogImageRequest, opts ...grpc.CallOption) (*UploadBlogImageResponse, error)
 }
 
 type therapistServiceClient struct {
@@ -114,11 +145,111 @@ func (c *therapistServiceClient) UploadFile(ctx context.Context, in *UploadFileR
 	return out, nil
 }
 
+func (c *therapistServiceClient) RefreshSession(ctx context.Context, in *RefreshSessionRequest, opts ...grpc.CallOption) (*RefreshSessionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RefreshSessionResponse)
+	err := c.cc.Invoke(ctx, TherapistService_RefreshSession_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*LogoutResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LogoutResponse)
+	err := c.cc.Invoke(ctx, TherapistService_Logout_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) CreateBlog(ctx context.Context, in *CreateBlogRequest, opts ...grpc.CallOption) (*CreateBlogResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateBlogResponse)
+	err := c.cc.Invoke(ctx, TherapistService_CreateBlog_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) UpdateBlog(ctx context.Context, in *UpdateBlogRequest, opts ...grpc.CallOption) (*UpdateBlogResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateBlogResponse)
+	err := c.cc.Invoke(ctx, TherapistService_UpdateBlog_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) PublishBlog(ctx context.Context, in *PublishBlogRequest, opts ...grpc.CallOption) (*PublishBlogResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PublishBlogResponse)
+	err := c.cc.Invoke(ctx, TherapistService_PublishBlog_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) DeleteBlog(ctx context.Context, in *DeleteBlogRequest, opts ...grpc.CallOption) (*DeleteBlogResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteBlogResponse)
+	err := c.cc.Invoke(ctx, TherapistService_DeleteBlog_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) GetBlog(ctx context.Context, in *GetBlogRequest, opts ...grpc.CallOption) (*GetBlogResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetBlogResponse)
+	err := c.cc.Invoke(ctx, TherapistService_GetBlog_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) ListBlogs(ctx context.Context, in *ListBlogsRequest, opts ...grpc.CallOption) (*ListBlogsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListBlogsResponse)
+	err := c.cc.Invoke(ctx, TherapistService_ListBlogs_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) ToggleLikeBlog(ctx context.Context, in *ToggleLikeBlogRequest, opts ...grpc.CallOption) (*ToggleLikeBlogResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ToggleLikeBlogResponse)
+	err := c.cc.Invoke(ctx, TherapistService_ToggleLikeBlog_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) UploadBlogImage(ctx context.Context, in *UploadBlogImageRequest, opts ...grpc.CallOption) (*UploadBlogImageResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UploadBlogImageResponse)
+	err := c.cc.Invoke(ctx, TherapistService_UploadBlogImage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TherapistServiceServer is the server API for TherapistService service.
 // All implementations must embed UnimplementedTherapistServiceServer
 // for forward compatibility.
 type TherapistServiceServer interface {
-	// Called after Supabase auth. Upserts the therapist and returns their state.
+	// Called after Supabase auth. Upserts the therapist and returns their state + tokens.
 	AuthCallback(context.Context, *AuthCallbackRequest) (*AuthCallbackResponse, error)
 	// Returns the current state for an already-authenticated therapist.
 	GetStatus(context.Context, *GetStatusRequest) (*GetStatusResponse, error)
@@ -131,6 +262,27 @@ type TherapistServiceServer interface {
 	// Upload a file (profile photo, degree certificate, government ID).
 	// Returns a URL string. Max 3 MB enforced server-side.
 	UploadFile(context.Context, *UploadFileRequest) (*UploadFileResponse, error)
+	// Exchange a valid refresh token for a new access + refresh token pair.
+	RefreshSession(context.Context, *RefreshSessionRequest) (*RefreshSessionResponse, error)
+	// Invalidate the refresh token (log out this device).
+	Logout(context.Context, *LogoutRequest) (*LogoutResponse, error)
+	// ── Blog ──────────────────────────────────────────────────────────────────
+	// Create a draft blog (verified therapists only).
+	CreateBlog(context.Context, *CreateBlogRequest) (*CreateBlogResponse, error)
+	// Update a draft blog (owner only).
+	UpdateBlog(context.Context, *UpdateBlogRequest) (*UpdateBlogResponse, error)
+	// Publish a draft blog (owner only).
+	PublishBlog(context.Context, *PublishBlogRequest) (*PublishBlogResponse, error)
+	// Delete a blog (owner only).
+	DeleteBlog(context.Context, *DeleteBlogRequest) (*DeleteBlogResponse, error)
+	// Fetch a single blog; increments view count for published blogs.
+	GetBlog(context.Context, *GetBlogRequest) (*GetBlogResponse, error)
+	// List published blogs (optionally filtered by therapist).
+	ListBlogs(context.Context, *ListBlogsRequest) (*ListBlogsResponse, error)
+	// Toggle like on a published blog.
+	ToggleLikeBlog(context.Context, *ToggleLikeBlogRequest) (*ToggleLikeBlogResponse, error)
+	// Upload a single inline blog image (max 2 MB).
+	UploadBlogImage(context.Context, *UploadBlogImageRequest) (*UploadBlogImageResponse, error)
 	mustEmbedUnimplementedTherapistServiceServer()
 }
 
@@ -158,6 +310,36 @@ func (UnimplementedTherapistServiceServer) RejectTherapist(context.Context, *Rej
 }
 func (UnimplementedTherapistServiceServer) UploadFile(context.Context, *UploadFileRequest) (*UploadFileResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UploadFile not implemented")
+}
+func (UnimplementedTherapistServiceServer) RefreshSession(context.Context, *RefreshSessionRequest) (*RefreshSessionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RefreshSession not implemented")
+}
+func (UnimplementedTherapistServiceServer) Logout(context.Context, *LogoutRequest) (*LogoutResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Logout not implemented")
+}
+func (UnimplementedTherapistServiceServer) CreateBlog(context.Context, *CreateBlogRequest) (*CreateBlogResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateBlog not implemented")
+}
+func (UnimplementedTherapistServiceServer) UpdateBlog(context.Context, *UpdateBlogRequest) (*UpdateBlogResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateBlog not implemented")
+}
+func (UnimplementedTherapistServiceServer) PublishBlog(context.Context, *PublishBlogRequest) (*PublishBlogResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method PublishBlog not implemented")
+}
+func (UnimplementedTherapistServiceServer) DeleteBlog(context.Context, *DeleteBlogRequest) (*DeleteBlogResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteBlog not implemented")
+}
+func (UnimplementedTherapistServiceServer) GetBlog(context.Context, *GetBlogRequest) (*GetBlogResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetBlog not implemented")
+}
+func (UnimplementedTherapistServiceServer) ListBlogs(context.Context, *ListBlogsRequest) (*ListBlogsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListBlogs not implemented")
+}
+func (UnimplementedTherapistServiceServer) ToggleLikeBlog(context.Context, *ToggleLikeBlogRequest) (*ToggleLikeBlogResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ToggleLikeBlog not implemented")
+}
+func (UnimplementedTherapistServiceServer) UploadBlogImage(context.Context, *UploadBlogImageRequest) (*UploadBlogImageResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UploadBlogImage not implemented")
 }
 func (UnimplementedTherapistServiceServer) mustEmbedUnimplementedTherapistServiceServer() {}
 func (UnimplementedTherapistServiceServer) testEmbeddedByValue()                          {}
@@ -288,6 +470,186 @@ func _TherapistService_UploadFile_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TherapistService_RefreshSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).RefreshSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_RefreshSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).RefreshSession(ctx, req.(*RefreshSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogoutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).Logout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_Logout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).Logout(ctx, req.(*LogoutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_CreateBlog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateBlogRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).CreateBlog(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_CreateBlog_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).CreateBlog(ctx, req.(*CreateBlogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_UpdateBlog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateBlogRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).UpdateBlog(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_UpdateBlog_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).UpdateBlog(ctx, req.(*UpdateBlogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_PublishBlog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PublishBlogRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).PublishBlog(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_PublishBlog_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).PublishBlog(ctx, req.(*PublishBlogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_DeleteBlog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteBlogRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).DeleteBlog(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_DeleteBlog_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).DeleteBlog(ctx, req.(*DeleteBlogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_GetBlog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBlogRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).GetBlog(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_GetBlog_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).GetBlog(ctx, req.(*GetBlogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_ListBlogs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListBlogsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).ListBlogs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_ListBlogs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).ListBlogs(ctx, req.(*ListBlogsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_ToggleLikeBlog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ToggleLikeBlogRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).ToggleLikeBlog(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_ToggleLikeBlog_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).ToggleLikeBlog(ctx, req.(*ToggleLikeBlogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_UploadBlogImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadBlogImageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).UploadBlogImage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_UploadBlogImage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).UploadBlogImage(ctx, req.(*UploadBlogImageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TherapistService_ServiceDesc is the grpc.ServiceDesc for TherapistService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -319,7 +681,47 @@ var TherapistService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "UploadFile",
 			Handler:    _TherapistService_UploadFile_Handler,
 		},
+		{
+			MethodName: "RefreshSession",
+			Handler:    _TherapistService_RefreshSession_Handler,
+		},
+		{
+			MethodName: "Logout",
+			Handler:    _TherapistService_Logout_Handler,
+		},
+		{
+			MethodName: "CreateBlog",
+			Handler:    _TherapistService_CreateBlog_Handler,
+		},
+		{
+			MethodName: "UpdateBlog",
+			Handler:    _TherapistService_UpdateBlog_Handler,
+		},
+		{
+			MethodName: "PublishBlog",
+			Handler:    _TherapistService_PublishBlog_Handler,
+		},
+		{
+			MethodName: "DeleteBlog",
+			Handler:    _TherapistService_DeleteBlog_Handler,
+		},
+		{
+			MethodName: "GetBlog",
+			Handler:    _TherapistService_GetBlog_Handler,
+		},
+		{
+			MethodName: "ListBlogs",
+			Handler:    _TherapistService_ListBlogs_Handler,
+		},
+		{
+			MethodName: "ToggleLikeBlog",
+			Handler:    _TherapistService_ToggleLikeBlog_Handler,
+		},
+		{
+			MethodName: "UploadBlogImage",
+			Handler:    _TherapistService_UploadBlogImage_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/therapist.proto",
+	Metadata: "therapist.proto",
 }

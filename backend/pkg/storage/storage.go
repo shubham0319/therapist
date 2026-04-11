@@ -15,13 +15,24 @@ import (
 
 const MaxFileSize = 3 * 1024 * 1024 // 3 MB
 
-var ErrFileTooLarge = errors.New("file exceeds 3 MB limit")
+// MaxBlogImageSize is the per-image limit for blog inline images.
+const MaxBlogImageSize = 2 * 1024 * 1024 // 2 MB
+
+var ErrFileTooLarge = errors.New("file exceeds size limit")
 
 // AllowedFileTypes maps the logical file type to its human label.
 var AllowedFileTypes = map[string]bool{
-	"profile_photo":       true,
-	"degree_certificate":  true,
-	"government_id":       true,
+	"profile_photo":      true,
+	"degree_certificate": true,
+	"government_id":      true,
+	"blog_image":         true,
+}
+
+// AllowedBlogImageContentTypes is the allow-list for blog image MIME types.
+var AllowedBlogImageContentTypes = map[string]bool{
+	"image/jpeg": true,
+	"image/png":  true,
+	"image/webp": true,
 }
 
 // Client is the storage abstraction.

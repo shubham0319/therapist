@@ -23,8 +23,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (_) => emit(const AuthUnauthenticated()),
       (session) => emit(AuthAuthenticated(
-        therapistId: session.therapistId,
-        status: session.status,
+        therapistId:  session.therapistId,
+        status:       session.status,
+        accessToken:  session.accessToken,
+        refreshToken: session.refreshToken,
       )),
     );
   }
@@ -36,8 +38,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthError(failure.message)),
       (session) => emit(AuthAuthenticated(
-        therapistId: session.therapistId,
-        status: session.status,
+        therapistId:  session.therapistId,
+        status:       session.status,
+        accessToken:  session.accessToken,
+        refreshToken: session.refreshToken,
       )),
     );
   }
@@ -63,15 +67,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthError(failure.message)),
       (session) => emit(AuthAuthenticated(
-        therapistId: session.therapistId,
-        status: session.status,
+        therapistId:  session.therapistId,
+        status:       session.status,
+        accessToken:  session.accessToken,
+        refreshToken: session.refreshToken,
       )),
     );
   }
 
   Future<void> _onSignOut(
       AuthSignOutRequested event, Emitter<AuthState> emit) async {
-    await _repo.signOut();
+    final refreshToken = state is AuthAuthenticated
+        ? (state as AuthAuthenticated).refreshToken
+        : '';
+    await _repo.signOut(refreshToken);
     emit(const AuthUnauthenticated());
   }
 }

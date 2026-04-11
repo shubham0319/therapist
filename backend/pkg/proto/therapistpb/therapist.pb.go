@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v4.24.3
-// source: proto/therapist.proto
+// source: therapist.proto
 
 package therapistpb
 
@@ -21,6 +21,55 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type BlogStatus int32
+
+const (
+	BlogStatus_BLOG_STATUS_UNSPECIFIED BlogStatus = 0
+	BlogStatus_BLOG_STATUS_DRAFT       BlogStatus = 1
+	BlogStatus_BLOG_STATUS_PUBLISHED   BlogStatus = 2
+)
+
+// Enum value maps for BlogStatus.
+var (
+	BlogStatus_name = map[int32]string{
+		0: "BLOG_STATUS_UNSPECIFIED",
+		1: "BLOG_STATUS_DRAFT",
+		2: "BLOG_STATUS_PUBLISHED",
+	}
+	BlogStatus_value = map[string]int32{
+		"BLOG_STATUS_UNSPECIFIED": 0,
+		"BLOG_STATUS_DRAFT":       1,
+		"BLOG_STATUS_PUBLISHED":   2,
+	}
+)
+
+func (x BlogStatus) Enum() *BlogStatus {
+	p := new(BlogStatus)
+	*p = x
+	return p
+}
+
+func (x BlogStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (BlogStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_therapist_proto_enumTypes[0].Descriptor()
+}
+
+func (BlogStatus) Type() protoreflect.EnumType {
+	return &file_therapist_proto_enumTypes[0]
+}
+
+func (x BlogStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use BlogStatus.Descriptor instead.
+func (BlogStatus) EnumDescriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{0}
+}
+
 type AuthCallbackRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SupabaseToken string                 `protobuf:"bytes,1,opt,name=supabase_token,json=supabaseToken,proto3" json:"supabase_token,omitempty"`
@@ -30,7 +79,7 @@ type AuthCallbackRequest struct {
 
 func (x *AuthCallbackRequest) Reset() {
 	*x = AuthCallbackRequest{}
-	mi := &file_proto_therapist_proto_msgTypes[0]
+	mi := &file_therapist_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +91,7 @@ func (x *AuthCallbackRequest) String() string {
 func (*AuthCallbackRequest) ProtoMessage() {}
 
 func (x *AuthCallbackRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[0]
+	mi := &file_therapist_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +104,7 @@ func (x *AuthCallbackRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthCallbackRequest.ProtoReflect.Descriptor instead.
 func (*AuthCallbackRequest) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{0}
+	return file_therapist_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *AuthCallbackRequest) GetSupabaseToken() string {
@@ -73,13 +122,17 @@ type AuthCallbackResponse struct {
 	OnboardingCompleted bool   `protobuf:"varint,3,opt,name=onboarding_completed,json=onboardingCompleted,proto3" json:"onboarding_completed,omitempty"`
 	ReferralId          string `protobuf:"bytes,4,opt,name=referral_id,json=referralId,proto3" json:"referral_id,omitempty"`
 	RejectionReason     string `protobuf:"bytes,5,opt,name=rejection_reason,json=rejectionReason,proto3" json:"rejection_reason,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// Session tokens
+	AccessToken   string `protobuf:"bytes,6,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	RefreshToken  string `protobuf:"bytes,7,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	ExpiresAt     int64  `protobuf:"varint,8,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"` // Unix timestamp — access token expiry
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AuthCallbackResponse) Reset() {
 	*x = AuthCallbackResponse{}
-	mi := &file_proto_therapist_proto_msgTypes[1]
+	mi := &file_therapist_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -91,7 +144,7 @@ func (x *AuthCallbackResponse) String() string {
 func (*AuthCallbackResponse) ProtoMessage() {}
 
 func (x *AuthCallbackResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[1]
+	mi := &file_therapist_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -104,7 +157,7 @@ func (x *AuthCallbackResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthCallbackResponse.ProtoReflect.Descriptor instead.
 func (*AuthCallbackResponse) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{1}
+	return file_therapist_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *AuthCallbackResponse) GetTherapistId() string {
@@ -142,6 +195,27 @@ func (x *AuthCallbackResponse) GetRejectionReason() string {
 	return ""
 }
 
+func (x *AuthCallbackResponse) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+func (x *AuthCallbackResponse) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
+}
+
+func (x *AuthCallbackResponse) GetExpiresAt() int64 {
+	if x != nil {
+		return x.ExpiresAt
+	}
+	return 0
+}
+
 type GetStatusRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SupabaseToken string                 `protobuf:"bytes,1,opt,name=supabase_token,json=supabaseToken,proto3" json:"supabase_token,omitempty"`
@@ -151,7 +225,7 @@ type GetStatusRequest struct {
 
 func (x *GetStatusRequest) Reset() {
 	*x = GetStatusRequest{}
-	mi := &file_proto_therapist_proto_msgTypes[2]
+	mi := &file_therapist_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -163,7 +237,7 @@ func (x *GetStatusRequest) String() string {
 func (*GetStatusRequest) ProtoMessage() {}
 
 func (x *GetStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[2]
+	mi := &file_therapist_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -176,7 +250,7 @@ func (x *GetStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetStatusRequest.ProtoReflect.Descriptor instead.
 func (*GetStatusRequest) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{2}
+	return file_therapist_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetStatusRequest) GetSupabaseToken() string {
@@ -199,7 +273,7 @@ type GetStatusResponse struct {
 
 func (x *GetStatusResponse) Reset() {
 	*x = GetStatusResponse{}
-	mi := &file_proto_therapist_proto_msgTypes[3]
+	mi := &file_therapist_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -211,7 +285,7 @@ func (x *GetStatusResponse) String() string {
 func (*GetStatusResponse) ProtoMessage() {}
 
 func (x *GetStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[3]
+	mi := &file_therapist_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -224,7 +298,7 @@ func (x *GetStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetStatusResponse.ProtoReflect.Descriptor instead.
 func (*GetStatusResponse) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{3}
+	return file_therapist_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetStatusResponse) GetTherapistId() string {
@@ -271,23 +345,28 @@ type CompleteOnboardingRequest struct {
 	Specializations    []string `protobuf:"bytes,4,rep,name=specializations,proto3" json:"specializations,omitempty"`
 	YearsOfExperience  int32    `protobuf:"varint,5,opt,name=years_of_experience,json=yearsOfExperience,proto3" json:"years_of_experience,omitempty"`
 	SessionFee         string   `protobuf:"bytes,6,opt,name=session_fee,json=sessionFee,proto3" json:"session_fee,omitempty"`       // decimal string e.g. "1500.00"
-	SessionTypes       []string `protobuf:"bytes,7,rep,name=session_types,json=sessionTypes,proto3" json:"session_types,omitempty"` // "chat" | "audio" | "video"
+	SessionTypes       []string `protobuf:"bytes,7,rep,name=session_types,json=sessionTypes,proto3" json:"session_types,omitempty"` // "video" | "in_person"
 	DegreeCertificate  string   `protobuf:"bytes,8,opt,name=degree_certificate,json=degreeCertificate,proto3" json:"degree_certificate,omitempty"`
 	RegistrationNumber string   `protobuf:"bytes,9,opt,name=registration_number,json=registrationNumber,proto3" json:"registration_number,omitempty"`
 	IssuingBody        string   `protobuf:"bytes,10,opt,name=issuing_body,json=issuingBody,proto3" json:"issuing_body,omitempty"`
 	// Optional
-	Gender        string `protobuf:"bytes,11,opt,name=gender,proto3" json:"gender,omitempty"`
-	Bio           string `protobuf:"bytes,12,opt,name=bio,proto3" json:"bio,omitempty"`
-	ProfilePhoto  string `protobuf:"bytes,13,opt,name=profile_photo,json=profilePhoto,proto3" json:"profile_photo,omitempty"`
-	PhoneNumber   string `protobuf:"bytes,14,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty"`
-	GovernmentId  string `protobuf:"bytes,15,opt,name=government_id,json=governmentId,proto3" json:"government_id,omitempty"`
+	Gender       string `protobuf:"bytes,11,opt,name=gender,proto3" json:"gender,omitempty"`
+	Bio          string `protobuf:"bytes,12,opt,name=bio,proto3" json:"bio,omitempty"`
+	ProfilePhoto string `protobuf:"bytes,13,opt,name=profile_photo,json=profilePhoto,proto3" json:"profile_photo,omitempty"`
+	PhoneNumber  string `protobuf:"bytes,14,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty"`
+	GovernmentId string `protobuf:"bytes,15,opt,name=government_id,json=governmentId,proto3" json:"government_id,omitempty"`
+	// Required when session_types contains "in_person"
+	AddressText   string  `protobuf:"bytes,16,opt,name=address_text,json=addressText,proto3" json:"address_text,omitempty"`
+	Latitude      float64 `protobuf:"fixed64,17,opt,name=latitude,proto3" json:"latitude,omitempty"`
+	Longitude     float64 `protobuf:"fixed64,18,opt,name=longitude,proto3" json:"longitude,omitempty"`
+	PlaceId       string  `protobuf:"bytes,19,opt,name=place_id,json=placeId,proto3" json:"place_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CompleteOnboardingRequest) Reset() {
 	*x = CompleteOnboardingRequest{}
-	mi := &file_proto_therapist_proto_msgTypes[4]
+	mi := &file_therapist_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -299,7 +378,7 @@ func (x *CompleteOnboardingRequest) String() string {
 func (*CompleteOnboardingRequest) ProtoMessage() {}
 
 func (x *CompleteOnboardingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[4]
+	mi := &file_therapist_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -312,7 +391,7 @@ func (x *CompleteOnboardingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CompleteOnboardingRequest.ProtoReflect.Descriptor instead.
 func (*CompleteOnboardingRequest) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{4}
+	return file_therapist_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CompleteOnboardingRequest) GetTherapistId() string {
@@ -420,6 +499,34 @@ func (x *CompleteOnboardingRequest) GetGovernmentId() string {
 	return ""
 }
 
+func (x *CompleteOnboardingRequest) GetAddressText() string {
+	if x != nil {
+		return x.AddressText
+	}
+	return ""
+}
+
+func (x *CompleteOnboardingRequest) GetLatitude() float64 {
+	if x != nil {
+		return x.Latitude
+	}
+	return 0
+}
+
+func (x *CompleteOnboardingRequest) GetLongitude() float64 {
+	if x != nil {
+		return x.Longitude
+	}
+	return 0
+}
+
+func (x *CompleteOnboardingRequest) GetPlaceId() string {
+	if x != nil {
+		return x.PlaceId
+	}
+	return ""
+}
+
 type CompleteOnboardingResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
@@ -429,7 +536,7 @@ type CompleteOnboardingResponse struct {
 
 func (x *CompleteOnboardingResponse) Reset() {
 	*x = CompleteOnboardingResponse{}
-	mi := &file_proto_therapist_proto_msgTypes[5]
+	mi := &file_therapist_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -441,7 +548,7 @@ func (x *CompleteOnboardingResponse) String() string {
 func (*CompleteOnboardingResponse) ProtoMessage() {}
 
 func (x *CompleteOnboardingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[5]
+	mi := &file_therapist_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -454,7 +561,7 @@ func (x *CompleteOnboardingResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CompleteOnboardingResponse.ProtoReflect.Descriptor instead.
 func (*CompleteOnboardingResponse) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{5}
+	return file_therapist_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *CompleteOnboardingResponse) GetSuccess() bool {
@@ -473,7 +580,7 @@ type ApproveTherapistRequest struct {
 
 func (x *ApproveTherapistRequest) Reset() {
 	*x = ApproveTherapistRequest{}
-	mi := &file_proto_therapist_proto_msgTypes[6]
+	mi := &file_therapist_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -485,7 +592,7 @@ func (x *ApproveTherapistRequest) String() string {
 func (*ApproveTherapistRequest) ProtoMessage() {}
 
 func (x *ApproveTherapistRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[6]
+	mi := &file_therapist_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -498,7 +605,7 @@ func (x *ApproveTherapistRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApproveTherapistRequest.ProtoReflect.Descriptor instead.
 func (*ApproveTherapistRequest) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{6}
+	return file_therapist_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ApproveTherapistRequest) GetTherapistId() string {
@@ -517,7 +624,7 @@ type ApproveTherapistResponse struct {
 
 func (x *ApproveTherapistResponse) Reset() {
 	*x = ApproveTherapistResponse{}
-	mi := &file_proto_therapist_proto_msgTypes[7]
+	mi := &file_therapist_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -529,7 +636,7 @@ func (x *ApproveTherapistResponse) String() string {
 func (*ApproveTherapistResponse) ProtoMessage() {}
 
 func (x *ApproveTherapistResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[7]
+	mi := &file_therapist_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -542,7 +649,7 @@ func (x *ApproveTherapistResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApproveTherapistResponse.ProtoReflect.Descriptor instead.
 func (*ApproveTherapistResponse) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{7}
+	return file_therapist_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ApproveTherapistResponse) GetReferralId() string {
@@ -562,7 +669,7 @@ type RejectTherapistRequest struct {
 
 func (x *RejectTherapistRequest) Reset() {
 	*x = RejectTherapistRequest{}
-	mi := &file_proto_therapist_proto_msgTypes[8]
+	mi := &file_therapist_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -574,7 +681,7 @@ func (x *RejectTherapistRequest) String() string {
 func (*RejectTherapistRequest) ProtoMessage() {}
 
 func (x *RejectTherapistRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[8]
+	mi := &file_therapist_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -587,7 +694,7 @@ func (x *RejectTherapistRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RejectTherapistRequest.ProtoReflect.Descriptor instead.
 func (*RejectTherapistRequest) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{8}
+	return file_therapist_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *RejectTherapistRequest) GetTherapistId() string {
@@ -613,7 +720,7 @@ type RejectTherapistResponse struct {
 
 func (x *RejectTherapistResponse) Reset() {
 	*x = RejectTherapistResponse{}
-	mi := &file_proto_therapist_proto_msgTypes[9]
+	mi := &file_therapist_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -625,7 +732,7 @@ func (x *RejectTherapistResponse) String() string {
 func (*RejectTherapistResponse) ProtoMessage() {}
 
 func (x *RejectTherapistResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[9]
+	mi := &file_therapist_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -638,7 +745,7 @@ func (x *RejectTherapistResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RejectTherapistResponse.ProtoReflect.Descriptor instead.
 func (*RejectTherapistResponse) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{9}
+	return file_therapist_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *RejectTherapistResponse) GetSuccess() bool {
@@ -660,7 +767,7 @@ type UploadFileRequest struct {
 
 func (x *UploadFileRequest) Reset() {
 	*x = UploadFileRequest{}
-	mi := &file_proto_therapist_proto_msgTypes[10]
+	mi := &file_therapist_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -672,7 +779,7 @@ func (x *UploadFileRequest) String() string {
 func (*UploadFileRequest) ProtoMessage() {}
 
 func (x *UploadFileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[10]
+	mi := &file_therapist_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -685,7 +792,7 @@ func (x *UploadFileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadFileRequest.ProtoReflect.Descriptor instead.
 func (*UploadFileRequest) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{10}
+	return file_therapist_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UploadFileRequest) GetData() []byte {
@@ -718,7 +825,7 @@ type UploadFileResponse struct {
 
 func (x *UploadFileResponse) Reset() {
 	*x = UploadFileResponse{}
-	mi := &file_proto_therapist_proto_msgTypes[11]
+	mi := &file_therapist_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -730,7 +837,7 @@ func (x *UploadFileResponse) String() string {
 func (*UploadFileResponse) ProtoMessage() {}
 
 func (x *UploadFileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[11]
+	mi := &file_therapist_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -743,7 +850,7 @@ func (x *UploadFileResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadFileResponse.ProtoReflect.Descriptor instead.
 func (*UploadFileResponse) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{11}
+	return file_therapist_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UploadFileResponse) GetUrl() string {
@@ -753,20 +860,1260 @@ func (x *UploadFileResponse) GetUrl() string {
 	return ""
 }
 
-var File_proto_therapist_proto protoreflect.FileDescriptor
+type RefreshSessionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RefreshToken  string                 `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
 
-const file_proto_therapist_proto_rawDesc = "" +
+func (x *RefreshSessionRequest) Reset() {
+	*x = RefreshSessionRequest{}
+	mi := &file_therapist_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RefreshSessionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RefreshSessionRequest) ProtoMessage() {}
+
+func (x *RefreshSessionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RefreshSessionRequest.ProtoReflect.Descriptor instead.
+func (*RefreshSessionRequest) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *RefreshSessionRequest) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
+}
+
+type RefreshSessionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TherapistId   string                 `protobuf:"bytes,1,opt,name=therapist_id,json=therapistId,proto3" json:"therapist_id,omitempty"`
+	Status        string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
+	AccessToken   string                 `protobuf:"bytes,3,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	RefreshToken  string                 `protobuf:"bytes,4,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	ExpiresAt     int64                  `protobuf:"varint,5,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RefreshSessionResponse) Reset() {
+	*x = RefreshSessionResponse{}
+	mi := &file_therapist_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RefreshSessionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RefreshSessionResponse) ProtoMessage() {}
+
+func (x *RefreshSessionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RefreshSessionResponse.ProtoReflect.Descriptor instead.
+func (*RefreshSessionResponse) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *RefreshSessionResponse) GetTherapistId() string {
+	if x != nil {
+		return x.TherapistId
+	}
+	return ""
+}
+
+func (x *RefreshSessionResponse) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *RefreshSessionResponse) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+func (x *RefreshSessionResponse) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
+}
+
+func (x *RefreshSessionResponse) GetExpiresAt() int64 {
+	if x != nil {
+		return x.ExpiresAt
+	}
+	return 0
+}
+
+type LogoutRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RefreshToken  string                 `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LogoutRequest) Reset() {
+	*x = LogoutRequest{}
+	mi := &file_therapist_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LogoutRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LogoutRequest) ProtoMessage() {}
+
+func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LogoutRequest.ProtoReflect.Descriptor instead.
+func (*LogoutRequest) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *LogoutRequest) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
+}
+
+type LogoutResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LogoutResponse) Reset() {
+	*x = LogoutResponse{}
+	mi := &file_therapist_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LogoutResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LogoutResponse) ProtoMessage() {}
+
+func (x *LogoutResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LogoutResponse.ProtoReflect.Descriptor instead.
+func (*LogoutResponse) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *LogoutResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type Blog struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	TherapistId   string                 `protobuf:"bytes,2,opt,name=therapist_id,json=therapistId,proto3" json:"therapist_id,omitempty"`
+	Title         string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	Slug          string                 `protobuf:"bytes,4,opt,name=slug,proto3" json:"slug,omitempty"`
+	CoverImageUrl string                 `protobuf:"bytes,5,opt,name=cover_image_url,json=coverImageUrl,proto3" json:"cover_image_url,omitempty"`
+	Content       string                 `protobuf:"bytes,6,opt,name=content,proto3" json:"content,omitempty"`                      // plain text / markdown, max 50 000 chars
+	ImageUrls     []string               `protobuf:"bytes,7,rep,name=image_urls,json=imageUrls,proto3" json:"image_urls,omitempty"` // max 2 inline images
+	Status        BlogStatus             `protobuf:"varint,8,opt,name=status,proto3,enum=therapist.BlogStatus" json:"status,omitempty"`
+	Views         int64                  `protobuf:"varint,9,opt,name=views,proto3" json:"views,omitempty"`
+	Likes         int64                  `protobuf:"varint,10,opt,name=likes,proto3" json:"likes,omitempty"`
+	LikedByMe     bool                   `protobuf:"varint,11,opt,name=liked_by_me,json=likedByMe,proto3" json:"liked_by_me,omitempty"`
+	CreatedAt     string                 `protobuf:"bytes,12,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     string                 `protobuf:"bytes,13,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	PublishedAt   string                 `protobuf:"bytes,14,opt,name=published_at,json=publishedAt,proto3" json:"published_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Blog) Reset() {
+	*x = Blog{}
+	mi := &file_therapist_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Blog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Blog) ProtoMessage() {}
+
+func (x *Blog) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Blog.ProtoReflect.Descriptor instead.
+func (*Blog) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *Blog) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Blog) GetTherapistId() string {
+	if x != nil {
+		return x.TherapistId
+	}
+	return ""
+}
+
+func (x *Blog) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *Blog) GetSlug() string {
+	if x != nil {
+		return x.Slug
+	}
+	return ""
+}
+
+func (x *Blog) GetCoverImageUrl() string {
+	if x != nil {
+		return x.CoverImageUrl
+	}
+	return ""
+}
+
+func (x *Blog) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *Blog) GetImageUrls() []string {
+	if x != nil {
+		return x.ImageUrls
+	}
+	return nil
+}
+
+func (x *Blog) GetStatus() BlogStatus {
+	if x != nil {
+		return x.Status
+	}
+	return BlogStatus_BLOG_STATUS_UNSPECIFIED
+}
+
+func (x *Blog) GetViews() int64 {
+	if x != nil {
+		return x.Views
+	}
+	return 0
+}
+
+func (x *Blog) GetLikes() int64 {
+	if x != nil {
+		return x.Likes
+	}
+	return 0
+}
+
+func (x *Blog) GetLikedByMe() bool {
+	if x != nil {
+		return x.LikedByMe
+	}
+	return false
+}
+
+func (x *Blog) GetCreatedAt() string {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return ""
+}
+
+func (x *Blog) GetUpdatedAt() string {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return ""
+}
+
+func (x *Blog) GetPublishedAt() string {
+	if x != nil {
+		return x.PublishedAt
+	}
+	return ""
+}
+
+// CreateBlog — verified therapists only; creates a draft.
+type CreateBlogRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TherapistId   string                 `protobuf:"bytes,1,opt,name=therapist_id,json=therapistId,proto3" json:"therapist_id,omitempty"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	CoverImageUrl string                 `protobuf:"bytes,4,opt,name=cover_image_url,json=coverImageUrl,proto3" json:"cover_image_url,omitempty"`
+	ImageUrls     []string               `protobuf:"bytes,5,rep,name=image_urls,json=imageUrls,proto3" json:"image_urls,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateBlogRequest) Reset() {
+	*x = CreateBlogRequest{}
+	mi := &file_therapist_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateBlogRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateBlogRequest) ProtoMessage() {}
+
+func (x *CreateBlogRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateBlogRequest.ProtoReflect.Descriptor instead.
+func (*CreateBlogRequest) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *CreateBlogRequest) GetTherapistId() string {
+	if x != nil {
+		return x.TherapistId
+	}
+	return ""
+}
+
+func (x *CreateBlogRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *CreateBlogRequest) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *CreateBlogRequest) GetCoverImageUrl() string {
+	if x != nil {
+		return x.CoverImageUrl
+	}
+	return ""
+}
+
+func (x *CreateBlogRequest) GetImageUrls() []string {
+	if x != nil {
+		return x.ImageUrls
+	}
+	return nil
+}
+
+type CreateBlogResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Blog          *Blog                  `protobuf:"bytes,1,opt,name=blog,proto3" json:"blog,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateBlogResponse) Reset() {
+	*x = CreateBlogResponse{}
+	mi := &file_therapist_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateBlogResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateBlogResponse) ProtoMessage() {}
+
+func (x *CreateBlogResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateBlogResponse.ProtoReflect.Descriptor instead.
+func (*CreateBlogResponse) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *CreateBlogResponse) GetBlog() *Blog {
+	if x != nil {
+		return x.Blog
+	}
+	return nil
+}
+
+// UpdateBlog — own draft only.
+type UpdateBlogRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TherapistId   string                 `protobuf:"bytes,1,opt,name=therapist_id,json=therapistId,proto3" json:"therapist_id,omitempty"`
+	BlogId        string                 `protobuf:"bytes,2,opt,name=blog_id,json=blogId,proto3" json:"blog_id,omitempty"`
+	Title         string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
+	CoverImageUrl string                 `protobuf:"bytes,5,opt,name=cover_image_url,json=coverImageUrl,proto3" json:"cover_image_url,omitempty"`
+	ImageUrls     []string               `protobuf:"bytes,6,rep,name=image_urls,json=imageUrls,proto3" json:"image_urls,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateBlogRequest) Reset() {
+	*x = UpdateBlogRequest{}
+	mi := &file_therapist_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateBlogRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateBlogRequest) ProtoMessage() {}
+
+func (x *UpdateBlogRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateBlogRequest.ProtoReflect.Descriptor instead.
+func (*UpdateBlogRequest) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *UpdateBlogRequest) GetTherapistId() string {
+	if x != nil {
+		return x.TherapistId
+	}
+	return ""
+}
+
+func (x *UpdateBlogRequest) GetBlogId() string {
+	if x != nil {
+		return x.BlogId
+	}
+	return ""
+}
+
+func (x *UpdateBlogRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *UpdateBlogRequest) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *UpdateBlogRequest) GetCoverImageUrl() string {
+	if x != nil {
+		return x.CoverImageUrl
+	}
+	return ""
+}
+
+func (x *UpdateBlogRequest) GetImageUrls() []string {
+	if x != nil {
+		return x.ImageUrls
+	}
+	return nil
+}
+
+type UpdateBlogResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Blog          *Blog                  `protobuf:"bytes,1,opt,name=blog,proto3" json:"blog,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateBlogResponse) Reset() {
+	*x = UpdateBlogResponse{}
+	mi := &file_therapist_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateBlogResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateBlogResponse) ProtoMessage() {}
+
+func (x *UpdateBlogResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateBlogResponse.ProtoReflect.Descriptor instead.
+func (*UpdateBlogResponse) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *UpdateBlogResponse) GetBlog() *Blog {
+	if x != nil {
+		return x.Blog
+	}
+	return nil
+}
+
+// PublishBlog — move draft → published.
+type PublishBlogRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TherapistId   string                 `protobuf:"bytes,1,opt,name=therapist_id,json=therapistId,proto3" json:"therapist_id,omitempty"`
+	BlogId        string                 `protobuf:"bytes,2,opt,name=blog_id,json=blogId,proto3" json:"blog_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PublishBlogRequest) Reset() {
+	*x = PublishBlogRequest{}
+	mi := &file_therapist_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PublishBlogRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PublishBlogRequest) ProtoMessage() {}
+
+func (x *PublishBlogRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PublishBlogRequest.ProtoReflect.Descriptor instead.
+func (*PublishBlogRequest) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *PublishBlogRequest) GetTherapistId() string {
+	if x != nil {
+		return x.TherapistId
+	}
+	return ""
+}
+
+func (x *PublishBlogRequest) GetBlogId() string {
+	if x != nil {
+		return x.BlogId
+	}
+	return ""
+}
+
+type PublishBlogResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Blog          *Blog                  `protobuf:"bytes,1,opt,name=blog,proto3" json:"blog,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PublishBlogResponse) Reset() {
+	*x = PublishBlogResponse{}
+	mi := &file_therapist_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PublishBlogResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PublishBlogResponse) ProtoMessage() {}
+
+func (x *PublishBlogResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PublishBlogResponse.ProtoReflect.Descriptor instead.
+func (*PublishBlogResponse) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *PublishBlogResponse) GetBlog() *Blog {
+	if x != nil {
+		return x.Blog
+	}
+	return nil
+}
+
+// DeleteBlog — own blog (any status).
+type DeleteBlogRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TherapistId   string                 `protobuf:"bytes,1,opt,name=therapist_id,json=therapistId,proto3" json:"therapist_id,omitempty"`
+	BlogId        string                 `protobuf:"bytes,2,opt,name=blog_id,json=blogId,proto3" json:"blog_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteBlogRequest) Reset() {
+	*x = DeleteBlogRequest{}
+	mi := &file_therapist_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteBlogRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteBlogRequest) ProtoMessage() {}
+
+func (x *DeleteBlogRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteBlogRequest.ProtoReflect.Descriptor instead.
+func (*DeleteBlogRequest) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *DeleteBlogRequest) GetTherapistId() string {
+	if x != nil {
+		return x.TherapistId
+	}
+	return ""
+}
+
+func (x *DeleteBlogRequest) GetBlogId() string {
+	if x != nil {
+		return x.BlogId
+	}
+	return ""
+}
+
+type DeleteBlogResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteBlogResponse) Reset() {
+	*x = DeleteBlogResponse{}
+	mi := &file_therapist_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteBlogResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteBlogResponse) ProtoMessage() {}
+
+func (x *DeleteBlogResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteBlogResponse.ProtoReflect.Descriptor instead.
+func (*DeleteBlogResponse) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *DeleteBlogResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+// GetBlog — fetch one blog; increments views when published.
+type GetBlogRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	BlogId        string                 `protobuf:"bytes,1,opt,name=blog_id,json=blogId,proto3" json:"blog_id,omitempty"`
+	ViewerId      string                 `protobuf:"bytes,2,opt,name=viewer_id,json=viewerId,proto3" json:"viewer_id,omitempty"` // optional — therapist_id of the viewer, used for liked_by_me
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetBlogRequest) Reset() {
+	*x = GetBlogRequest{}
+	mi := &file_therapist_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetBlogRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetBlogRequest) ProtoMessage() {}
+
+func (x *GetBlogRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetBlogRequest.ProtoReflect.Descriptor instead.
+func (*GetBlogRequest) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *GetBlogRequest) GetBlogId() string {
+	if x != nil {
+		return x.BlogId
+	}
+	return ""
+}
+
+func (x *GetBlogRequest) GetViewerId() string {
+	if x != nil {
+		return x.ViewerId
+	}
+	return ""
+}
+
+type GetBlogResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Blog          *Blog                  `protobuf:"bytes,1,opt,name=blog,proto3" json:"blog,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetBlogResponse) Reset() {
+	*x = GetBlogResponse{}
+	mi := &file_therapist_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetBlogResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetBlogResponse) ProtoMessage() {}
+
+func (x *GetBlogResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetBlogResponse.ProtoReflect.Descriptor instead.
+func (*GetBlogResponse) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *GetBlogResponse) GetBlog() *Blog {
+	if x != nil {
+		return x.Blog
+	}
+	return nil
+}
+
+// ListBlogs — paginated list of published blogs (optionally filtered by therapist).
+type ListBlogsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TherapistId   string                 `protobuf:"bytes,1,opt,name=therapist_id,json=therapistId,proto3" json:"therapist_id,omitempty"` // optional filter
+	ViewerId      string                 `protobuf:"bytes,2,opt,name=viewer_id,json=viewerId,proto3" json:"viewer_id,omitempty"`          // optional — for liked_by_me
+	Page          int32                  `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`                                 // 1-based
+	PageSize      int32                  `protobuf:"varint,4,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`         // max 50
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListBlogsRequest) Reset() {
+	*x = ListBlogsRequest{}
+	mi := &file_therapist_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListBlogsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListBlogsRequest) ProtoMessage() {}
+
+func (x *ListBlogsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListBlogsRequest.ProtoReflect.Descriptor instead.
+func (*ListBlogsRequest) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *ListBlogsRequest) GetTherapistId() string {
+	if x != nil {
+		return x.TherapistId
+	}
+	return ""
+}
+
+func (x *ListBlogsRequest) GetViewerId() string {
+	if x != nil {
+		return x.ViewerId
+	}
+	return ""
+}
+
+func (x *ListBlogsRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *ListBlogsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+type ListBlogsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Blogs         []*Blog                `protobuf:"bytes,1,rep,name=blogs,proto3" json:"blogs,omitempty"`
+	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListBlogsResponse) Reset() {
+	*x = ListBlogsResponse{}
+	mi := &file_therapist_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListBlogsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListBlogsResponse) ProtoMessage() {}
+
+func (x *ListBlogsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListBlogsResponse.ProtoReflect.Descriptor instead.
+func (*ListBlogsResponse) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *ListBlogsResponse) GetBlogs() []*Blog {
+	if x != nil {
+		return x.Blogs
+	}
+	return nil
+}
+
+func (x *ListBlogsResponse) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+// ToggleLikeBlog — like or unlike a published blog.
+type ToggleLikeBlogRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TherapistId   string                 `protobuf:"bytes,1,opt,name=therapist_id,json=therapistId,proto3" json:"therapist_id,omitempty"` // the liker
+	BlogId        string                 `protobuf:"bytes,2,opt,name=blog_id,json=blogId,proto3" json:"blog_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ToggleLikeBlogRequest) Reset() {
+	*x = ToggleLikeBlogRequest{}
+	mi := &file_therapist_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ToggleLikeBlogRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ToggleLikeBlogRequest) ProtoMessage() {}
+
+func (x *ToggleLikeBlogRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ToggleLikeBlogRequest.ProtoReflect.Descriptor instead.
+func (*ToggleLikeBlogRequest) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *ToggleLikeBlogRequest) GetTherapistId() string {
+	if x != nil {
+		return x.TherapistId
+	}
+	return ""
+}
+
+func (x *ToggleLikeBlogRequest) GetBlogId() string {
+	if x != nil {
+		return x.BlogId
+	}
+	return ""
+}
+
+type ToggleLikeBlogResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Liked         bool                   `protobuf:"varint,1,opt,name=liked,proto3" json:"liked,omitempty"`
+	Likes         int64                  `protobuf:"varint,2,opt,name=likes,proto3" json:"likes,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ToggleLikeBlogResponse) Reset() {
+	*x = ToggleLikeBlogResponse{}
+	mi := &file_therapist_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ToggleLikeBlogResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ToggleLikeBlogResponse) ProtoMessage() {}
+
+func (x *ToggleLikeBlogResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ToggleLikeBlogResponse.ProtoReflect.Descriptor instead.
+func (*ToggleLikeBlogResponse) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *ToggleLikeBlogResponse) GetLiked() bool {
+	if x != nil {
+		return x.Liked
+	}
+	return false
+}
+
+func (x *ToggleLikeBlogResponse) GetLikes() int64 {
+	if x != nil {
+		return x.Likes
+	}
+	return 0
+}
+
+// UploadBlogImage — upload one inline blog image (max 2 MB).
+type UploadBlogImageRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TherapistId   string                 `protobuf:"bytes,1,opt,name=therapist_id,json=therapistId,proto3" json:"therapist_id,omitempty"`
+	Data          []byte                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	FileName      string                 `protobuf:"bytes,3,opt,name=file_name,json=fileName,proto3" json:"file_name,omitempty"`
+	ContentType   string                 `protobuf:"bytes,4,opt,name=content_type,json=contentType,proto3" json:"content_type,omitempty"` // image/jpeg | image/png | image/webp
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UploadBlogImageRequest) Reset() {
+	*x = UploadBlogImageRequest{}
+	mi := &file_therapist_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadBlogImageRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadBlogImageRequest) ProtoMessage() {}
+
+func (x *UploadBlogImageRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadBlogImageRequest.ProtoReflect.Descriptor instead.
+func (*UploadBlogImageRequest) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *UploadBlogImageRequest) GetTherapistId() string {
+	if x != nil {
+		return x.TherapistId
+	}
+	return ""
+}
+
+func (x *UploadBlogImageRequest) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *UploadBlogImageRequest) GetFileName() string {
+	if x != nil {
+		return x.FileName
+	}
+	return ""
+}
+
+func (x *UploadBlogImageRequest) GetContentType() string {
+	if x != nil {
+		return x.ContentType
+	}
+	return ""
+}
+
+type UploadBlogImageResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UploadBlogImageResponse) Reset() {
+	*x = UploadBlogImageResponse{}
+	mi := &file_therapist_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadBlogImageResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadBlogImageResponse) ProtoMessage() {}
+
+func (x *UploadBlogImageResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_therapist_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadBlogImageResponse.ProtoReflect.Descriptor instead.
+func (*UploadBlogImageResponse) Descriptor() ([]byte, []int) {
+	return file_therapist_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *UploadBlogImageResponse) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+var File_therapist_proto protoreflect.FileDescriptor
+
+const file_therapist_proto_rawDesc = "" +
 	"\n" +
-	"\x15proto/therapist.proto\x12\ttherapist\"<\n" +
+	"\x0ftherapist.proto\x12\ttherapist\"<\n" +
 	"\x13AuthCallbackRequest\x12%\n" +
-	"\x0esupabase_token\x18\x01 \x01(\tR\rsupabaseToken\"\xd0\x01\n" +
+	"\x0esupabase_token\x18\x01 \x01(\tR\rsupabaseToken\"\xb7\x02\n" +
 	"\x14AuthCallbackResponse\x12!\n" +
 	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x16\n" +
 	"\x06status\x18\x02 \x01(\tR\x06status\x121\n" +
 	"\x14onboarding_completed\x18\x03 \x01(\bR\x13onboardingCompleted\x12\x1f\n" +
 	"\vreferral_id\x18\x04 \x01(\tR\n" +
 	"referralId\x12)\n" +
-	"\x10rejection_reason\x18\x05 \x01(\tR\x0frejectionReason\"9\n" +
+	"\x10rejection_reason\x18\x05 \x01(\tR\x0frejectionReason\x12!\n" +
+	"\faccess_token\x18\x06 \x01(\tR\vaccessToken\x12#\n" +
+	"\rrefresh_token\x18\a \x01(\tR\frefreshToken\x12\x1d\n" +
+	"\n" +
+	"expires_at\x18\b \x01(\x03R\texpiresAt\"9\n" +
 	"\x10GetStatusRequest\x12%\n" +
 	"\x0esupabase_token\x18\x01 \x01(\tR\rsupabaseToken\"\xcd\x01\n" +
 	"\x11GetStatusResponse\x12!\n" +
@@ -775,7 +2122,7 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\x14onboarding_completed\x18\x03 \x01(\bR\x13onboardingCompleted\x12\x1f\n" +
 	"\vreferral_id\x18\x04 \x01(\tR\n" +
 	"referralId\x12)\n" +
-	"\x10rejection_reason\x18\x05 \x01(\tR\x0frejectionReason\"\xc0\x04\n" +
+	"\x10rejection_reason\x18\x05 \x01(\tR\x0frejectionReason\"\xb8\x05\n" +
 	"\x19CompleteOnboardingRequest\x12!\n" +
 	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x1b\n" +
 	"\tfull_name\x18\x02 \x01(\tR\bfullName\x12)\n" +
@@ -793,7 +2140,11 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\x03bio\x18\f \x01(\tR\x03bio\x12#\n" +
 	"\rprofile_photo\x18\r \x01(\tR\fprofilePhoto\x12!\n" +
 	"\fphone_number\x18\x0e \x01(\tR\vphoneNumber\x12#\n" +
-	"\rgovernment_id\x18\x0f \x01(\tR\fgovernmentId\"6\n" +
+	"\rgovernment_id\x18\x0f \x01(\tR\fgovernmentId\x12!\n" +
+	"\faddress_text\x18\x10 \x01(\tR\vaddressText\x12\x1a\n" +
+	"\blatitude\x18\x11 \x01(\x01R\blatitude\x12\x1c\n" +
+	"\tlongitude\x18\x12 \x01(\x01R\tlongitude\x12\x19\n" +
+	"\bplace_id\x18\x13 \x01(\tR\aplaceId\"6\n" +
 	"\x1aCompleteOnboardingResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\"<\n" +
 	"\x17ApproveTherapistRequest\x12!\n" +
@@ -811,7 +2162,100 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\tfile_name\x18\x02 \x01(\tR\bfileName\x12\x1b\n" +
 	"\tfile_type\x18\x03 \x01(\tR\bfileType\"&\n" +
 	"\x12UploadFileResponse\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url2\x90\x04\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\"<\n" +
+	"\x15RefreshSessionRequest\x12#\n" +
+	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"\xba\x01\n" +
+	"\x16RefreshSessionResponse\x12!\n" +
+	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x16\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\x12!\n" +
+	"\faccess_token\x18\x03 \x01(\tR\vaccessToken\x12#\n" +
+	"\rrefresh_token\x18\x04 \x01(\tR\frefreshToken\x12\x1d\n" +
+	"\n" +
+	"expires_at\x18\x05 \x01(\x03R\texpiresAt\"4\n" +
+	"\rLogoutRequest\x12#\n" +
+	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"*\n" +
+	"\x0eLogoutResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\xa0\x03\n" +
+	"\x04Blog\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
+	"\ftherapist_id\x18\x02 \x01(\tR\vtherapistId\x12\x14\n" +
+	"\x05title\x18\x03 \x01(\tR\x05title\x12\x12\n" +
+	"\x04slug\x18\x04 \x01(\tR\x04slug\x12&\n" +
+	"\x0fcover_image_url\x18\x05 \x01(\tR\rcoverImageUrl\x12\x18\n" +
+	"\acontent\x18\x06 \x01(\tR\acontent\x12\x1d\n" +
+	"\n" +
+	"image_urls\x18\a \x03(\tR\timageUrls\x12-\n" +
+	"\x06status\x18\b \x01(\x0e2\x15.therapist.BlogStatusR\x06status\x12\x14\n" +
+	"\x05views\x18\t \x01(\x03R\x05views\x12\x14\n" +
+	"\x05likes\x18\n" +
+	" \x01(\x03R\x05likes\x12\x1e\n" +
+	"\vliked_by_me\x18\v \x01(\bR\tlikedByMe\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\f \x01(\tR\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\r \x01(\tR\tupdatedAt\x12!\n" +
+	"\fpublished_at\x18\x0e \x01(\tR\vpublishedAt\"\xad\x01\n" +
+	"\x11CreateBlogRequest\x12!\n" +
+	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\x12\x18\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent\x12&\n" +
+	"\x0fcover_image_url\x18\x04 \x01(\tR\rcoverImageUrl\x12\x1d\n" +
+	"\n" +
+	"image_urls\x18\x05 \x03(\tR\timageUrls\"9\n" +
+	"\x12CreateBlogResponse\x12#\n" +
+	"\x04blog\x18\x01 \x01(\v2\x0f.therapist.BlogR\x04blog\"\xc6\x01\n" +
+	"\x11UpdateBlogRequest\x12!\n" +
+	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x17\n" +
+	"\ablog_id\x18\x02 \x01(\tR\x06blogId\x12\x14\n" +
+	"\x05title\x18\x03 \x01(\tR\x05title\x12\x18\n" +
+	"\acontent\x18\x04 \x01(\tR\acontent\x12&\n" +
+	"\x0fcover_image_url\x18\x05 \x01(\tR\rcoverImageUrl\x12\x1d\n" +
+	"\n" +
+	"image_urls\x18\x06 \x03(\tR\timageUrls\"9\n" +
+	"\x12UpdateBlogResponse\x12#\n" +
+	"\x04blog\x18\x01 \x01(\v2\x0f.therapist.BlogR\x04blog\"P\n" +
+	"\x12PublishBlogRequest\x12!\n" +
+	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x17\n" +
+	"\ablog_id\x18\x02 \x01(\tR\x06blogId\":\n" +
+	"\x13PublishBlogResponse\x12#\n" +
+	"\x04blog\x18\x01 \x01(\v2\x0f.therapist.BlogR\x04blog\"O\n" +
+	"\x11DeleteBlogRequest\x12!\n" +
+	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x17\n" +
+	"\ablog_id\x18\x02 \x01(\tR\x06blogId\".\n" +
+	"\x12DeleteBlogResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"F\n" +
+	"\x0eGetBlogRequest\x12\x17\n" +
+	"\ablog_id\x18\x01 \x01(\tR\x06blogId\x12\x1b\n" +
+	"\tviewer_id\x18\x02 \x01(\tR\bviewerId\"6\n" +
+	"\x0fGetBlogResponse\x12#\n" +
+	"\x04blog\x18\x01 \x01(\v2\x0f.therapist.BlogR\x04blog\"\x83\x01\n" +
+	"\x10ListBlogsRequest\x12!\n" +
+	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x1b\n" +
+	"\tviewer_id\x18\x02 \x01(\tR\bviewerId\x12\x12\n" +
+	"\x04page\x18\x03 \x01(\x05R\x04page\x12\x1b\n" +
+	"\tpage_size\x18\x04 \x01(\x05R\bpageSize\"P\n" +
+	"\x11ListBlogsResponse\x12%\n" +
+	"\x05blogs\x18\x01 \x03(\v2\x0f.therapist.BlogR\x05blogs\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"S\n" +
+	"\x15ToggleLikeBlogRequest\x12!\n" +
+	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x17\n" +
+	"\ablog_id\x18\x02 \x01(\tR\x06blogId\"D\n" +
+	"\x16ToggleLikeBlogResponse\x12\x14\n" +
+	"\x05liked\x18\x01 \x01(\bR\x05liked\x12\x14\n" +
+	"\x05likes\x18\x02 \x01(\x03R\x05likes\"\x8f\x01\n" +
+	"\x16UploadBlogImageRequest\x12!\n" +
+	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x12\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\x12\x1b\n" +
+	"\tfile_name\x18\x03 \x01(\tR\bfileName\x12!\n" +
+	"\fcontent_type\x18\x04 \x01(\tR\vcontentType\"+\n" +
+	"\x17UploadBlogImageResponse\x12\x10\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url*[\n" +
+	"\n" +
+	"BlogStatus\x12\x1b\n" +
+	"\x17BLOG_STATUS_UNSPECIFIED\x10\x00\x12\x15\n" +
+	"\x11BLOG_STATUS_DRAFT\x10\x01\x12\x19\n" +
+	"\x15BLOG_STATUS_PUBLISHED\x10\x022\x90\n" +
+	"\n" +
 	"\x10TherapistService\x12O\n" +
 	"\fAuthCallback\x12\x1e.therapist.AuthCallbackRequest\x1a\x1f.therapist.AuthCallbackResponse\x12F\n" +
 	"\tGetStatus\x12\x1b.therapist.GetStatusRequest\x1a\x1c.therapist.GetStatusResponse\x12a\n" +
@@ -819,75 +2263,138 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\x10ApproveTherapist\x12\".therapist.ApproveTherapistRequest\x1a#.therapist.ApproveTherapistResponse\x12X\n" +
 	"\x0fRejectTherapist\x12!.therapist.RejectTherapistRequest\x1a\".therapist.RejectTherapistResponse\x12I\n" +
 	"\n" +
-	"UploadFile\x12\x1c.therapist.UploadFileRequest\x1a\x1d.therapist.UploadFileResponseB-Z+therapist/pkg/proto/therapistpb;therapistpbb\x06proto3"
+	"UploadFile\x12\x1c.therapist.UploadFileRequest\x1a\x1d.therapist.UploadFileResponse\x12U\n" +
+	"\x0eRefreshSession\x12 .therapist.RefreshSessionRequest\x1a!.therapist.RefreshSessionResponse\x12=\n" +
+	"\x06Logout\x12\x18.therapist.LogoutRequest\x1a\x19.therapist.LogoutResponse\x12I\n" +
+	"\n" +
+	"CreateBlog\x12\x1c.therapist.CreateBlogRequest\x1a\x1d.therapist.CreateBlogResponse\x12I\n" +
+	"\n" +
+	"UpdateBlog\x12\x1c.therapist.UpdateBlogRequest\x1a\x1d.therapist.UpdateBlogResponse\x12L\n" +
+	"\vPublishBlog\x12\x1d.therapist.PublishBlogRequest\x1a\x1e.therapist.PublishBlogResponse\x12I\n" +
+	"\n" +
+	"DeleteBlog\x12\x1c.therapist.DeleteBlogRequest\x1a\x1d.therapist.DeleteBlogResponse\x12@\n" +
+	"\aGetBlog\x12\x19.therapist.GetBlogRequest\x1a\x1a.therapist.GetBlogResponse\x12F\n" +
+	"\tListBlogs\x12\x1b.therapist.ListBlogsRequest\x1a\x1c.therapist.ListBlogsResponse\x12U\n" +
+	"\x0eToggleLikeBlog\x12 .therapist.ToggleLikeBlogRequest\x1a!.therapist.ToggleLikeBlogResponse\x12X\n" +
+	"\x0fUploadBlogImage\x12!.therapist.UploadBlogImageRequest\x1a\".therapist.UploadBlogImageResponseB-Z+therapist/pkg/proto/therapistpb;therapistpbb\x06proto3"
 
 var (
-	file_proto_therapist_proto_rawDescOnce sync.Once
-	file_proto_therapist_proto_rawDescData []byte
+	file_therapist_proto_rawDescOnce sync.Once
+	file_therapist_proto_rawDescData []byte
 )
 
-func file_proto_therapist_proto_rawDescGZIP() []byte {
-	file_proto_therapist_proto_rawDescOnce.Do(func() {
-		file_proto_therapist_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_therapist_proto_rawDesc), len(file_proto_therapist_proto_rawDesc)))
+func file_therapist_proto_rawDescGZIP() []byte {
+	file_therapist_proto_rawDescOnce.Do(func() {
+		file_therapist_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_therapist_proto_rawDesc), len(file_therapist_proto_rawDesc)))
 	})
-	return file_proto_therapist_proto_rawDescData
+	return file_therapist_proto_rawDescData
 }
 
-var file_proto_therapist_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
-var file_proto_therapist_proto_goTypes = []any{
-	(*AuthCallbackRequest)(nil),        // 0: therapist.AuthCallbackRequest
-	(*AuthCallbackResponse)(nil),       // 1: therapist.AuthCallbackResponse
-	(*GetStatusRequest)(nil),           // 2: therapist.GetStatusRequest
-	(*GetStatusResponse)(nil),          // 3: therapist.GetStatusResponse
-	(*CompleteOnboardingRequest)(nil),  // 4: therapist.CompleteOnboardingRequest
-	(*CompleteOnboardingResponse)(nil), // 5: therapist.CompleteOnboardingResponse
-	(*ApproveTherapistRequest)(nil),    // 6: therapist.ApproveTherapistRequest
-	(*ApproveTherapistResponse)(nil),   // 7: therapist.ApproveTherapistResponse
-	(*RejectTherapistRequest)(nil),     // 8: therapist.RejectTherapistRequest
-	(*RejectTherapistResponse)(nil),    // 9: therapist.RejectTherapistResponse
-	(*UploadFileRequest)(nil),          // 10: therapist.UploadFileRequest
-	(*UploadFileResponse)(nil),         // 11: therapist.UploadFileResponse
+var file_therapist_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_therapist_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
+var file_therapist_proto_goTypes = []any{
+	(BlogStatus)(0),                    // 0: therapist.BlogStatus
+	(*AuthCallbackRequest)(nil),        // 1: therapist.AuthCallbackRequest
+	(*AuthCallbackResponse)(nil),       // 2: therapist.AuthCallbackResponse
+	(*GetStatusRequest)(nil),           // 3: therapist.GetStatusRequest
+	(*GetStatusResponse)(nil),          // 4: therapist.GetStatusResponse
+	(*CompleteOnboardingRequest)(nil),  // 5: therapist.CompleteOnboardingRequest
+	(*CompleteOnboardingResponse)(nil), // 6: therapist.CompleteOnboardingResponse
+	(*ApproveTherapistRequest)(nil),    // 7: therapist.ApproveTherapistRequest
+	(*ApproveTherapistResponse)(nil),   // 8: therapist.ApproveTherapistResponse
+	(*RejectTherapistRequest)(nil),     // 9: therapist.RejectTherapistRequest
+	(*RejectTherapistResponse)(nil),    // 10: therapist.RejectTherapistResponse
+	(*UploadFileRequest)(nil),          // 11: therapist.UploadFileRequest
+	(*UploadFileResponse)(nil),         // 12: therapist.UploadFileResponse
+	(*RefreshSessionRequest)(nil),      // 13: therapist.RefreshSessionRequest
+	(*RefreshSessionResponse)(nil),     // 14: therapist.RefreshSessionResponse
+	(*LogoutRequest)(nil),              // 15: therapist.LogoutRequest
+	(*LogoutResponse)(nil),             // 16: therapist.LogoutResponse
+	(*Blog)(nil),                       // 17: therapist.Blog
+	(*CreateBlogRequest)(nil),          // 18: therapist.CreateBlogRequest
+	(*CreateBlogResponse)(nil),         // 19: therapist.CreateBlogResponse
+	(*UpdateBlogRequest)(nil),          // 20: therapist.UpdateBlogRequest
+	(*UpdateBlogResponse)(nil),         // 21: therapist.UpdateBlogResponse
+	(*PublishBlogRequest)(nil),         // 22: therapist.PublishBlogRequest
+	(*PublishBlogResponse)(nil),        // 23: therapist.PublishBlogResponse
+	(*DeleteBlogRequest)(nil),          // 24: therapist.DeleteBlogRequest
+	(*DeleteBlogResponse)(nil),         // 25: therapist.DeleteBlogResponse
+	(*GetBlogRequest)(nil),             // 26: therapist.GetBlogRequest
+	(*GetBlogResponse)(nil),            // 27: therapist.GetBlogResponse
+	(*ListBlogsRequest)(nil),           // 28: therapist.ListBlogsRequest
+	(*ListBlogsResponse)(nil),          // 29: therapist.ListBlogsResponse
+	(*ToggleLikeBlogRequest)(nil),      // 30: therapist.ToggleLikeBlogRequest
+	(*ToggleLikeBlogResponse)(nil),     // 31: therapist.ToggleLikeBlogResponse
+	(*UploadBlogImageRequest)(nil),     // 32: therapist.UploadBlogImageRequest
+	(*UploadBlogImageResponse)(nil),    // 33: therapist.UploadBlogImageResponse
 }
-var file_proto_therapist_proto_depIdxs = []int32{
-	0,  // 0: therapist.TherapistService.AuthCallback:input_type -> therapist.AuthCallbackRequest
-	2,  // 1: therapist.TherapistService.GetStatus:input_type -> therapist.GetStatusRequest
-	4,  // 2: therapist.TherapistService.CompleteOnboarding:input_type -> therapist.CompleteOnboardingRequest
-	6,  // 3: therapist.TherapistService.ApproveTherapist:input_type -> therapist.ApproveTherapistRequest
-	8,  // 4: therapist.TherapistService.RejectTherapist:input_type -> therapist.RejectTherapistRequest
-	10, // 5: therapist.TherapistService.UploadFile:input_type -> therapist.UploadFileRequest
-	1,  // 6: therapist.TherapistService.AuthCallback:output_type -> therapist.AuthCallbackResponse
-	3,  // 7: therapist.TherapistService.GetStatus:output_type -> therapist.GetStatusResponse
-	5,  // 8: therapist.TherapistService.CompleteOnboarding:output_type -> therapist.CompleteOnboardingResponse
-	7,  // 9: therapist.TherapistService.ApproveTherapist:output_type -> therapist.ApproveTherapistResponse
-	9,  // 10: therapist.TherapistService.RejectTherapist:output_type -> therapist.RejectTherapistResponse
-	11, // 11: therapist.TherapistService.UploadFile:output_type -> therapist.UploadFileResponse
-	6,  // [6:12] is the sub-list for method output_type
-	0,  // [0:6] is the sub-list for method input_type
-	0,  // [0:0] is the sub-list for extension type_name
-	0,  // [0:0] is the sub-list for extension extendee
-	0,  // [0:0] is the sub-list for field type_name
+var file_therapist_proto_depIdxs = []int32{
+	0,  // 0: therapist.Blog.status:type_name -> therapist.BlogStatus
+	17, // 1: therapist.CreateBlogResponse.blog:type_name -> therapist.Blog
+	17, // 2: therapist.UpdateBlogResponse.blog:type_name -> therapist.Blog
+	17, // 3: therapist.PublishBlogResponse.blog:type_name -> therapist.Blog
+	17, // 4: therapist.GetBlogResponse.blog:type_name -> therapist.Blog
+	17, // 5: therapist.ListBlogsResponse.blogs:type_name -> therapist.Blog
+	1,  // 6: therapist.TherapistService.AuthCallback:input_type -> therapist.AuthCallbackRequest
+	3,  // 7: therapist.TherapistService.GetStatus:input_type -> therapist.GetStatusRequest
+	5,  // 8: therapist.TherapistService.CompleteOnboarding:input_type -> therapist.CompleteOnboardingRequest
+	7,  // 9: therapist.TherapistService.ApproveTherapist:input_type -> therapist.ApproveTherapistRequest
+	9,  // 10: therapist.TherapistService.RejectTherapist:input_type -> therapist.RejectTherapistRequest
+	11, // 11: therapist.TherapistService.UploadFile:input_type -> therapist.UploadFileRequest
+	13, // 12: therapist.TherapistService.RefreshSession:input_type -> therapist.RefreshSessionRequest
+	15, // 13: therapist.TherapistService.Logout:input_type -> therapist.LogoutRequest
+	18, // 14: therapist.TherapistService.CreateBlog:input_type -> therapist.CreateBlogRequest
+	20, // 15: therapist.TherapistService.UpdateBlog:input_type -> therapist.UpdateBlogRequest
+	22, // 16: therapist.TherapistService.PublishBlog:input_type -> therapist.PublishBlogRequest
+	24, // 17: therapist.TherapistService.DeleteBlog:input_type -> therapist.DeleteBlogRequest
+	26, // 18: therapist.TherapistService.GetBlog:input_type -> therapist.GetBlogRequest
+	28, // 19: therapist.TherapistService.ListBlogs:input_type -> therapist.ListBlogsRequest
+	30, // 20: therapist.TherapistService.ToggleLikeBlog:input_type -> therapist.ToggleLikeBlogRequest
+	32, // 21: therapist.TherapistService.UploadBlogImage:input_type -> therapist.UploadBlogImageRequest
+	2,  // 22: therapist.TherapistService.AuthCallback:output_type -> therapist.AuthCallbackResponse
+	4,  // 23: therapist.TherapistService.GetStatus:output_type -> therapist.GetStatusResponse
+	6,  // 24: therapist.TherapistService.CompleteOnboarding:output_type -> therapist.CompleteOnboardingResponse
+	8,  // 25: therapist.TherapistService.ApproveTherapist:output_type -> therapist.ApproveTherapistResponse
+	10, // 26: therapist.TherapistService.RejectTherapist:output_type -> therapist.RejectTherapistResponse
+	12, // 27: therapist.TherapistService.UploadFile:output_type -> therapist.UploadFileResponse
+	14, // 28: therapist.TherapistService.RefreshSession:output_type -> therapist.RefreshSessionResponse
+	16, // 29: therapist.TherapistService.Logout:output_type -> therapist.LogoutResponse
+	19, // 30: therapist.TherapistService.CreateBlog:output_type -> therapist.CreateBlogResponse
+	21, // 31: therapist.TherapistService.UpdateBlog:output_type -> therapist.UpdateBlogResponse
+	23, // 32: therapist.TherapistService.PublishBlog:output_type -> therapist.PublishBlogResponse
+	25, // 33: therapist.TherapistService.DeleteBlog:output_type -> therapist.DeleteBlogResponse
+	27, // 34: therapist.TherapistService.GetBlog:output_type -> therapist.GetBlogResponse
+	29, // 35: therapist.TherapistService.ListBlogs:output_type -> therapist.ListBlogsResponse
+	31, // 36: therapist.TherapistService.ToggleLikeBlog:output_type -> therapist.ToggleLikeBlogResponse
+	33, // 37: therapist.TherapistService.UploadBlogImage:output_type -> therapist.UploadBlogImageResponse
+	22, // [22:38] is the sub-list for method output_type
+	6,  // [6:22] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
-func init() { file_proto_therapist_proto_init() }
-func file_proto_therapist_proto_init() {
-	if File_proto_therapist_proto != nil {
+func init() { file_therapist_proto_init() }
+func file_therapist_proto_init() {
+	if File_therapist_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_therapist_proto_rawDesc), len(file_proto_therapist_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   12,
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_therapist_proto_rawDesc), len(file_therapist_proto_rawDesc)),
+			NumEnums:      1,
+			NumMessages:   33,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_proto_therapist_proto_goTypes,
-		DependencyIndexes: file_proto_therapist_proto_depIdxs,
-		MessageInfos:      file_proto_therapist_proto_msgTypes,
+		GoTypes:           file_therapist_proto_goTypes,
+		DependencyIndexes: file_therapist_proto_depIdxs,
+		EnumInfos:         file_therapist_proto_enumTypes,
+		MessageInfos:      file_therapist_proto_msgTypes,
 	}.Build()
-	File_proto_therapist_proto = out.File
-	file_proto_therapist_proto_goTypes = nil
-	file_proto_therapist_proto_depIdxs = nil
+	File_therapist_proto = out.File
+	file_therapist_proto_goTypes = nil
+	file_therapist_proto_depIdxs = nil
 }

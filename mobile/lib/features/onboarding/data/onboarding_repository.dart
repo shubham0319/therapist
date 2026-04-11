@@ -24,6 +24,10 @@ class OnboardingFormData {
     this.degreeCertName,
     this.govIdBytes,
     this.govIdName,
+    this.addressText = '',
+    this.latitude = 0.0,
+    this.longitude = 0.0,
+    this.placeId = '',
   });
 
   final String fullName;
@@ -44,45 +48,11 @@ class OnboardingFormData {
   final Uint8List? govIdBytes;
   final String? govIdName;
 
-  OnboardingFormData copyWith({
-    String? fullName,
-    String? phone,
-    String? gender,
-    String? bio,
-    List<String>? specializations,
-    List<String>? languages,
-    int? yearsOfExperience,
-    List<String>? sessionTypes,
-    String? sessionFee,
-    String? registrationNumber,
-    String? issuingBody,
-    Uint8List? profilePhotoBytes,
-    String? profilePhotoName,
-    Uint8List? degreeCertBytes,
-    String? degreeCertName,
-    Uint8List? govIdBytes,
-    String? govIdName,
-  }) {
-    return OnboardingFormData(
-      fullName: fullName ?? this.fullName,
-      phone: phone ?? this.phone,
-      gender: gender ?? this.gender,
-      bio: bio ?? this.bio,
-      specializations: specializations ?? this.specializations,
-      languages: languages ?? this.languages,
-      yearsOfExperience: yearsOfExperience ?? this.yearsOfExperience,
-      sessionTypes: sessionTypes ?? this.sessionTypes,
-      sessionFee: sessionFee ?? this.sessionFee,
-      registrationNumber: registrationNumber ?? this.registrationNumber,
-      issuingBody: issuingBody ?? this.issuingBody,
-      profilePhotoBytes: profilePhotoBytes ?? this.profilePhotoBytes,
-      profilePhotoName: profilePhotoName ?? this.profilePhotoName,
-      degreeCertBytes: degreeCertBytes ?? this.degreeCertBytes,
-      degreeCertName: degreeCertName ?? this.degreeCertName,
-      govIdBytes: govIdBytes ?? this.govIdBytes,
-      govIdName: govIdName ?? this.govIdName,
-    );
-  }
+  // Practice location — required when sessionTypes contains 'in_person'
+  final String addressText;
+  final double latitude;
+  final double longitude;
+  final String placeId;
 }
 
 class OnboardingRepository {
@@ -169,7 +139,11 @@ class OnboardingRepository {
           ..bio = data.bio
           ..profilePhoto = profilePhotoUrl
           ..phoneNumber = data.phone
-          ..governmentId = govIdUrl,
+          ..governmentId = govIdUrl
+          ..addressText = data.addressText
+          ..latitude = data.latitude
+          ..longitude = data.longitude
+          ..placeId = data.placeId,
       );
 
       return Result.success(null);
