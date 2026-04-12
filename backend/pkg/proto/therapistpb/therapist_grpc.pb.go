@@ -33,6 +33,7 @@ const (
 	TherapistService_DeleteBlog_FullMethodName         = "/therapist.TherapistService/DeleteBlog"
 	TherapistService_GetBlog_FullMethodName            = "/therapist.TherapistService/GetBlog"
 	TherapistService_ListBlogs_FullMethodName          = "/therapist.TherapistService/ListBlogs"
+	TherapistService_ListMyBlogs_FullMethodName        = "/therapist.TherapistService/ListMyBlogs"
 	TherapistService_ToggleLikeBlog_FullMethodName     = "/therapist.TherapistService/ToggleLikeBlog"
 	TherapistService_UploadBlogImage_FullMethodName    = "/therapist.TherapistService/UploadBlogImage"
 )
@@ -71,6 +72,8 @@ type TherapistServiceClient interface {
 	GetBlog(ctx context.Context, in *GetBlogRequest, opts ...grpc.CallOption) (*GetBlogResponse, error)
 	// List published blogs (optionally filtered by therapist).
 	ListBlogs(ctx context.Context, in *ListBlogsRequest, opts ...grpc.CallOption) (*ListBlogsResponse, error)
+	// List all blogs (draft + published) for the authenticated therapist.
+	ListMyBlogs(ctx context.Context, in *ListMyBlogsRequest, opts ...grpc.CallOption) (*ListMyBlogsResponse, error)
 	// Toggle like on a published blog.
 	ToggleLikeBlog(ctx context.Context, in *ToggleLikeBlogRequest, opts ...grpc.CallOption) (*ToggleLikeBlogResponse, error)
 	// Upload a single inline blog image (max 2 MB).
@@ -225,6 +228,16 @@ func (c *therapistServiceClient) ListBlogs(ctx context.Context, in *ListBlogsReq
 	return out, nil
 }
 
+func (c *therapistServiceClient) ListMyBlogs(ctx context.Context, in *ListMyBlogsRequest, opts ...grpc.CallOption) (*ListMyBlogsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListMyBlogsResponse)
+	err := c.cc.Invoke(ctx, TherapistService_ListMyBlogs_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *therapistServiceClient) ToggleLikeBlog(ctx context.Context, in *ToggleLikeBlogRequest, opts ...grpc.CallOption) (*ToggleLikeBlogResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ToggleLikeBlogResponse)
@@ -279,6 +292,8 @@ type TherapistServiceServer interface {
 	GetBlog(context.Context, *GetBlogRequest) (*GetBlogResponse, error)
 	// List published blogs (optionally filtered by therapist).
 	ListBlogs(context.Context, *ListBlogsRequest) (*ListBlogsResponse, error)
+	// List all blogs (draft + published) for the authenticated therapist.
+	ListMyBlogs(context.Context, *ListMyBlogsRequest) (*ListMyBlogsResponse, error)
 	// Toggle like on a published blog.
 	ToggleLikeBlog(context.Context, *ToggleLikeBlogRequest) (*ToggleLikeBlogResponse, error)
 	// Upload a single inline blog image (max 2 MB).
@@ -334,6 +349,9 @@ func (UnimplementedTherapistServiceServer) GetBlog(context.Context, *GetBlogRequ
 }
 func (UnimplementedTherapistServiceServer) ListBlogs(context.Context, *ListBlogsRequest) (*ListBlogsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListBlogs not implemented")
+}
+func (UnimplementedTherapistServiceServer) ListMyBlogs(context.Context, *ListMyBlogsRequest) (*ListMyBlogsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListMyBlogs not implemented")
 }
 func (UnimplementedTherapistServiceServer) ToggleLikeBlog(context.Context, *ToggleLikeBlogRequest) (*ToggleLikeBlogResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ToggleLikeBlog not implemented")
@@ -614,6 +632,24 @@ func _TherapistService_ListBlogs_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TherapistService_ListMyBlogs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListMyBlogsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).ListMyBlogs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_ListMyBlogs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).ListMyBlogs(ctx, req.(*ListMyBlogsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _TherapistService_ToggleLikeBlog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ToggleLikeBlogRequest)
 	if err := dec(in); err != nil {
@@ -712,6 +748,10 @@ var TherapistService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListBlogs",
 			Handler:    _TherapistService_ListBlogs_Handler,
+		},
+		{
+			MethodName: "ListMyBlogs",
+			Handler:    _TherapistService_ListMyBlogs_Handler,
 		},
 		{
 			MethodName: "ToggleLikeBlog",

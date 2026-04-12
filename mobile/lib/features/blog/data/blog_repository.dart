@@ -210,6 +210,28 @@ class BlogRepository {
     }
   }
 
+  // ── My blogs (draft + published) ─────────────────────────────────────────
+
+  Future<Result<({List<BlogModel> blogs, int total})>> listMyBlogs({
+    required String therapistId,
+    int page = 1,
+    int pageSize = 20,
+  }) async {
+    try {
+      final res = await _stub.listMyBlogs(
+        ListMyBlogsRequest()
+          ..therapistId = therapistId
+          ..page = page
+          ..pageSize = pageSize,
+        options: CallOptions(timeout: _kRpcTimeout),
+      );
+      final blogs = res.blogs.map(BlogModel.fromProto).toList();
+      return Result.success((blogs: blogs, total: res.total));
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
+  }
+
   // ── Like ──────────────────────────────────────────────────────────────────
 
   Future<Result<({bool liked, int likes})>> toggleLike({

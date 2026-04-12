@@ -297,6 +297,40 @@ func (s *Service) ListBlogs(ctx context.Context, therapistID, viewerID string, p
 	return results, total, nil
 }
 
+// ─── ListMyBlogs ──────────────────────────────────────────────────────────────
+
+func (s *Service) ListMyBlogs(ctx context.Context, therapistID string, page, pageSize int32) ([]*BlogResult, int64, error) {
+	if pageSize <= 0 || pageSize > maxBlogPageSize {
+		pageSize = maxBlogPageSize
+	}
+	if page <= 0 {
+		page = 1
+	}
+	offset := (page - 1) * pageSize
+
+	tid, err := parseUUID(therapistID)
+	if err != nil {
+		return nil, 0, ErrBadInput
+	}
+
+	blogs, err := s.db.ListAllBlogsByTherapist(ctx, tid, pageSize, offset)
+	if err != nil {
+		return nil, 0, fmt.Errorf("%w: %v", ErrDBQuery, err)
+	}
+	total, err := s.db.CountAllBlogsByTherapist(ctx, tid)
+	if err != nil {
+		return nil, 0, fmt.Errorf("%w: %v", ErrDBQuery, err)
+	}
+
+	results := make([]*BlogResult, 0, len(blogs))
+	for _, b := range blogs {
+		likes, _ := s.db.CountBlogLikes(ctx, b.ID)
+		// likedByMe is always false for own drafts — owner never "likes" their own draft
+		results = append(results, toBlogResult(b, likes, false))
+	}
+	return results, total, nil
+}
+
 // ─── ToggleLikeBlog ───────────────────────────────────────────────────────────
 
 func (s *Service) ToggleLikeBlog(ctx context.Context, therapistID, blogID string) (bool, int64, error) {

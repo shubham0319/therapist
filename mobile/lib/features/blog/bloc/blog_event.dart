@@ -45,6 +45,18 @@ class BlogSubmitted extends BlogEvent {
   final String? blogId;
 }
 
+// My blogs (drafts + published for the owner)
+class MyBlogListRequested extends BlogEvent {
+  MyBlogListRequested({required this.therapistId, this.page = 1});
+  final String therapistId;
+  final int page;
+}
+
+class MyBlogLoadMoreRequested extends BlogEvent {
+  MyBlogLoadMoreRequested({required this.therapistId});
+  final String therapistId;
+}
+
 class BlogPublishRequested extends BlogEvent {
   BlogPublishRequested({required this.therapistId, required this.blogId});
   final String therapistId;

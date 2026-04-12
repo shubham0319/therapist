@@ -146,6 +146,14 @@ class TherapistServiceClient extends $grpc.Client {
     return $createUnaryCall(_$listBlogs, request, options: options);
   }
 
+  /// List all blogs (draft + published) for the authenticated therapist.
+  $grpc.ResponseFuture<$0.ListMyBlogsResponse> listMyBlogs(
+    $0.ListMyBlogsRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$listMyBlogs, request, options: options);
+  }
+
   /// Toggle like on a published blog.
   $grpc.ResponseFuture<$0.ToggleLikeBlogResponse> toggleLikeBlog(
     $0.ToggleLikeBlogRequest request, {
@@ -234,6 +242,11 @@ class TherapistServiceClient extends $grpc.Client {
           '/therapist.TherapistService/ListBlogs',
           ($0.ListBlogsRequest value) => value.writeToBuffer(),
           $0.ListBlogsResponse.fromBuffer);
+  static final _$listMyBlogs =
+      $grpc.ClientMethod<$0.ListMyBlogsRequest, $0.ListMyBlogsResponse>(
+          '/therapist.TherapistService/ListMyBlogs',
+          ($0.ListMyBlogsRequest value) => value.writeToBuffer(),
+          $0.ListMyBlogsResponse.fromBuffer);
   static final _$toggleLikeBlog =
       $grpc.ClientMethod<$0.ToggleLikeBlogRequest, $0.ToggleLikeBlogResponse>(
           '/therapist.TherapistService/ToggleLikeBlog',
@@ -361,6 +374,15 @@ abstract class TherapistServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.ListBlogsRequest.fromBuffer(value),
         ($0.ListBlogsResponse value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.ListMyBlogsRequest, $0.ListMyBlogsResponse>(
+            'ListMyBlogs',
+            listMyBlogs_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.ListMyBlogsRequest.fromBuffer(value),
+            ($0.ListMyBlogsResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.ToggleLikeBlogRequest,
             $0.ToggleLikeBlogResponse>(
         'ToggleLikeBlog',
@@ -497,6 +519,14 @@ abstract class TherapistServiceBase extends $grpc.Service {
 
   $async.Future<$0.ListBlogsResponse> listBlogs(
       $grpc.ServiceCall call, $0.ListBlogsRequest request);
+
+  $async.Future<$0.ListMyBlogsResponse> listMyBlogs_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.ListMyBlogsRequest> $request) async {
+    return listMyBlogs($call, await $request);
+  }
+
+  $async.Future<$0.ListMyBlogsResponse> listMyBlogs(
+      $grpc.ServiceCall call, $0.ListMyBlogsRequest request);
 
   $async.Future<$0.ToggleLikeBlogResponse> toggleLikeBlog_Pre(
       $grpc.ServiceCall $call,

@@ -26,6 +26,7 @@ type therapistService interface {
 	DeleteBlog(ctx context.Context, therapistID, blogID string) error
 	GetBlog(ctx context.Context, blogID, viewerID string) (*service.BlogResult, error)
 	ListBlogs(ctx context.Context, therapistID, viewerID string, page, pageSize int32) ([]*service.BlogResult, int64, error)
+	ListMyBlogs(ctx context.Context, therapistID string, page, pageSize int32) ([]*service.BlogResult, int64, error)
 	ToggleLikeBlog(ctx context.Context, therapistID, blogID string) (bool, int64, error)
 	UploadBlogImage(ctx context.Context, therapistID, fileName, contentType string, data []byte) (string, error)
 }

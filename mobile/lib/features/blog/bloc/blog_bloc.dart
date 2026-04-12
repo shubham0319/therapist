@@ -11,6 +11,8 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
   BlogBloc() : super(BlogInitial()) {
     on<BlogListRequested>(_onListRequested);
     on<BlogLoadMoreRequested>(_onLoadMoreRequested);
+    on<MyBlogListRequested>(_onMyListRequested);
+    on<MyBlogLoadMoreRequested>(_onMyLoadMoreRequested);
     on<BlogDetailRequested>(_onDetailRequested);
     on<BlogSubmitted>(_onSubmitted);
     on<BlogPublishRequested>(_onPublishRequested);
@@ -57,6 +59,43 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
       (data) {
         final all = [...current.blogs, ...data.blogs];
         emit(BlogListLoaded(
+          blogs: all,
+          total: data.total,
+          page: nextPage,
+          hasMore: all.length < data.total,
+        ));
+      },
+    );
+  }
+
+  // ── My blogs ──────────────────────────────────────────────────────────────
+
+  Future<void> _onMyListRequested(MyBlogListRequested e, Emitter<BlogState> emit) async {
+    emit(BlogLoading());
+    final result = await _repo.listMyBlogs(therapistId: e.therapistId, page: e.page);
+    result.fold(
+      (f) => emit(BlogError(f.message)),
+      (data) => emit(MyBlogListLoaded(
+        blogs: data.blogs,
+        total: data.total,
+        page: e.page,
+        hasMore: data.blogs.length < data.total,
+      )),
+    );
+  }
+
+  Future<void> _onMyLoadMoreRequested(MyBlogLoadMoreRequested e, Emitter<BlogState> emit) async {
+    final current = state;
+    if (current is! MyBlogListLoaded || !current.hasMore) return;
+
+    emit(MyBlogListLoadingMore(currentBlogs: current.blogs));
+    final nextPage = current.page + 1;
+    final result = await _repo.listMyBlogs(therapistId: e.therapistId, page: nextPage);
+    result.fold(
+      (f) => emit(BlogError(f.message)),
+      (data) {
+        final all = [...current.blogs, ...data.blogs];
+        emit(MyBlogListLoaded(
           blogs: all,
           total: data.total,
           page: nextPage,

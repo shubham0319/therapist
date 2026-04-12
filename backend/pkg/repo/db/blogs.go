@@ -109,6 +109,14 @@ func (d *DB) CountPublishedBlogsByTherapist(ctx context.Context, therapistID pgt
 	return d.query.CountPublishedBlogsByTherapist(ctx, therapistID)
 }
 
+func (d *DB) ListAllBlogsByTherapist(ctx context.Context, therapistID pgtype.UUID, limit, offset int32) ([]schema.Blog, error) {
+	return d.query.ListAllBlogsByTherapist(ctx, therapistID, limit, offset)
+}
+
+func (d *DB) CountAllBlogsByTherapist(ctx context.Context, therapistID pgtype.UUID) (int64, error) {
+	return d.query.CountAllBlogsByTherapist(ctx, therapistID)
+}
+
 // ToggleBlogLike inserts or removes a like. Returns (liked=true, totalLikes) after the operation.
 func (d *DB) ToggleBlogLike(ctx context.Context, blogID, therapistID pgtype.UUID) (bool, int64, error) {
 	d.log.Debug("ToggleBlogLike",

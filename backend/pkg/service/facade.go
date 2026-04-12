@@ -36,6 +36,8 @@ type dbHelper interface {
 	ListPublishedBlogsByTherapist(ctx context.Context, therapistID pgtype.UUID, limit, offset int32) ([]schema.Blog, error)
 	CountPublishedBlogs(ctx context.Context) (int64, error)
 	CountPublishedBlogsByTherapist(ctx context.Context, therapistID pgtype.UUID) (int64, error)
+	ListAllBlogsByTherapist(ctx context.Context, therapistID pgtype.UUID, limit, offset int32) ([]schema.Blog, error)
+	CountAllBlogsByTherapist(ctx context.Context, therapistID pgtype.UUID) (int64, error)
 	ToggleBlogLike(ctx context.Context, blogID, therapistID pgtype.UUID) (bool, int64, error)
 	IsBlogLikedBy(ctx context.Context, blogID, therapistID pgtype.UUID) (bool, error)
 	CountBlogLikes(ctx context.Context, blogID pgtype.UUID) (int64, error)

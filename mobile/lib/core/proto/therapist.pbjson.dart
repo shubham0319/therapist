@@ -576,6 +576,42 @@ final $typed_data.Uint8List listBlogsResponseDescriptor = $convert.base64Decode(
     'ChFMaXN0QmxvZ3NSZXNwb25zZRIlCgVibG9ncxgBIAMoCzIPLnRoZXJhcGlzdC5CbG9nUgVibG'
     '9ncxIUCgV0b3RhbBgCIAEoBVIFdG90YWw=');
 
+@$core.Deprecated('Use listMyBlogsRequestDescriptor instead')
+const ListMyBlogsRequest$json = {
+  '1': 'ListMyBlogsRequest',
+  '2': [
+    {'1': 'therapist_id', '3': 1, '4': 1, '5': 9, '10': 'therapistId'},
+    {'1': 'page', '3': 2, '4': 1, '5': 5, '10': 'page'},
+    {'1': 'page_size', '3': 3, '4': 1, '5': 5, '10': 'pageSize'},
+  ],
+};
+
+/// Descriptor for `ListMyBlogsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listMyBlogsRequestDescriptor = $convert.base64Decode(
+    'ChJMaXN0TXlCbG9nc1JlcXVlc3QSIQoMdGhlcmFwaXN0X2lkGAEgASgJUgt0aGVyYXBpc3RJZB'
+    'ISCgRwYWdlGAIgASgFUgRwYWdlEhsKCXBhZ2Vfc2l6ZRgDIAEoBVIIcGFnZVNpemU=');
+
+@$core.Deprecated('Use listMyBlogsResponseDescriptor instead')
+const ListMyBlogsResponse$json = {
+  '1': 'ListMyBlogsResponse',
+  '2': [
+    {
+      '1': 'blogs',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.therapist.Blog',
+      '10': 'blogs'
+    },
+    {'1': 'total', '3': 2, '4': 1, '5': 5, '10': 'total'},
+  ],
+};
+
+/// Descriptor for `ListMyBlogsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listMyBlogsResponseDescriptor = $convert.base64Decode(
+    'ChNMaXN0TXlCbG9nc1Jlc3BvbnNlEiUKBWJsb2dzGAEgAygLMg8udGhlcmFwaXN0LkJsb2dSBW'
+    'Jsb2dzEhQKBXRvdGFsGAIgASgFUgV0b3RhbA==');
+
 @$core.Deprecated('Use toggleLikeBlogRequestDescriptor instead')
 const ToggleLikeBlogRequest$json = {
   '1': 'ToggleLikeBlogRequest',

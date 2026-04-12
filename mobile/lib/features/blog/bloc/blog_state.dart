@@ -24,6 +24,24 @@ class BlogListLoadingMore extends BlogState {
   final List<BlogModel> currentBlogs;
 }
 
+class MyBlogListLoaded extends BlogState {
+  MyBlogListLoaded({
+    required this.blogs,
+    required this.total,
+    this.page = 1,
+    this.hasMore = false,
+  });
+  final List<BlogModel> blogs;
+  final int total;
+  final int page;
+  final bool hasMore;
+}
+
+class MyBlogListLoadingMore extends BlogState {
+  MyBlogListLoadingMore({required this.currentBlogs});
+  final List<BlogModel> currentBlogs;
+}
+
 class BlogDetailLoaded extends BlogState {
   BlogDetailLoaded(this.blog);
   final BlogModel blog;

@@ -46,7 +46,9 @@ service TherapistService {
   // Fetch a single blog; increments view count for published blogs.
   rpc GetBlog (GetBlogRequest) returns (GetBlogResponse);
   // List published blogs (optionally filtered by therapist).
-  rpc ListBlogs (ListBlogsRequest) returns (ListBlogsResponse);
+  rpc ListBlogs   (ListBlogsRequest)   returns (ListBlogsResponse);
+  // List all blogs (draft + published) for the authenticated therapist.
+  rpc ListMyBlogs (ListMyBlogsRequest) returns (ListMyBlogsResponse);
   // Toggle like on a published blog.
   rpc ToggleLikeBlog (ToggleLikeBlogRequest) returns (ToggleLikeBlogResponse);
   // Upload a single inline blog image (max 2 MB).
@@ -270,6 +272,17 @@ message ListBlogsRequest {
   int32  page_size    = 4; // max 50
 }
 message ListBlogsResponse {
+  repeated Blog blogs = 1;
+  int32         total = 2;
+}
+
+// ListMyBlogs — all blogs (draft + published) for the authenticated therapist.
+message ListMyBlogsRequest {
+  string therapist_id = 1;
+  int32  page         = 2; // 1-based
+  int32  page_size    = 3; // max 50
+}
+message ListMyBlogsResponse {
   repeated Blog blogs = 1;
   int32         total = 2;
 }

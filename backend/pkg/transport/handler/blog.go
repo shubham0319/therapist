@@ -124,6 +124,27 @@ func (h *TherapistHandler) ListBlogs(ctx context.Context, req *therapistpb.ListB
 	return &therapistpb.ListBlogsResponse{Blogs: pbBlogs, Total: int32(total)}, nil
 }
 
+func (h *TherapistHandler) ListMyBlogs(ctx context.Context, req *therapistpb.ListMyBlogsRequest) (*therapistpb.ListMyBlogsResponse, error) {
+	log := logger.Named("handler.blog")
+	log.Debug("ListMyBlogs called", zap.String("therapist_id", req.TherapistId))
+
+	if req.TherapistId == "" {
+		return nil, status.Error(codes.InvalidArgument, "therapist_id is required")
+	}
+
+	blogs, total, err := h.svc.ListMyBlogs(ctx, req.TherapistId, req.Page, req.PageSize)
+	if err != nil {
+		log.Error("ListMyBlogs failed", zap.Error(err))
+		return nil, grpcError(err)
+	}
+
+	pbBlogs := make([]*therapistpb.Blog, 0, len(blogs))
+	for _, b := range blogs {
+		pbBlogs = append(pbBlogs, toBlogProto(b))
+	}
+	return &therapistpb.ListMyBlogsResponse{Blogs: pbBlogs, Total: int32(total)}, nil
+}
+
 func (h *TherapistHandler) ToggleLikeBlog(ctx context.Context, req *therapistpb.ToggleLikeBlogRequest) (*therapistpb.ToggleLikeBlogResponse, error) {
 	log := logger.Named("handler.blog")
 	log.Debug("ToggleLikeBlog called", zap.String("blog_id", req.BlogId))

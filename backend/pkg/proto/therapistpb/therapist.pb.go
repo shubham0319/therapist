@@ -1902,6 +1902,119 @@ func (x *ListBlogsResponse) GetTotal() int32 {
 	return 0
 }
 
+// ListMyBlogs — all blogs (draft + published) for the authenticated therapist.
+type ListMyBlogsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TherapistId   string                 `protobuf:"bytes,1,opt,name=therapist_id,json=therapistId,proto3" json:"therapist_id,omitempty"`
+	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`                         // 1-based
+	PageSize      int32                  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"` // max 50
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListMyBlogsRequest) Reset() {
+	*x = ListMyBlogsRequest{}
+	mi := &file_proto_therapist_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListMyBlogsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListMyBlogsRequest) ProtoMessage() {}
+
+func (x *ListMyBlogsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListMyBlogsRequest.ProtoReflect.Descriptor instead.
+func (*ListMyBlogsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *ListMyBlogsRequest) GetTherapistId() string {
+	if x != nil {
+		return x.TherapistId
+	}
+	return ""
+}
+
+func (x *ListMyBlogsRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *ListMyBlogsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+type ListMyBlogsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Blogs         []*Blog                `protobuf:"bytes,1,rep,name=blogs,proto3" json:"blogs,omitempty"`
+	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListMyBlogsResponse) Reset() {
+	*x = ListMyBlogsResponse{}
+	mi := &file_proto_therapist_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListMyBlogsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListMyBlogsResponse) ProtoMessage() {}
+
+func (x *ListMyBlogsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListMyBlogsResponse.ProtoReflect.Descriptor instead.
+func (*ListMyBlogsResponse) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *ListMyBlogsResponse) GetBlogs() []*Blog {
+	if x != nil {
+		return x.Blogs
+	}
+	return nil
+}
+
+func (x *ListMyBlogsResponse) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
 // ToggleLikeBlog — like or unlike a published blog.
 type ToggleLikeBlogRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1913,7 +2026,7 @@ type ToggleLikeBlogRequest struct {
 
 func (x *ToggleLikeBlogRequest) Reset() {
 	*x = ToggleLikeBlogRequest{}
-	mi := &file_proto_therapist_proto_msgTypes[29]
+	mi := &file_proto_therapist_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1925,7 +2038,7 @@ func (x *ToggleLikeBlogRequest) String() string {
 func (*ToggleLikeBlogRequest) ProtoMessage() {}
 
 func (x *ToggleLikeBlogRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[29]
+	mi := &file_proto_therapist_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1938,7 +2051,7 @@ func (x *ToggleLikeBlogRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ToggleLikeBlogRequest.ProtoReflect.Descriptor instead.
 func (*ToggleLikeBlogRequest) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{29}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *ToggleLikeBlogRequest) GetTherapistId() string {
@@ -1965,7 +2078,7 @@ type ToggleLikeBlogResponse struct {
 
 func (x *ToggleLikeBlogResponse) Reset() {
 	*x = ToggleLikeBlogResponse{}
-	mi := &file_proto_therapist_proto_msgTypes[30]
+	mi := &file_proto_therapist_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1977,7 +2090,7 @@ func (x *ToggleLikeBlogResponse) String() string {
 func (*ToggleLikeBlogResponse) ProtoMessage() {}
 
 func (x *ToggleLikeBlogResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[30]
+	mi := &file_proto_therapist_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1990,7 +2103,7 @@ func (x *ToggleLikeBlogResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ToggleLikeBlogResponse.ProtoReflect.Descriptor instead.
 func (*ToggleLikeBlogResponse) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{30}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *ToggleLikeBlogResponse) GetLiked() bool {
@@ -2020,7 +2133,7 @@ type UploadBlogImageRequest struct {
 
 func (x *UploadBlogImageRequest) Reset() {
 	*x = UploadBlogImageRequest{}
-	mi := &file_proto_therapist_proto_msgTypes[31]
+	mi := &file_proto_therapist_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2032,7 +2145,7 @@ func (x *UploadBlogImageRequest) String() string {
 func (*UploadBlogImageRequest) ProtoMessage() {}
 
 func (x *UploadBlogImageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[31]
+	mi := &file_proto_therapist_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2045,7 +2158,7 @@ func (x *UploadBlogImageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadBlogImageRequest.ProtoReflect.Descriptor instead.
 func (*UploadBlogImageRequest) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{31}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *UploadBlogImageRequest) GetTherapistId() string {
@@ -2085,7 +2198,7 @@ type UploadBlogImageResponse struct {
 
 func (x *UploadBlogImageResponse) Reset() {
 	*x = UploadBlogImageResponse{}
-	mi := &file_proto_therapist_proto_msgTypes[32]
+	mi := &file_proto_therapist_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2097,7 +2210,7 @@ func (x *UploadBlogImageResponse) String() string {
 func (*UploadBlogImageResponse) ProtoMessage() {}
 
 func (x *UploadBlogImageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_therapist_proto_msgTypes[32]
+	mi := &file_proto_therapist_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2110,7 +2223,7 @@ func (x *UploadBlogImageResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadBlogImageResponse.ProtoReflect.Descriptor instead.
 func (*UploadBlogImageResponse) Descriptor() ([]byte, []int) {
-	return file_proto_therapist_proto_rawDescGZIP(), []int{32}
+	return file_proto_therapist_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *UploadBlogImageResponse) GetUrl() string {
@@ -2263,6 +2376,13 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\tpage_size\x18\x04 \x01(\x05R\bpageSize\"P\n" +
 	"\x11ListBlogsResponse\x12%\n" +
 	"\x05blogs\x18\x01 \x03(\v2\x0f.therapist.BlogR\x05blogs\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"h\n" +
+	"\x12ListMyBlogsRequest\x12!\n" +
+	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x1b\n" +
+	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\"R\n" +
+	"\x13ListMyBlogsResponse\x12%\n" +
+	"\x05blogs\x18\x01 \x03(\v2\x0f.therapist.BlogR\x05blogs\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\"S\n" +
 	"\x15ToggleLikeBlogRequest\x12!\n" +
 	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x17\n" +
@@ -2281,7 +2401,7 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"BlogStatus\x12\x1b\n" +
 	"\x17BLOG_STATUS_UNSPECIFIED\x10\x00\x12\x15\n" +
 	"\x11BLOG_STATUS_DRAFT\x10\x01\x12\x19\n" +
-	"\x15BLOG_STATUS_PUBLISHED\x10\x022\x90\n" +
+	"\x15BLOG_STATUS_PUBLISHED\x10\x022\xde\n" +
 	"\n" +
 	"\x10TherapistService\x12O\n" +
 	"\fAuthCallback\x12\x1e.therapist.AuthCallbackRequest\x1a\x1f.therapist.AuthCallbackResponse\x12F\n" +
@@ -2301,7 +2421,8 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\n" +
 	"DeleteBlog\x12\x1c.therapist.DeleteBlogRequest\x1a\x1d.therapist.DeleteBlogResponse\x12@\n" +
 	"\aGetBlog\x12\x19.therapist.GetBlogRequest\x1a\x1a.therapist.GetBlogResponse\x12F\n" +
-	"\tListBlogs\x12\x1b.therapist.ListBlogsRequest\x1a\x1c.therapist.ListBlogsResponse\x12U\n" +
+	"\tListBlogs\x12\x1b.therapist.ListBlogsRequest\x1a\x1c.therapist.ListBlogsResponse\x12L\n" +
+	"\vListMyBlogs\x12\x1d.therapist.ListMyBlogsRequest\x1a\x1e.therapist.ListMyBlogsResponse\x12U\n" +
 	"\x0eToggleLikeBlog\x12 .therapist.ToggleLikeBlogRequest\x1a!.therapist.ToggleLikeBlogResponse\x12X\n" +
 	"\x0fUploadBlogImage\x12!.therapist.UploadBlogImageRequest\x1a\".therapist.UploadBlogImageResponseB-Z+therapist/pkg/proto/therapistpb;therapistpbb\x06proto3"
 
@@ -2318,7 +2439,7 @@ func file_proto_therapist_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_therapist_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_proto_therapist_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
+var file_proto_therapist_proto_msgTypes = make([]protoimpl.MessageInfo, 35)
 var file_proto_therapist_proto_goTypes = []any{
 	(BlogStatus)(0),                    // 0: therapist.BlogStatus
 	(*AuthCallbackRequest)(nil),        // 1: therapist.AuthCallbackRequest
@@ -2350,10 +2471,12 @@ var file_proto_therapist_proto_goTypes = []any{
 	(*GetBlogResponse)(nil),            // 27: therapist.GetBlogResponse
 	(*ListBlogsRequest)(nil),           // 28: therapist.ListBlogsRequest
 	(*ListBlogsResponse)(nil),          // 29: therapist.ListBlogsResponse
-	(*ToggleLikeBlogRequest)(nil),      // 30: therapist.ToggleLikeBlogRequest
-	(*ToggleLikeBlogResponse)(nil),     // 31: therapist.ToggleLikeBlogResponse
-	(*UploadBlogImageRequest)(nil),     // 32: therapist.UploadBlogImageRequest
-	(*UploadBlogImageResponse)(nil),    // 33: therapist.UploadBlogImageResponse
+	(*ListMyBlogsRequest)(nil),         // 30: therapist.ListMyBlogsRequest
+	(*ListMyBlogsResponse)(nil),        // 31: therapist.ListMyBlogsResponse
+	(*ToggleLikeBlogRequest)(nil),      // 32: therapist.ToggleLikeBlogRequest
+	(*ToggleLikeBlogResponse)(nil),     // 33: therapist.ToggleLikeBlogResponse
+	(*UploadBlogImageRequest)(nil),     // 34: therapist.UploadBlogImageRequest
+	(*UploadBlogImageResponse)(nil),    // 35: therapist.UploadBlogImageResponse
 }
 var file_proto_therapist_proto_depIdxs = []int32{
 	0,  // 0: therapist.Blog.status:type_name -> therapist.BlogStatus
@@ -2362,43 +2485,46 @@ var file_proto_therapist_proto_depIdxs = []int32{
 	17, // 3: therapist.PublishBlogResponse.blog:type_name -> therapist.Blog
 	17, // 4: therapist.GetBlogResponse.blog:type_name -> therapist.Blog
 	17, // 5: therapist.ListBlogsResponse.blogs:type_name -> therapist.Blog
-	1,  // 6: therapist.TherapistService.AuthCallback:input_type -> therapist.AuthCallbackRequest
-	3,  // 7: therapist.TherapistService.GetStatus:input_type -> therapist.GetStatusRequest
-	5,  // 8: therapist.TherapistService.CompleteOnboarding:input_type -> therapist.CompleteOnboardingRequest
-	7,  // 9: therapist.TherapistService.ApproveTherapist:input_type -> therapist.ApproveTherapistRequest
-	9,  // 10: therapist.TherapistService.RejectTherapist:input_type -> therapist.RejectTherapistRequest
-	11, // 11: therapist.TherapistService.UploadFile:input_type -> therapist.UploadFileRequest
-	13, // 12: therapist.TherapistService.RefreshSession:input_type -> therapist.RefreshSessionRequest
-	15, // 13: therapist.TherapistService.Logout:input_type -> therapist.LogoutRequest
-	18, // 14: therapist.TherapistService.CreateBlog:input_type -> therapist.CreateBlogRequest
-	20, // 15: therapist.TherapistService.UpdateBlog:input_type -> therapist.UpdateBlogRequest
-	22, // 16: therapist.TherapistService.PublishBlog:input_type -> therapist.PublishBlogRequest
-	24, // 17: therapist.TherapistService.DeleteBlog:input_type -> therapist.DeleteBlogRequest
-	26, // 18: therapist.TherapistService.GetBlog:input_type -> therapist.GetBlogRequest
-	28, // 19: therapist.TherapistService.ListBlogs:input_type -> therapist.ListBlogsRequest
-	30, // 20: therapist.TherapistService.ToggleLikeBlog:input_type -> therapist.ToggleLikeBlogRequest
-	32, // 21: therapist.TherapistService.UploadBlogImage:input_type -> therapist.UploadBlogImageRequest
-	2,  // 22: therapist.TherapistService.AuthCallback:output_type -> therapist.AuthCallbackResponse
-	4,  // 23: therapist.TherapistService.GetStatus:output_type -> therapist.GetStatusResponse
-	6,  // 24: therapist.TherapistService.CompleteOnboarding:output_type -> therapist.CompleteOnboardingResponse
-	8,  // 25: therapist.TherapistService.ApproveTherapist:output_type -> therapist.ApproveTherapistResponse
-	10, // 26: therapist.TherapistService.RejectTherapist:output_type -> therapist.RejectTherapistResponse
-	12, // 27: therapist.TherapistService.UploadFile:output_type -> therapist.UploadFileResponse
-	14, // 28: therapist.TherapistService.RefreshSession:output_type -> therapist.RefreshSessionResponse
-	16, // 29: therapist.TherapistService.Logout:output_type -> therapist.LogoutResponse
-	19, // 30: therapist.TherapistService.CreateBlog:output_type -> therapist.CreateBlogResponse
-	21, // 31: therapist.TherapistService.UpdateBlog:output_type -> therapist.UpdateBlogResponse
-	23, // 32: therapist.TherapistService.PublishBlog:output_type -> therapist.PublishBlogResponse
-	25, // 33: therapist.TherapistService.DeleteBlog:output_type -> therapist.DeleteBlogResponse
-	27, // 34: therapist.TherapistService.GetBlog:output_type -> therapist.GetBlogResponse
-	29, // 35: therapist.TherapistService.ListBlogs:output_type -> therapist.ListBlogsResponse
-	31, // 36: therapist.TherapistService.ToggleLikeBlog:output_type -> therapist.ToggleLikeBlogResponse
-	33, // 37: therapist.TherapistService.UploadBlogImage:output_type -> therapist.UploadBlogImageResponse
-	22, // [22:38] is the sub-list for method output_type
-	6,  // [6:22] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	17, // 6: therapist.ListMyBlogsResponse.blogs:type_name -> therapist.Blog
+	1,  // 7: therapist.TherapistService.AuthCallback:input_type -> therapist.AuthCallbackRequest
+	3,  // 8: therapist.TherapistService.GetStatus:input_type -> therapist.GetStatusRequest
+	5,  // 9: therapist.TherapistService.CompleteOnboarding:input_type -> therapist.CompleteOnboardingRequest
+	7,  // 10: therapist.TherapistService.ApproveTherapist:input_type -> therapist.ApproveTherapistRequest
+	9,  // 11: therapist.TherapistService.RejectTherapist:input_type -> therapist.RejectTherapistRequest
+	11, // 12: therapist.TherapistService.UploadFile:input_type -> therapist.UploadFileRequest
+	13, // 13: therapist.TherapistService.RefreshSession:input_type -> therapist.RefreshSessionRequest
+	15, // 14: therapist.TherapistService.Logout:input_type -> therapist.LogoutRequest
+	18, // 15: therapist.TherapistService.CreateBlog:input_type -> therapist.CreateBlogRequest
+	20, // 16: therapist.TherapistService.UpdateBlog:input_type -> therapist.UpdateBlogRequest
+	22, // 17: therapist.TherapistService.PublishBlog:input_type -> therapist.PublishBlogRequest
+	24, // 18: therapist.TherapistService.DeleteBlog:input_type -> therapist.DeleteBlogRequest
+	26, // 19: therapist.TherapistService.GetBlog:input_type -> therapist.GetBlogRequest
+	28, // 20: therapist.TherapistService.ListBlogs:input_type -> therapist.ListBlogsRequest
+	30, // 21: therapist.TherapistService.ListMyBlogs:input_type -> therapist.ListMyBlogsRequest
+	32, // 22: therapist.TherapistService.ToggleLikeBlog:input_type -> therapist.ToggleLikeBlogRequest
+	34, // 23: therapist.TherapistService.UploadBlogImage:input_type -> therapist.UploadBlogImageRequest
+	2,  // 24: therapist.TherapistService.AuthCallback:output_type -> therapist.AuthCallbackResponse
+	4,  // 25: therapist.TherapistService.GetStatus:output_type -> therapist.GetStatusResponse
+	6,  // 26: therapist.TherapistService.CompleteOnboarding:output_type -> therapist.CompleteOnboardingResponse
+	8,  // 27: therapist.TherapistService.ApproveTherapist:output_type -> therapist.ApproveTherapistResponse
+	10, // 28: therapist.TherapistService.RejectTherapist:output_type -> therapist.RejectTherapistResponse
+	12, // 29: therapist.TherapistService.UploadFile:output_type -> therapist.UploadFileResponse
+	14, // 30: therapist.TherapistService.RefreshSession:output_type -> therapist.RefreshSessionResponse
+	16, // 31: therapist.TherapistService.Logout:output_type -> therapist.LogoutResponse
+	19, // 32: therapist.TherapistService.CreateBlog:output_type -> therapist.CreateBlogResponse
+	21, // 33: therapist.TherapistService.UpdateBlog:output_type -> therapist.UpdateBlogResponse
+	23, // 34: therapist.TherapistService.PublishBlog:output_type -> therapist.PublishBlogResponse
+	25, // 35: therapist.TherapistService.DeleteBlog:output_type -> therapist.DeleteBlogResponse
+	27, // 36: therapist.TherapistService.GetBlog:output_type -> therapist.GetBlogResponse
+	29, // 37: therapist.TherapistService.ListBlogs:output_type -> therapist.ListBlogsResponse
+	31, // 38: therapist.TherapistService.ListMyBlogs:output_type -> therapist.ListMyBlogsResponse
+	33, // 39: therapist.TherapistService.ToggleLikeBlog:output_type -> therapist.ToggleLikeBlogResponse
+	35, // 40: therapist.TherapistService.UploadBlogImage:output_type -> therapist.UploadBlogImageResponse
+	24, // [24:41] is the sub-list for method output_type
+	7,  // [7:24] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_therapist_proto_init() }
@@ -2412,7 +2538,7 @@ func file_proto_therapist_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_therapist_proto_rawDesc), len(file_proto_therapist_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   33,
+			NumMessages:   35,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

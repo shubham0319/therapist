@@ -140,6 +140,32 @@ func (q *Queries) ListPublishedBlogsByTherapist(ctx context.Context, therapistID
 	return collectBlogs(rows)
 }
 
+const listAllBlogsByTherapist = `-- name: ListAllBlogsByTherapist :many
+SELECT id, therapist_id, title, slug, cover_image_url, content, image_urls, tags, status, views, published_at, created_at, updated_at
+FROM blogs WHERE therapist_id = $1
+ORDER BY created_at DESC
+LIMIT $2 OFFSET $3
+`
+
+func (q *Queries) ListAllBlogsByTherapist(ctx context.Context, therapistID pgtype.UUID, limit, offset int32) ([]Blog, error) {
+	rows, err := q.db.Query(ctx, listAllBlogsByTherapist, therapistID, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	return collectBlogs(rows)
+}
+
+const countAllBlogsByTherapist = `-- name: CountAllBlogsByTherapist :one
+SELECT COUNT(*) FROM blogs WHERE therapist_id = $1
+`
+
+func (q *Queries) CountAllBlogsByTherapist(ctx context.Context, therapistID pgtype.UUID) (int64, error) {
+	var n int64
+	err := q.db.QueryRow(ctx, countAllBlogsByTherapist, therapistID).Scan(&n)
+	return n, err
+}
+
 const countPublishedBlogs = `-- name: CountPublishedBlogs :one
 SELECT COUNT(*) FROM blogs WHERE status = 'published'
 `

@@ -2376,6 +2376,145 @@ class ListBlogsResponse extends $pb.GeneratedMessage {
   void clearTotal() => $_clearField(2);
 }
 
+/// ListMyBlogs — all blogs (draft + published) for the authenticated therapist.
+class ListMyBlogsRequest extends $pb.GeneratedMessage {
+  factory ListMyBlogsRequest({
+    $core.String? therapistId,
+    $core.int? page,
+    $core.int? pageSize,
+  }) {
+    final result = create();
+    if (therapistId != null) result.therapistId = therapistId;
+    if (page != null) result.page = page;
+    if (pageSize != null) result.pageSize = pageSize;
+    return result;
+  }
+
+  ListMyBlogsRequest._();
+
+  factory ListMyBlogsRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListMyBlogsRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ListMyBlogsRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'therapist'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'therapistId')
+    ..aI(2, _omitFieldNames ? '' : 'page')
+    ..aI(3, _omitFieldNames ? '' : 'pageSize')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListMyBlogsRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListMyBlogsRequest copyWith(void Function(ListMyBlogsRequest) updates) =>
+      super.copyWith((message) => updates(message as ListMyBlogsRequest))
+          as ListMyBlogsRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ListMyBlogsRequest create() => ListMyBlogsRequest._();
+  @$core.override
+  ListMyBlogsRequest createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static ListMyBlogsRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ListMyBlogsRequest>(create);
+  static ListMyBlogsRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get therapistId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set therapistId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTherapistId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTherapistId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get page => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set page($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasPage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPage() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get pageSize => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set pageSize($core.int value) => $_setSignedInt32(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasPageSize() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearPageSize() => $_clearField(3);
+}
+
+class ListMyBlogsResponse extends $pb.GeneratedMessage {
+  factory ListMyBlogsResponse({
+    $core.Iterable<Blog>? blogs,
+    $core.int? total,
+  }) {
+    final result = create();
+    if (blogs != null) result.blogs.addAll(blogs);
+    if (total != null) result.total = total;
+    return result;
+  }
+
+  ListMyBlogsResponse._();
+
+  factory ListMyBlogsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListMyBlogsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ListMyBlogsResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'therapist'),
+      createEmptyInstance: create)
+    ..pPM<Blog>(1, _omitFieldNames ? '' : 'blogs', subBuilder: Blog.create)
+    ..aI(2, _omitFieldNames ? '' : 'total')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListMyBlogsResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListMyBlogsResponse copyWith(void Function(ListMyBlogsResponse) updates) =>
+      super.copyWith((message) => updates(message as ListMyBlogsResponse))
+          as ListMyBlogsResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ListMyBlogsResponse create() => ListMyBlogsResponse._();
+  @$core.override
+  ListMyBlogsResponse createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static ListMyBlogsResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ListMyBlogsResponse>(create);
+  static ListMyBlogsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<Blog> get blogs => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.int get total => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set total($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasTotal() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTotal() => $_clearField(2);
+}
+
 /// ToggleLikeBlog — like or unlike a published blog.
 class ToggleLikeBlogRequest extends $pb.GeneratedMessage {
   factory ToggleLikeBlogRequest({
