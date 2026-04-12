@@ -9,6 +9,7 @@ class AppTextField extends StatelessWidget {
     this.errorText,
     this.obscureText = false,
     this.keyboardType,
+    this.textCapitalization = TextCapitalization.none,
     this.onChanged,
     this.validator,
     this.maxLines = 1,
@@ -20,6 +21,7 @@ class AppTextField extends StatelessWidget {
   final String? errorText;
   final bool obscureText;
   final TextInputType? keyboardType;
+  final TextCapitalization textCapitalization;
   final ValueChanged<String>? onChanged;
   final FormFieldValidator<String>? validator;
   final int maxLines;
@@ -30,6 +32,7 @@ class AppTextField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
+      textCapitalization: textCapitalization,
       onChanged: onChanged,
       validator: validator,
       maxLines: maxLines,

@@ -12,13 +12,15 @@ import (
 )
 
 const upsertTherapistAddress = `-- name: UpsertTherapistAddress :exec
-INSERT INTO therapist_addresses (therapist_id, address_text, latitude, longitude, place_id)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO therapist_addresses (therapist_id, address_text, latitude, longitude, place_id, state, nation)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT (therapist_id) DO UPDATE SET
     address_text = EXCLUDED.address_text,
     latitude     = EXCLUDED.latitude,
     longitude    = EXCLUDED.longitude,
     place_id     = EXCLUDED.place_id,
+    state        = EXCLUDED.state,
+    nation       = EXCLUDED.nation,
     updated_at   = NOW()
 `
 
@@ -28,6 +30,8 @@ type UpsertTherapistAddressParams struct {
 	Latitude    float64
 	Longitude   float64
 	PlaceID     string
+	State       string
+	Nation      string
 }
 
 func (q *Queries) UpsertTherapistAddress(ctx context.Context, arg UpsertTherapistAddressParams) error {
@@ -37,12 +41,15 @@ func (q *Queries) UpsertTherapistAddress(ctx context.Context, arg UpsertTherapis
 		arg.Latitude,
 		arg.Longitude,
 		arg.PlaceID,
+		arg.State,
+		arg.Nation,
 	)
 	return err
 }
 
 const getTherapistAddress = `-- name: GetTherapistAddress :one
-SELECT id, therapist_id, address_text, latitude, longitude, place_id, created_at, updated_at FROM therapist_addresses WHERE therapist_id = $1
+SELECT id, therapist_id, address_text, latitude, longitude, place_id, state, nation, created_at, updated_at
+FROM therapist_addresses WHERE therapist_id = $1
 `
 
 func (q *Queries) GetTherapistAddress(ctx context.Context, therapistID pgtype.UUID) (TherapistAddress, error) {
@@ -55,6 +62,8 @@ func (q *Queries) GetTherapistAddress(ctx context.Context, therapistID pgtype.UU
 		&i.Latitude,
 		&i.Longitude,
 		&i.PlaceID,
+		&i.State,
+		&i.Nation,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

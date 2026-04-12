@@ -18,6 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   final _emailCtrl = TextEditingController();
   final _otpCtrl = TextEditingController();
   bool _otpSent = false;
+  /// 'therapist' | 'user'
+  String _accountType = 'therapist';
 
   @override
   void dispose() {
@@ -34,9 +36,12 @@ class _LoginPageState extends State<LoginPage> {
           setState(() => _otpSent = true);
         }
         if (state is AuthAuthenticated) {
-          if (state.status == 'needs_onboarding') {
-            ctx.go(AppRoutes.onboarding);
+          if (state.isUser) {
+            ctx.go(state.status == 'needs_onboarding'
+                ? AppRoutes.userOnboarding
+                : AppRoutes.userHome);
           } else {
+            // Therapist flow — router redirect handles the right destination.
             ctx.go(AppRoutes.home);
           }
         }
@@ -76,7 +81,15 @@ class _LoginPageState extends State<LoginPage> {
                       .bodyLarge
                       ?.copyWith(color: AppColors.subtle),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 24),
+
+                // ── Account type toggle ───────────────────────────────────
+                if (!_otpSent)
+                  _AccountTypeToggle(
+                    selected: _accountType,
+                    onChanged: (v) => setState(() => _accountType = v),
+                  ),
+                const SizedBox(height: 24),
 
                 if (!_otpSent) ...[
                   // Google sign-in
@@ -146,9 +159,10 @@ class _LoginPageState extends State<LoginPage> {
                       loading: state is AuthLoading,
                       onPressed: () {
                         ctx.read<AuthBloc>().add(AuthOtpVerified(
-                              contact: _emailCtrl.text.trim(),
-                              otp: _otpCtrl.text.trim(),
-                              isEmail: true,
+                              contact:     _emailCtrl.text.trim(),
+                              otp:         _otpCtrl.text.trim(),
+                              isEmail:     true,
+                              accountType: _accountType,
                             ));
                       },
                     ),
@@ -167,6 +181,118 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Account type toggle: "I'm a Therapist" / "I'm looking for help"
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _AccountTypeToggle extends StatelessWidget {
+  const _AccountTypeToggle({
+    required this.selected,
+    required this.onChanged,
+  });
+
+  final String selected;
+  final ValueChanged<String> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs    = theme.colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('I am a…', style: theme.textTheme.labelMedium),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: _ToggleOption(
+                label: 'Therapist',
+                icon: Icons.psychology_outlined,
+                selected: selected == 'therapist',
+                onTap: () => onChanged('therapist'),
+                cs: cs,
+                theme: theme,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _ToggleOption(
+                label: 'Looking for help',
+                icon: Icons.favorite_border,
+                selected: selected == 'user',
+                onTap: () => onChanged('user'),
+                cs: cs,
+                theme: theme,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _ToggleOption extends StatelessWidget {
+  const _ToggleOption({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+    required this.cs,
+    required this.theme,
+  });
+
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+  final ColorScheme cs;
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(
+          color: selected ? cs.primaryContainer : cs.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: selected ? cs.primary : Colors.transparent,
+            width: 1.5,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 18,
+              color: selected ? cs.onPrimaryContainer : cs.onSurfaceVariant,
+            ),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                label,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: selected ? cs.onPrimaryContainer : cs.onSurfaceVariant,
+                  fontWeight:
+                      selected ? FontWeight.bold : FontWeight.normal,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
         ),
       ),
     );

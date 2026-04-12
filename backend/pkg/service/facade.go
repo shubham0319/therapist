@@ -11,6 +11,7 @@ import (
 
 // dbHelper is the interface the service depends on.
 type dbHelper interface {
+	// ── Therapist ─────────────────────────────────────────────────────────────
 	CreateTherapist(ctx context.Context, supabaseUID, email string) (schema.Therapist, error)
 	GetTherapistBySupabaseUID(ctx context.Context, uid string) (schema.Therapist, error)
 	GetTherapistByID(ctx context.Context, id pgtype.UUID) (schema.Therapist, error)
@@ -19,12 +20,22 @@ type dbHelper interface {
 	RejectTherapist(ctx context.Context, id pgtype.UUID, reason string) error
 	IsReferralIDTaken(ctx context.Context, referralID string) (bool, error)
 	UpsertTherapistAddress(ctx context.Context, therapistID pgtype.UUID, p db.AddressParams) error
-	// Session management
+	// Therapist session management
 	CreateSession(ctx context.Context, therapistID pgtype.UUID, refreshToken string, expiresAt time.Time) (schema.TherapistSessionRow, error)
 	GetSessionByRefreshToken(ctx context.Context, refreshToken string) (schema.TherapistSessionRow, error)
 	DeleteSession(ctx context.Context, refreshToken string) error
 	DeleteAllSessionsForTherapist(ctx context.Context, therapistID pgtype.UUID) error
-	// Blog management
+	// ── User (client/patient) ─────────────────────────────────────────────────
+	UpsertUser(ctx context.Context, supabaseUID, email string) (schema.User, error)
+	GetUserBySupabaseUID(ctx context.Context, uid string) (schema.User, error)
+	GetUserByID(ctx context.Context, id pgtype.UUID) (schema.User, error)
+	CompleteUserOnboarding(ctx context.Context, id pgtype.UUID, p db.UserOnboardingParams) error
+	// User session management
+	CreateUserSession(ctx context.Context, userID pgtype.UUID, refreshToken string, expiresAt time.Time) (schema.UserSessionRow, error)
+	GetUserSessionByRefreshToken(ctx context.Context, refreshToken string) (schema.UserSessionRow, error)
+	DeleteUserSession(ctx context.Context, refreshToken string) error
+	DeleteAllUserSessions(ctx context.Context, userID pgtype.UUID) error
+	// ── Blog management ───────────────────────────────────────────────────────
 	CreateBlog(ctx context.Context, p db.CreateBlogParams) (schema.Blog, error)
 	GetBlogByID(ctx context.Context, id pgtype.UUID) (schema.Blog, error)
 	GetBlogByTherapistAndSlug(ctx context.Context, therapistID pgtype.UUID, slug string) (schema.Blog, error)

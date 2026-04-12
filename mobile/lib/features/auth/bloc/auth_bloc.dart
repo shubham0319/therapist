@@ -23,7 +23,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (_) => emit(const AuthUnauthenticated()),
       (session) => emit(AuthAuthenticated(
+        accountType:  session.accountType,
         therapistId:  session.therapistId,
+        userId:       session.userId,
         status:       session.status,
         accessToken:  session.accessToken,
         refreshToken: session.refreshToken,
@@ -38,7 +40,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthError(failure.message)),
       (session) => emit(AuthAuthenticated(
+        accountType:  session.accountType,
         therapistId:  session.therapistId,
+        userId:       session.userId,
         status:       session.status,
         accessToken:  session.accessToken,
         refreshToken: session.refreshToken,
@@ -60,14 +64,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthOtpVerified event, Emitter<AuthState> emit) async {
     emit(const AuthLoading());
     final result = await _repo.verifyOtp(
-      contact: event.contact,
-      otp: event.otp,
-      isEmail: event.isEmail,
+      contact:     event.contact,
+      otp:         event.otp,
+      isEmail:     event.isEmail,
+      accountType: event.accountType,
     );
     result.fold(
       (failure) => emit(AuthError(failure.message)),
       (session) => emit(AuthAuthenticated(
+        accountType:  session.accountType,
         therapistId:  session.therapistId,
+        userId:       session.userId,
         status:       session.status,
         accessToken:  session.accessToken,
         refreshToken: session.refreshToken,
@@ -77,10 +84,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onSignOut(
       AuthSignOutRequested event, Emitter<AuthState> emit) async {
-    final refreshToken = state is AuthAuthenticated
-        ? (state as AuthAuthenticated).refreshToken
-        : '';
-    await _repo.signOut(refreshToken);
+    final current = state;
+    final refreshToken = current is AuthAuthenticated ? current.refreshToken : '';
+    final accountType  = current is AuthAuthenticated ? current.accountType  : 'therapist';
+    await _repo.signOut(refreshToken, accountType: accountType);
     emit(const AuthUnauthenticated());
   }
 }

@@ -10,6 +10,7 @@ import (
 // therapistService is the slice of *service.Service the handler depends on.
 // Keeping it as an interface makes the handler independently testable.
 type therapistService interface {
+	// ── Therapist auth / onboarding ───────────────────────────────────────────
 	HandleAuthCallback(ctx context.Context, supabaseToken string) (*service.AuthResult, service.TokenPair, error)
 	GetTherapistStatus(ctx context.Context, supabaseToken string) (*service.AuthResult, error)
 	CompleteOnboarding(ctx context.Context, therapistID string, in service.OnboardingInput) error
@@ -19,7 +20,13 @@ type therapistService interface {
 	RefreshSession(ctx context.Context, refreshToken string) (*service.AuthResult, service.TokenPair, error)
 	Logout(ctx context.Context, refreshToken string) error
 	LogoutAll(ctx context.Context, therapistID pgtype.UUID) error
-	// Blog
+	// ── User (client/patient) auth / onboarding ───────────────────────────────
+	HandleUserAuthCallback(ctx context.Context, supabaseToken string) (*service.UserResult, service.TokenPair, error)
+	CompleteUserOnboarding(ctx context.Context, userID string, in service.UserOnboardingInput) error
+	GetUserProfile(ctx context.Context, userID string) (*service.UserResult, error)
+	UserRefreshSession(ctx context.Context, refreshToken string) (*service.UserResult, service.TokenPair, error)
+	UserLogout(ctx context.Context, refreshToken string) error
+	// ── Blog ──────────────────────────────────────────────────────────────────
 	CreateBlog(ctx context.Context, therapistID, title, content, coverImageURL string, imageURLs, tags []string) (*service.BlogResult, error)
 	UpdateBlog(ctx context.Context, therapistID, blogID, title, content, coverImageURL string, imageURLs, tags []string) (*service.BlogResult, error)
 	PublishBlog(ctx context.Context, therapistID, blogID string) (*service.BlogResult, error)

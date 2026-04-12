@@ -216,8 +216,32 @@ type TherapistAddress struct {
 	Latitude    float64
 	Longitude   float64
 	PlaceID     string
+	State       string
+	Nation      string
 	CreatedAt   pgtype.Timestamptz
 	UpdatedAt   pgtype.Timestamptz
+}
+
+type User struct {
+	ID                  pgtype.UUID
+	SupabaseUid         string
+	Email               string
+	Name                string
+	Phone               string
+	State               string
+	Nation              string
+	LookingFor          []string
+	OnboardingCompleted bool
+	CreatedAt           pgtype.Timestamptz
+	UpdatedAt           pgtype.Timestamptz
+}
+
+type UserSessionRow struct {
+	ID           pgtype.UUID
+	UserID       pgtype.UUID
+	RefreshToken string
+	ExpiresAt    pgtype.Timestamptz
+	CreatedAt    pgtype.Timestamptz
 }
 
 type TherapistSessionRow struct {

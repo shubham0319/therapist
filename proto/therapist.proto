@@ -9,6 +9,7 @@ option go_package = "therapist/pkg/proto/therapistpb;therapistpb";
 // ─────────────────────────────────────────────
 
 service TherapistService {
+  // ── Therapist auth / onboarding ───────────────────────────────────────────
   // Called after Supabase auth. Upserts the therapist and returns their state + tokens.
   rpc AuthCallback (AuthCallbackRequest) returns (AuthCallbackResponse);
 
@@ -33,6 +34,22 @@ service TherapistService {
 
   // Invalidate the refresh token (log out this device).
   rpc Logout (LogoutRequest) returns (LogoutResponse);
+
+  // ── User (client/patient) auth / onboarding ───────────────────────────────
+  // Called after Supabase auth for users (clients looking for a therapist).
+  rpc UserAuthCallback (UserAuthCallbackRequest) returns (UserAuthCallbackResponse);
+
+  // Saves the user onboarding form.
+  rpc CompleteUserOnboarding (CompleteUserOnboardingRequest) returns (CompleteUserOnboardingResponse);
+
+  // Fetch the authenticated user's own profile.
+  rpc GetUserProfile (GetUserProfileRequest) returns (GetUserProfileResponse);
+
+  // Exchange a user refresh token for a new access + refresh token pair.
+  rpc UserRefreshSession (UserRefreshSessionRequest) returns (UserRefreshSessionResponse);
+
+  // Invalidate the user refresh token (log out this device).
+  rpc UserLogout (UserLogoutRequest) returns (UserLogoutResponse);
 
   // ── Blog ──────────────────────────────────────────────────────────────────
   // Create a draft blog (verified therapists only).
@@ -122,6 +139,8 @@ message CompleteOnboardingRequest {
   double            latitude            = 17;
   double            longitude           = 18;
   string            place_id            = 19;
+  string            address_state       = 20; // e.g. "Maharashtra"
+  string            address_nation      = 21; // e.g. "India"
 }
 
 message CompleteOnboardingResponse {
@@ -305,3 +324,74 @@ message UploadBlogImageRequest {
   string content_type  = 4; // image/jpeg | image/png | image/webp
 }
 message UploadBlogImageResponse { string url = 1; }
+
+// ─────────────────────────────────────────────
+// User (client/patient)
+// ─────────────────────────────────────────────
+
+message User {
+  string          id                   = 1;
+  string          email                = 2;
+  string          name                 = 3;
+  string          phone                = 4;
+  string          state                = 5;
+  string          nation               = 6;
+  repeated string looking_for          = 7;
+  bool            onboarding_completed = 8;
+  string          created_at           = 9;
+}
+
+// UserAuthCallback
+message UserAuthCallbackRequest {
+  string supabase_token = 1;
+}
+message UserAuthCallbackResponse {
+  string user_id               = 1;
+  // "needs_onboarding" | "active"
+  string status                = 2;
+  bool   onboarding_completed  = 3;
+  string access_token          = 4;
+  string refresh_token         = 5;
+  int64  expires_at            = 6; // Unix timestamp
+}
+
+// CompleteUserOnboarding
+message CompleteUserOnboardingRequest {
+  string          user_id     = 1;
+  string          name        = 2;  // required
+  string          phone       = 3;  // optional
+  string          state       = 4;  // e.g. "Maharashtra"
+  string          nation      = 5;  // e.g. "India"
+  repeated string looking_for = 6;  // e.g. ["Anxiety", "Depression"]
+}
+message CompleteUserOnboardingResponse {
+  bool success = 1;
+}
+
+// GetUserProfile
+message GetUserProfileRequest {
+  string user_id = 1;
+}
+message GetUserProfileResponse {
+  User user = 1;
+}
+
+// UserRefreshSession
+message UserRefreshSessionRequest {
+  string refresh_token = 1;
+}
+message UserRefreshSessionResponse {
+  string user_id        = 1;
+  string status         = 2;
+  string access_token   = 3;
+  string refresh_token  = 4;
+  int64  expires_at     = 5;
+}
+
+// UserLogout
+message UserLogoutRequest {
+  string refresh_token = 1;
+}
+message UserLogoutResponse {
+  bool success = 1;
+}

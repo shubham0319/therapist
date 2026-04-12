@@ -14,6 +14,8 @@ type AddressParams struct {
 	Latitude    float64
 	Longitude   float64
 	PlaceID     string
+	State       string
+	Nation      string
 }
 
 func (d *DB) UpsertTherapistAddress(ctx context.Context, therapistID pgtype.UUID, p AddressParams) error {
@@ -25,6 +27,8 @@ func (d *DB) UpsertTherapistAddress(ctx context.Context, therapistID pgtype.UUID
 		Latitude:    p.Latitude,
 		Longitude:   p.Longitude,
 		PlaceID:     p.PlaceID,
+		State:       p.State,
+		Nation:      p.Nation,
 	})
 	if err != nil {
 		d.log.Error("UpsertTherapistAddress failed",

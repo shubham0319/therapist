@@ -33,12 +33,15 @@ class AuthOtpVerified extends AuthEvent {
     required this.contact,
     required this.otp,
     required this.isEmail,
+    this.accountType = 'therapist',
   });
   final String contact;
   final String otp;
   final bool isEmail;
+  /// 'therapist' | 'user'
+  final String accountType;
   @override
-  List<Object?> get props => [contact, otp, isEmail];
+  List<Object?> get props => [contact, otp, isEmail, accountType];
 }
 
 class AuthSignOutRequested extends AuthEvent {

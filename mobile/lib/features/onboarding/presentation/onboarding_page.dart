@@ -65,6 +65,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
   String _registrationNumber = '';
   String _issuingBody = '';
   PickedLocation? _practiceLocation;
+  String _addressState = '';
+  String _addressNation = '';
 
   PickedFile? _profilePhoto;
   PickedFile? _degreeCert;
@@ -109,12 +111,16 @@ class _OnboardingPageState extends State<OnboardingPage> {
     required String registrationNumber,
     required String issuingBody,
     required PickedLocation? practiceLocation,
+    required String addressState,
+    required String addressNation,
   }) {
     _sessionTypes = sessionTypes;
     _sessionFee = sessionFee;
     _registrationNumber = registrationNumber;
     _issuingBody = issuingBody;
     _practiceLocation = practiceLocation;
+    _addressState = addressState;
+    _addressNation = addressNation;
     _goToStep(3);
   }
 
@@ -145,6 +151,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
       latitude: _practiceLocation?.latitude ?? 0.0,
       longitude: _practiceLocation?.longitude ?? 0.0,
       placeId: _practiceLocation?.placeId ?? '',
+      addressState: _addressState,
+      addressNation: _addressNation,
     );
 
     ctx.read<OnboardingBloc>().add(
@@ -416,6 +424,8 @@ class _Step3Sessions extends StatefulWidget {
     required String registrationNumber,
     required String issuingBody,
     required PickedLocation? practiceLocation,
+    required String addressState,
+    required String addressNation,
   }) onNext;
   final VoidCallback onBack;
 
@@ -428,6 +438,8 @@ class _Step3SessionsState extends State<_Step3Sessions> {
   final _feeCtrl = TextEditingController();
   final _regCtrl = TextEditingController();
   final _bodyCtrl = TextEditingController();
+  final _stateCtrl = TextEditingController();
+  final _nationCtrl = TextEditingController();
   List<String> _types = [];
   String? _typesError;
   PickedLocation? _location;
@@ -438,6 +450,8 @@ class _Step3SessionsState extends State<_Step3Sessions> {
     _feeCtrl.dispose();
     _regCtrl.dispose();
     _bodyCtrl.dispose();
+    _stateCtrl.dispose();
+    _nationCtrl.dispose();
     super.dispose();
   }
 
@@ -462,6 +476,8 @@ class _Step3SessionsState extends State<_Step3Sessions> {
       registrationNumber: _regCtrl.text.trim(),
       issuingBody: _bodyCtrl.text.trim(),
       practiceLocation: _location,
+      addressState: _stateCtrl.text.trim(),
+      addressNation: _nationCtrl.text.trim(),
     );
   }
 
@@ -517,7 +533,7 @@ class _Step3SessionsState extends State<_Step3Sessions> {
                   (v == null || v.trim().isEmpty) ? 'Issuing body is required' : null,
             ),
 
-            // ── Location picker — shown only when in_person is selected ────
+            // ── Location picker + state/nation — shown when in_person selected ─
             if (_hasInPerson) ...[
               const SizedBox(height: 20),
               LocationPickerField(
@@ -527,6 +543,26 @@ class _Step3SessionsState extends State<_Step3Sessions> {
                   _location = loc;
                   _locationError = null;
                 }),
+              ),
+              const SizedBox(height: 16),
+              AppTextField(
+                controller: _stateCtrl,
+                label: 'State / Province *',
+                hint: 'e.g. Maharashtra',
+                textCapitalization: TextCapitalization.words,
+                validator: (v) => (_hasInPerson && (v == null || v.trim().isEmpty))
+                    ? 'State is required for in-person sessions'
+                    : null,
+              ),
+              const SizedBox(height: 16),
+              AppTextField(
+                controller: _nationCtrl,
+                label: 'Country *',
+                hint: 'e.g. India',
+                textCapitalization: TextCapitalization.words,
+                validator: (v) => (_hasInPerson && (v == null || v.trim().isEmpty))
+                    ? 'Country is required for in-person sessions'
+                    : null,
               ),
             ],
           ],

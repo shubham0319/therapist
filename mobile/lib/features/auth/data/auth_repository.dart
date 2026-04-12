@@ -9,21 +9,27 @@ const _kRpcTimeout = Duration(seconds: 15);
 
 class TherapistSession {
   const TherapistSession({
-    required this.therapistId,
     required this.status,
     required this.accessToken,
     required this.refreshToken,
     required this.expiresAt,
+    this.accountType = 'therapist',
+    this.therapistId = '',
+    this.userId = '',
   });
 
   final String therapistId;
-  final String status;       // needs_onboarding | pending | verified | rejected
+  final String userId;
+  final String accountType;  // 'therapist' | 'user'
+  final String status;
   final String accessToken;
   final String refreshToken;
-  final int    expiresAt;    // unix timestamp
+  final int    expiresAt;
 
   factory TherapistSession.fromStored(StoredSession s) => TherapistSession(
-        therapistId:  s.therapistId,
+        accountType:  s.accountType,
+        therapistId:  s.isTherapist ? s.entityId : '',
+        userId:       s.isUser      ? s.entityId : '',
         status:       s.status,
         accessToken:  s.accessToken,
         refreshToken: s.refreshToken,
@@ -52,7 +58,10 @@ class AuthRepository {
       return Result.success(TherapistSession.fromStored(stored));
     }
 
-    // Access token expired — try silent refresh
+    // Access token expired — try silent refresh based on account type.
+    if (stored.isUser) {
+      return _silentUserRefresh(stored.refreshToken);
+    }
     return _silentRefresh(stored.refreshToken);
   }
 
@@ -69,6 +78,7 @@ class AuthRepository {
         status:       res.status,
       );
       return Result.success(TherapistSession(
+        accountType:  'therapist',
         therapistId:  res.therapistId,
         status:       res.status,
         accessToken:  res.accessToken,
@@ -76,7 +86,32 @@ class AuthRepository {
         expiresAt:    res.expiresAt.toInt(),
       ));
     } catch (_) {
-      // Refresh token expired or invalid — force re-login
+      await _store.clear();
+      return Result.error(const AuthFailure('Session expired. Please log in again.'));
+    }
+  }
+
+  Future<Result<TherapistSession>> _silentUserRefresh(String refreshToken) async {
+    try {
+      final res = await _stub.userRefreshSession(
+        UserRefreshSessionRequest()..refreshToken = refreshToken,
+        options: CallOptions(timeout: _kRpcTimeout),
+      );
+      await _store.rotateTokens(
+        accessToken:  res.accessToken,
+        refreshToken: res.refreshToken,
+        expiresAt:    res.expiresAt.toInt(),
+        status:       res.status,
+      );
+      return Result.success(TherapistSession(
+        accountType:  'user',
+        userId:       res.userId,
+        status:       res.status,
+        accessToken:  res.accessToken,
+        refreshToken: res.refreshToken,
+        expiresAt:    res.expiresAt.toInt(),
+      ));
+    } catch (_) {
       await _store.clear();
       return Result.error(const AuthFailure('Session expired. Please log in again.'));
     }
@@ -98,9 +133,13 @@ class AuthRepository {
     required String contact,
     required String otp,
     required bool isEmail,
+    String accountType = 'therapist',
   }) async {
     if (otp != '123456') {
       return Result.error(const AuthFailure('Invalid OTP. Use 123456 for testing.'));
+    }
+    if (accountType == 'user') {
+      return _userAuthCallback('dev:$contact');
     }
     return _authCallback('dev:$contact');
   }
@@ -112,6 +151,7 @@ class AuthRepository {
         options: CallOptions(timeout: _kRpcTimeout),
       );
       final session = TherapistSession(
+        accountType:  'therapist',
         therapistId:  res.therapistId,
         status:       res.status,
         accessToken:  res.accessToken,
@@ -119,8 +159,9 @@ class AuthRepository {
         expiresAt:    res.expiresAt.toInt(),
       );
       await _store.save(StoredSession(
-        therapistId:  session.therapistId,
-        status:       session.status,
+        accountType:  'therapist',
+        entityId:     res.therapistId,
+        status:       res.status,
         accessToken:  session.accessToken,
         refreshToken: session.refreshToken,
         expiresAt:    session.expiresAt,
@@ -131,10 +172,47 @@ class AuthRepository {
     }
   }
 
-  Future<void> signOut(String refreshToken) async {
+  Future<Result<TherapistSession>> _userAuthCallback(String token) async {
     try {
-      await _stub.logout(LogoutRequest()..refreshToken = refreshToken,
-          options: CallOptions(timeout: _kRpcTimeout));
+      final res = await _stub.userAuthCallback(
+        UserAuthCallbackRequest()..supabaseToken = token,
+        options: CallOptions(timeout: _kRpcTimeout),
+      );
+      final session = TherapistSession(
+        accountType:  'user',
+        userId:       res.userId,
+        status:       res.status,
+        accessToken:  res.accessToken,
+        refreshToken: res.refreshToken,
+        expiresAt:    res.expiresAt.toInt(),
+      );
+      await _store.save(StoredSession(
+        accountType:  'user',
+        entityId:     res.userId,
+        status:       res.status,
+        accessToken:  session.accessToken,
+        refreshToken: session.refreshToken,
+        expiresAt:    session.expiresAt,
+      ));
+      return Result.success(session);
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
+  }
+
+  Future<void> signOut(String refreshToken, {String accountType = 'therapist'}) async {
+    try {
+      if (accountType == 'user') {
+        await _stub.userLogout(
+          UserLogoutRequest()..refreshToken = refreshToken,
+          options: CallOptions(timeout: _kRpcTimeout),
+        );
+      } else {
+        await _stub.logout(
+          LogoutRequest()..refreshToken = refreshToken,
+          options: CallOptions(timeout: _kRpcTimeout),
+        );
+      }
     } catch (_) {
       // Best-effort — always clear local storage
     }

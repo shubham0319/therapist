@@ -32,6 +32,7 @@ class TherapistServiceClient extends $grpc.Client {
 
   TherapistServiceClient(super.channel, {super.options, super.interceptors});
 
+  /// ── Therapist auth / onboarding ───────────────────────────────────────────
   /// Called after Supabase auth. Upserts the therapist and returns their state + tokens.
   $grpc.ResponseFuture<$0.AuthCallbackResponse> authCallback(
     $0.AuthCallbackRequest request, {
@@ -95,6 +96,49 @@ class TherapistServiceClient extends $grpc.Client {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$logout, request, options: options);
+  }
+
+  /// ── User (client/patient) auth / onboarding ───────────────────────────────
+  /// Called after Supabase auth for users (clients looking for a therapist).
+  $grpc.ResponseFuture<$0.UserAuthCallbackResponse> userAuthCallback(
+    $0.UserAuthCallbackRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$userAuthCallback, request, options: options);
+  }
+
+  /// Saves the user onboarding form.
+  $grpc.ResponseFuture<$0.CompleteUserOnboardingResponse>
+      completeUserOnboarding(
+    $0.CompleteUserOnboardingRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$completeUserOnboarding, request,
+        options: options);
+  }
+
+  /// Fetch the authenticated user's own profile.
+  $grpc.ResponseFuture<$0.GetUserProfileResponse> getUserProfile(
+    $0.GetUserProfileRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getUserProfile, request, options: options);
+  }
+
+  /// Exchange a user refresh token for a new access + refresh token pair.
+  $grpc.ResponseFuture<$0.UserRefreshSessionResponse> userRefreshSession(
+    $0.UserRefreshSessionRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$userRefreshSession, request, options: options);
+  }
+
+  /// Invalidate the user refresh token (log out this device).
+  $grpc.ResponseFuture<$0.UserLogoutResponse> userLogout(
+    $0.UserLogoutRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$userLogout, request, options: options);
   }
 
   /// ── Blog ──────────────────────────────────────────────────────────────────
@@ -212,6 +256,31 @@ class TherapistServiceClient extends $grpc.Client {
           '/therapist.TherapistService/Logout',
           ($0.LogoutRequest value) => value.writeToBuffer(),
           $0.LogoutResponse.fromBuffer);
+  static final _$userAuthCallback = $grpc.ClientMethod<
+          $0.UserAuthCallbackRequest, $0.UserAuthCallbackResponse>(
+      '/therapist.TherapistService/UserAuthCallback',
+      ($0.UserAuthCallbackRequest value) => value.writeToBuffer(),
+      $0.UserAuthCallbackResponse.fromBuffer);
+  static final _$completeUserOnboarding = $grpc.ClientMethod<
+          $0.CompleteUserOnboardingRequest, $0.CompleteUserOnboardingResponse>(
+      '/therapist.TherapistService/CompleteUserOnboarding',
+      ($0.CompleteUserOnboardingRequest value) => value.writeToBuffer(),
+      $0.CompleteUserOnboardingResponse.fromBuffer);
+  static final _$getUserProfile =
+      $grpc.ClientMethod<$0.GetUserProfileRequest, $0.GetUserProfileResponse>(
+          '/therapist.TherapistService/GetUserProfile',
+          ($0.GetUserProfileRequest value) => value.writeToBuffer(),
+          $0.GetUserProfileResponse.fromBuffer);
+  static final _$userRefreshSession = $grpc.ClientMethod<
+          $0.UserRefreshSessionRequest, $0.UserRefreshSessionResponse>(
+      '/therapist.TherapistService/UserRefreshSession',
+      ($0.UserRefreshSessionRequest value) => value.writeToBuffer(),
+      $0.UserRefreshSessionResponse.fromBuffer);
+  static final _$userLogout =
+      $grpc.ClientMethod<$0.UserLogoutRequest, $0.UserLogoutResponse>(
+          '/therapist.TherapistService/UserLogout',
+          ($0.UserLogoutRequest value) => value.writeToBuffer(),
+          $0.UserLogoutResponse.fromBuffer);
   static final _$createBlog =
       $grpc.ClientMethod<$0.CreateBlogRequest, $0.CreateBlogResponse>(
           '/therapist.TherapistService/CreateBlog',
@@ -330,6 +399,49 @@ abstract class TherapistServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.LogoutRequest.fromBuffer(value),
         ($0.LogoutResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UserAuthCallbackRequest,
+            $0.UserAuthCallbackResponse>(
+        'UserAuthCallback',
+        userAuthCallback_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.UserAuthCallbackRequest.fromBuffer(value),
+        ($0.UserAuthCallbackResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.CompleteUserOnboardingRequest,
+            $0.CompleteUserOnboardingResponse>(
+        'CompleteUserOnboarding',
+        completeUserOnboarding_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.CompleteUserOnboardingRequest.fromBuffer(value),
+        ($0.CompleteUserOnboardingResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetUserProfileRequest,
+            $0.GetUserProfileResponse>(
+        'GetUserProfile',
+        getUserProfile_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.GetUserProfileRequest.fromBuffer(value),
+        ($0.GetUserProfileResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UserRefreshSessionRequest,
+            $0.UserRefreshSessionResponse>(
+        'UserRefreshSession',
+        userRefreshSession_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.UserRefreshSessionRequest.fromBuffer(value),
+        ($0.UserRefreshSessionResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UserLogoutRequest, $0.UserLogoutResponse>(
+        'UserLogout',
+        userLogout_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.UserLogoutRequest.fromBuffer(value),
+        ($0.UserLogoutResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.CreateBlogRequest, $0.CreateBlogResponse>(
         'CreateBlog',
         createBlog_Pre,
@@ -471,6 +583,50 @@ abstract class TherapistServiceBase extends $grpc.Service {
 
   $async.Future<$0.LogoutResponse> logout(
       $grpc.ServiceCall call, $0.LogoutRequest request);
+
+  $async.Future<$0.UserAuthCallbackResponse> userAuthCallback_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.UserAuthCallbackRequest> $request) async {
+    return userAuthCallback($call, await $request);
+  }
+
+  $async.Future<$0.UserAuthCallbackResponse> userAuthCallback(
+      $grpc.ServiceCall call, $0.UserAuthCallbackRequest request);
+
+  $async.Future<$0.CompleteUserOnboardingResponse> completeUserOnboarding_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.CompleteUserOnboardingRequest> $request) async {
+    return completeUserOnboarding($call, await $request);
+  }
+
+  $async.Future<$0.CompleteUserOnboardingResponse> completeUserOnboarding(
+      $grpc.ServiceCall call, $0.CompleteUserOnboardingRequest request);
+
+  $async.Future<$0.GetUserProfileResponse> getUserProfile_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.GetUserProfileRequest> $request) async {
+    return getUserProfile($call, await $request);
+  }
+
+  $async.Future<$0.GetUserProfileResponse> getUserProfile(
+      $grpc.ServiceCall call, $0.GetUserProfileRequest request);
+
+  $async.Future<$0.UserRefreshSessionResponse> userRefreshSession_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.UserRefreshSessionRequest> $request) async {
+    return userRefreshSession($call, await $request);
+  }
+
+  $async.Future<$0.UserRefreshSessionResponse> userRefreshSession(
+      $grpc.ServiceCall call, $0.UserRefreshSessionRequest request);
+
+  $async.Future<$0.UserLogoutResponse> userLogout_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.UserLogoutRequest> $request) async {
+    return userLogout($call, await $request);
+  }
+
+  $async.Future<$0.UserLogoutResponse> userLogout(
+      $grpc.ServiceCall call, $0.UserLogoutRequest request);
 
   $async.Future<$0.CreateBlogResponse> createBlog_Pre($grpc.ServiceCall $call,
       $async.Future<$0.CreateBlogRequest> $request) async {

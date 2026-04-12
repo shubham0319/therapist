@@ -31,6 +31,8 @@ class OnboardingFormData {
     this.latitude = 0.0,
     this.longitude = 0.0,
     this.placeId = '',
+    this.addressState = '',
+    this.addressNation = '',
   });
 
   final String fullName;
@@ -56,6 +58,8 @@ class OnboardingFormData {
   final double latitude;
   final double longitude;
   final String placeId;
+  final String addressState;
+  final String addressNation;
 }
 
 class OnboardingRepository {
@@ -147,7 +151,9 @@ class OnboardingRepository {
           ..addressText = data.addressText
           ..latitude = data.latitude
           ..longitude = data.longitude
-          ..placeId = data.placeId,
+          ..placeId = data.placeId
+          ..addressState = data.addressState
+          ..addressNation = data.addressNation,
         options: CallOptions(timeout: _kRpcTimeout),
       );
 

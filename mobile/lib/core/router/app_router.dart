@@ -10,11 +10,14 @@ import 'package:therapist/features/home/presentation/home_page.dart';
 import 'package:therapist/features/onboarding/presentation/onboarding_page.dart';
 import 'package:therapist/features/status/presentation/pending_page.dart';
 import 'package:therapist/features/status/presentation/rejected_page.dart';
+import 'package:therapist/features/user/presentation/user_onboarding_page.dart';
 import 'package:therapist/shared/widgets/scaffold_with_nav.dart';
 
 /// Named route constants — use these everywhere instead of raw strings.
 abstract class AppRoutes {
+  // ── Shared ────────────────────────────────────────────────────────────────
   static const login      = '/login';
+  // ── Therapist ─────────────────────────────────────────────────────────────
   static const onboarding = '/onboarding';
   static const pending    = '/pending';
   static const rejected   = '/rejected';
@@ -24,6 +27,9 @@ abstract class AppRoutes {
   static const blogDetail = '/blog/detail';
   static const blogCreate = '/blog/create';
   static const blogEdit   = '/blog/edit';
+  // ── User (client/patient) ─────────────────────────────────────────────────
+  static const userOnboarding = '/user/onboarding';
+  static const userHome       = '/user/home';
 }
 
 /// Routes that are only accessible when unauthenticated.
@@ -89,6 +95,16 @@ GoRouter buildRouter(AuthBloc authBloc) => GoRouter(
             return _fade(CreateBlogPage(existingBlog: blog));
           },
         ),
+        // ── User routes ──────────────────────────────────────────────────────
+        GoRoute(
+          path: AppRoutes.userOnboarding,
+          pageBuilder: (ctx, state) => _fade(const UserOnboardingPage()),
+        ),
+        GoRoute(
+          path: AppRoutes.userHome,
+          // Placeholder until a dedicated user home is built.
+          pageBuilder: (ctx, state) => _fade(const _UserHomePlaceholder()),
+        ),
       ],
     );
 
@@ -96,27 +112,39 @@ String? _redirect(BuildContext ctx, GoRouterState state, AuthBloc authBloc) {
   final authState = authBloc.state;
   final location  = state.matchedLocation;
 
-  // While loading / initial, stay put
+  // While loading / initial, stay put.
   if (authState is AuthInitial || authState is AuthLoading) return null;
 
-  // Unauthenticated — send to login unless already there
+  // Unauthenticated — send to login unless already there.
   if (authState is AuthUnauthenticated || authState is AuthError) {
     return _publicRoutes.contains(location) ? null : AppRoutes.login;
   }
 
   if (authState is AuthAuthenticated) {
-    final status = authState.status;
+    final status      = authState.status;
+    final accountType = authState.accountType;
 
-    // Coming from login — send to the right place
+    // ── User (client/patient) flow ─────────────────────────────────────────
+    if (accountType == 'user') {
+      if (_publicRoutes.contains(location)) {
+        return _defaultForUserStatus(status);
+      }
+      // Block user from therapist-only routes.
+      if (_isTherapistRoute(location)) return _defaultForUserStatus(status);
+      return null;
+    }
+
+    // ── Therapist flow ─────────────────────────────────────────────────────
+    // Coming from login — send to the right place.
     if (_publicRoutes.contains(location)) return _defaultForStatus(status);
 
-    // Status-locked pages: only allow if status matches
+    // Status-locked pages: only allow if status matches.
     if (_isStatusLockedRoute(location)) {
       final expected = _defaultForStatus(status);
       if (location != expected) return expected;
     }
 
-    // Free authenticated pages (home, blog, profile) — block if not verified
+    // Free authenticated pages (home, blog, profile) — block if not verified.
     if (_isFreeAuthRoute(location) && status != 'verified') {
       return _defaultForStatus(status);
     }
@@ -125,7 +153,7 @@ String? _redirect(BuildContext ctx, GoRouterState state, AuthBloc authBloc) {
   return null;
 }
 
-/// The landing page for each status.
+/// Landing page for each therapist status.
 String _defaultForStatus(String status) => switch (status) {
       'needs_onboarding' => AppRoutes.onboarding,
       'pending'          => AppRoutes.pending,
@@ -134,17 +162,65 @@ String _defaultForStatus(String status) => switch (status) {
       _                  => AppRoutes.login,
     };
 
-/// Pages that are exclusively tied to a specific status (must redirect away if status changes).
+/// Landing page for each user status.
+String _defaultForUserStatus(String status) => switch (status) {
+      'needs_onboarding' => AppRoutes.userOnboarding,
+      'active'           => AppRoutes.userHome,
+      _                  => AppRoutes.userHome,
+    };
+
+/// Routes that are exclusively tied to a specific therapist status.
 bool _isStatusLockedRoute(String location) =>
     location == AppRoutes.onboarding ||
     location == AppRoutes.pending    ||
     location == AppRoutes.rejected;
 
-/// Pages that verified users can freely navigate between.
+/// Therapist-only authenticated pages (verified therapists can freely navigate).
 bool _isFreeAuthRoute(String location) =>
     location == AppRoutes.home    ||
     location == AppRoutes.profile ||
     location.startsWith(AppRoutes.blog);
+
+/// All therapist-specific routes (to block user accounts from accessing).
+bool _isTherapistRoute(String location) =>
+    location == AppRoutes.onboarding   ||
+    location == AppRoutes.pending      ||
+    location == AppRoutes.rejected     ||
+    location == AppRoutes.home         ||
+    location == AppRoutes.profile      ||
+    location.startsWith(AppRoutes.blog);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// User home placeholder — shown after user onboarding until a full home is built
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _UserHomePlaceholder extends StatelessWidget {
+  const _UserHomePlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(title: const Text('Find a Therapist')),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.search, size: 64,
+                color: theme.colorScheme.primary),
+            const SizedBox(height: 16),
+            Text('Therapist discovery coming soon!',
+                style: theme.textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text('We\'re building the therapist search experience.',
+                style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant)),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 CustomTransitionPage<void> _fade(Widget child) => CustomTransitionPage<void>(
       child: child,

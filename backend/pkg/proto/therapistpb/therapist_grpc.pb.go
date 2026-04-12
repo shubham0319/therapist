@@ -19,29 +19,35 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TherapistService_AuthCallback_FullMethodName       = "/therapist.TherapistService/AuthCallback"
-	TherapistService_GetStatus_FullMethodName          = "/therapist.TherapistService/GetStatus"
-	TherapistService_CompleteOnboarding_FullMethodName = "/therapist.TherapistService/CompleteOnboarding"
-	TherapistService_ApproveTherapist_FullMethodName   = "/therapist.TherapistService/ApproveTherapist"
-	TherapistService_RejectTherapist_FullMethodName    = "/therapist.TherapistService/RejectTherapist"
-	TherapistService_UploadFile_FullMethodName         = "/therapist.TherapistService/UploadFile"
-	TherapistService_RefreshSession_FullMethodName     = "/therapist.TherapistService/RefreshSession"
-	TherapistService_Logout_FullMethodName             = "/therapist.TherapistService/Logout"
-	TherapistService_CreateBlog_FullMethodName         = "/therapist.TherapistService/CreateBlog"
-	TherapistService_UpdateBlog_FullMethodName         = "/therapist.TherapistService/UpdateBlog"
-	TherapistService_PublishBlog_FullMethodName        = "/therapist.TherapistService/PublishBlog"
-	TherapistService_DeleteBlog_FullMethodName         = "/therapist.TherapistService/DeleteBlog"
-	TherapistService_GetBlog_FullMethodName            = "/therapist.TherapistService/GetBlog"
-	TherapistService_ListBlogs_FullMethodName          = "/therapist.TherapistService/ListBlogs"
-	TherapistService_ListMyBlogs_FullMethodName        = "/therapist.TherapistService/ListMyBlogs"
-	TherapistService_ToggleLikeBlog_FullMethodName     = "/therapist.TherapistService/ToggleLikeBlog"
-	TherapistService_UploadBlogImage_FullMethodName    = "/therapist.TherapistService/UploadBlogImage"
+	TherapistService_AuthCallback_FullMethodName           = "/therapist.TherapistService/AuthCallback"
+	TherapistService_GetStatus_FullMethodName              = "/therapist.TherapistService/GetStatus"
+	TherapistService_CompleteOnboarding_FullMethodName     = "/therapist.TherapistService/CompleteOnboarding"
+	TherapistService_ApproveTherapist_FullMethodName       = "/therapist.TherapistService/ApproveTherapist"
+	TherapistService_RejectTherapist_FullMethodName        = "/therapist.TherapistService/RejectTherapist"
+	TherapistService_UploadFile_FullMethodName             = "/therapist.TherapistService/UploadFile"
+	TherapistService_RefreshSession_FullMethodName         = "/therapist.TherapistService/RefreshSession"
+	TherapistService_Logout_FullMethodName                 = "/therapist.TherapistService/Logout"
+	TherapistService_UserAuthCallback_FullMethodName       = "/therapist.TherapistService/UserAuthCallback"
+	TherapistService_CompleteUserOnboarding_FullMethodName = "/therapist.TherapistService/CompleteUserOnboarding"
+	TherapistService_GetUserProfile_FullMethodName         = "/therapist.TherapistService/GetUserProfile"
+	TherapistService_UserRefreshSession_FullMethodName     = "/therapist.TherapistService/UserRefreshSession"
+	TherapistService_UserLogout_FullMethodName             = "/therapist.TherapistService/UserLogout"
+	TherapistService_CreateBlog_FullMethodName             = "/therapist.TherapistService/CreateBlog"
+	TherapistService_UpdateBlog_FullMethodName             = "/therapist.TherapistService/UpdateBlog"
+	TherapistService_PublishBlog_FullMethodName            = "/therapist.TherapistService/PublishBlog"
+	TherapistService_DeleteBlog_FullMethodName             = "/therapist.TherapistService/DeleteBlog"
+	TherapistService_GetBlog_FullMethodName                = "/therapist.TherapistService/GetBlog"
+	TherapistService_ListBlogs_FullMethodName              = "/therapist.TherapistService/ListBlogs"
+	TherapistService_ListMyBlogs_FullMethodName            = "/therapist.TherapistService/ListMyBlogs"
+	TherapistService_ToggleLikeBlog_FullMethodName         = "/therapist.TherapistService/ToggleLikeBlog"
+	TherapistService_UploadBlogImage_FullMethodName        = "/therapist.TherapistService/UploadBlogImage"
 )
 
 // TherapistServiceClient is the client API for TherapistService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TherapistServiceClient interface {
+	// ── Therapist auth / onboarding ───────────────────────────────────────────
 	// Called after Supabase auth. Upserts the therapist and returns their state + tokens.
 	AuthCallback(ctx context.Context, in *AuthCallbackRequest, opts ...grpc.CallOption) (*AuthCallbackResponse, error)
 	// Returns the current state for an already-authenticated therapist.
@@ -59,6 +65,17 @@ type TherapistServiceClient interface {
 	RefreshSession(ctx context.Context, in *RefreshSessionRequest, opts ...grpc.CallOption) (*RefreshSessionResponse, error)
 	// Invalidate the refresh token (log out this device).
 	Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*LogoutResponse, error)
+	// ── User (client/patient) auth / onboarding ───────────────────────────────
+	// Called after Supabase auth for users (clients looking for a therapist).
+	UserAuthCallback(ctx context.Context, in *UserAuthCallbackRequest, opts ...grpc.CallOption) (*UserAuthCallbackResponse, error)
+	// Saves the user onboarding form.
+	CompleteUserOnboarding(ctx context.Context, in *CompleteUserOnboardingRequest, opts ...grpc.CallOption) (*CompleteUserOnboardingResponse, error)
+	// Fetch the authenticated user's own profile.
+	GetUserProfile(ctx context.Context, in *GetUserProfileRequest, opts ...grpc.CallOption) (*GetUserProfileResponse, error)
+	// Exchange a user refresh token for a new access + refresh token pair.
+	UserRefreshSession(ctx context.Context, in *UserRefreshSessionRequest, opts ...grpc.CallOption) (*UserRefreshSessionResponse, error)
+	// Invalidate the user refresh token (log out this device).
+	UserLogout(ctx context.Context, in *UserLogoutRequest, opts ...grpc.CallOption) (*UserLogoutResponse, error)
 	// ── Blog ──────────────────────────────────────────────────────────────────
 	// Create a draft blog (verified therapists only).
 	CreateBlog(ctx context.Context, in *CreateBlogRequest, opts ...grpc.CallOption) (*CreateBlogResponse, error)
@@ -168,6 +185,56 @@ func (c *therapistServiceClient) Logout(ctx context.Context, in *LogoutRequest, 
 	return out, nil
 }
 
+func (c *therapistServiceClient) UserAuthCallback(ctx context.Context, in *UserAuthCallbackRequest, opts ...grpc.CallOption) (*UserAuthCallbackResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserAuthCallbackResponse)
+	err := c.cc.Invoke(ctx, TherapistService_UserAuthCallback_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) CompleteUserOnboarding(ctx context.Context, in *CompleteUserOnboardingRequest, opts ...grpc.CallOption) (*CompleteUserOnboardingResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CompleteUserOnboardingResponse)
+	err := c.cc.Invoke(ctx, TherapistService_CompleteUserOnboarding_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) GetUserProfile(ctx context.Context, in *GetUserProfileRequest, opts ...grpc.CallOption) (*GetUserProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserProfileResponse)
+	err := c.cc.Invoke(ctx, TherapistService_GetUserProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) UserRefreshSession(ctx context.Context, in *UserRefreshSessionRequest, opts ...grpc.CallOption) (*UserRefreshSessionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserRefreshSessionResponse)
+	err := c.cc.Invoke(ctx, TherapistService_UserRefreshSession_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) UserLogout(ctx context.Context, in *UserLogoutRequest, opts ...grpc.CallOption) (*UserLogoutResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserLogoutResponse)
+	err := c.cc.Invoke(ctx, TherapistService_UserLogout_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *therapistServiceClient) CreateBlog(ctx context.Context, in *CreateBlogRequest, opts ...grpc.CallOption) (*CreateBlogResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateBlogResponse)
@@ -262,6 +329,7 @@ func (c *therapistServiceClient) UploadBlogImage(ctx context.Context, in *Upload
 // All implementations must embed UnimplementedTherapistServiceServer
 // for forward compatibility.
 type TherapistServiceServer interface {
+	// ── Therapist auth / onboarding ───────────────────────────────────────────
 	// Called after Supabase auth. Upserts the therapist and returns their state + tokens.
 	AuthCallback(context.Context, *AuthCallbackRequest) (*AuthCallbackResponse, error)
 	// Returns the current state for an already-authenticated therapist.
@@ -279,6 +347,17 @@ type TherapistServiceServer interface {
 	RefreshSession(context.Context, *RefreshSessionRequest) (*RefreshSessionResponse, error)
 	// Invalidate the refresh token (log out this device).
 	Logout(context.Context, *LogoutRequest) (*LogoutResponse, error)
+	// ── User (client/patient) auth / onboarding ───────────────────────────────
+	// Called after Supabase auth for users (clients looking for a therapist).
+	UserAuthCallback(context.Context, *UserAuthCallbackRequest) (*UserAuthCallbackResponse, error)
+	// Saves the user onboarding form.
+	CompleteUserOnboarding(context.Context, *CompleteUserOnboardingRequest) (*CompleteUserOnboardingResponse, error)
+	// Fetch the authenticated user's own profile.
+	GetUserProfile(context.Context, *GetUserProfileRequest) (*GetUserProfileResponse, error)
+	// Exchange a user refresh token for a new access + refresh token pair.
+	UserRefreshSession(context.Context, *UserRefreshSessionRequest) (*UserRefreshSessionResponse, error)
+	// Invalidate the user refresh token (log out this device).
+	UserLogout(context.Context, *UserLogoutRequest) (*UserLogoutResponse, error)
 	// ── Blog ──────────────────────────────────────────────────────────────────
 	// Create a draft blog (verified therapists only).
 	CreateBlog(context.Context, *CreateBlogRequest) (*CreateBlogResponse, error)
@@ -331,6 +410,21 @@ func (UnimplementedTherapistServiceServer) RefreshSession(context.Context, *Refr
 }
 func (UnimplementedTherapistServiceServer) Logout(context.Context, *LogoutRequest) (*LogoutResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Logout not implemented")
+}
+func (UnimplementedTherapistServiceServer) UserAuthCallback(context.Context, *UserAuthCallbackRequest) (*UserAuthCallbackResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UserAuthCallback not implemented")
+}
+func (UnimplementedTherapistServiceServer) CompleteUserOnboarding(context.Context, *CompleteUserOnboardingRequest) (*CompleteUserOnboardingResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CompleteUserOnboarding not implemented")
+}
+func (UnimplementedTherapistServiceServer) GetUserProfile(context.Context, *GetUserProfileRequest) (*GetUserProfileResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUserProfile not implemented")
+}
+func (UnimplementedTherapistServiceServer) UserRefreshSession(context.Context, *UserRefreshSessionRequest) (*UserRefreshSessionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UserRefreshSession not implemented")
+}
+func (UnimplementedTherapistServiceServer) UserLogout(context.Context, *UserLogoutRequest) (*UserLogoutResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UserLogout not implemented")
 }
 func (UnimplementedTherapistServiceServer) CreateBlog(context.Context, *CreateBlogRequest) (*CreateBlogResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateBlog not implemented")
@@ -520,6 +614,96 @@ func _TherapistService_Logout_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TherapistServiceServer).Logout(ctx, req.(*LogoutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_UserAuthCallback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserAuthCallbackRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).UserAuthCallback(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_UserAuthCallback_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).UserAuthCallback(ctx, req.(*UserAuthCallbackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_CompleteUserOnboarding_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompleteUserOnboardingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).CompleteUserOnboarding(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_CompleteUserOnboarding_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).CompleteUserOnboarding(ctx, req.(*CompleteUserOnboardingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_GetUserProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).GetUserProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_GetUserProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).GetUserProfile(ctx, req.(*GetUserProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_UserRefreshSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRefreshSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).UserRefreshSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_UserRefreshSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).UserRefreshSession(ctx, req.(*UserRefreshSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_UserLogout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserLogoutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).UserLogout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_UserLogout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).UserLogout(ctx, req.(*UserLogoutRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -724,6 +908,26 @@ var TherapistService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Logout",
 			Handler:    _TherapistService_Logout_Handler,
+		},
+		{
+			MethodName: "UserAuthCallback",
+			Handler:    _TherapistService_UserAuthCallback_Handler,
+		},
+		{
+			MethodName: "CompleteUserOnboarding",
+			Handler:    _TherapistService_CompleteUserOnboarding_Handler,
+		},
+		{
+			MethodName: "GetUserProfile",
+			Handler:    _TherapistService_GetUserProfile_Handler,
+		},
+		{
+			MethodName: "UserRefreshSession",
+			Handler:    _TherapistService_UserRefreshSession_Handler,
+		},
+		{
+			MethodName: "UserLogout",
+			Handler:    _TherapistService_UserLogout_Handler,
 		},
 		{
 			MethodName: "CreateBlog",

@@ -49,6 +49,8 @@ type OnboardingInput struct {
 	Latitude    float64
 	Longitude   float64
 	PlaceID     string
+	AddressState  string
+	AddressNation string
 }
 
 // HandleAuthCallback is called after Supabase authenticates the therapist.
@@ -210,6 +212,8 @@ func (s *Service) CompleteOnboarding(ctx context.Context, therapistID string, in
 			Latitude:    in.Latitude,
 			Longitude:   in.Longitude,
 			PlaceID:     in.PlaceID,
+			State:       in.AddressState,
+			Nation:      in.AddressNation,
 		}); err != nil {
 			s.log.Error("failed to save therapist address",
 				zap.String("therapist_id", therapistID),

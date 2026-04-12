@@ -9,6 +9,8 @@ import 'package:therapist/features/blog/bloc/blog_bloc.dart';
 import 'package:therapist/features/blog/data/blog_repository.dart';
 import 'package:therapist/features/onboarding/bloc/onboarding_bloc.dart';
 import 'package:therapist/features/onboarding/data/onboarding_repository.dart';
+import 'package:therapist/features/user/bloc/user_onboarding_bloc.dart';
+import 'package:therapist/features/user/data/user_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -39,9 +41,13 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton<BlogRepository>(
     () => BlogRepository(grpc: sl()),
   );
+  sl.registerLazySingleton<UserRepository>(
+    () => UserRepository(grpc: sl()),
+  );
 
   // ── BLoCs (registered as factories so each creation gets a fresh instance)
   sl.registerFactory<AuthBloc>(() => AuthBloc());
   sl.registerFactory<OnboardingBloc>(() => OnboardingBloc());
   sl.registerFactory<BlogBloc>(() => BlogBloc());
+  sl.registerFactory<UserOnboardingBloc>(() => UserOnboardingBloc());
 }

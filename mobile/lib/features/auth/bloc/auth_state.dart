@@ -31,14 +31,25 @@ class AuthAuthenticated extends AuthState {
     required this.status,
     required this.accessToken,
     required this.refreshToken,
+    this.accountType = 'therapist',
+    this.userId = '',
   });
+
+  /// 'therapist' | 'user'
+  final String accountType;
+  /// Non-empty when accountType == 'therapist'
   final String therapistId;
-  // "needs_onboarding" | "pending" | "verified" | "rejected"
+  /// Non-empty when accountType == 'user'
+  final String userId;
   final String status;
   final String accessToken;
   final String refreshToken;
+
+  bool get isTherapist => accountType == 'therapist';
+  bool get isUser      => accountType == 'user';
+
   @override
-  List<Object?> get props => [therapistId, status];
+  List<Object?> get props => [accountType, therapistId, userId, status];
 }
 
 class AuthError extends AuthState {

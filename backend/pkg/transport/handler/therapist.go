@@ -100,6 +100,8 @@ func (h *TherapistHandler) CompleteOnboarding(ctx context.Context, req *therapis
 		Latitude:           req.Latitude,
 		Longitude:          req.Longitude,
 		PlaceID:            req.PlaceId,
+		AddressState:       req.AddressState,
+		AddressNation:      req.AddressNation,
 	})
 	if err != nil {
 		h.log.Error("CompleteOnboarding failed",

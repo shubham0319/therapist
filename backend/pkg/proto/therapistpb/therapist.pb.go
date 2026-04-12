@@ -360,6 +360,8 @@ type CompleteOnboardingRequest struct {
 	Latitude      float64 `protobuf:"fixed64,17,opt,name=latitude,proto3" json:"latitude,omitempty"`
 	Longitude     float64 `protobuf:"fixed64,18,opt,name=longitude,proto3" json:"longitude,omitempty"`
 	PlaceId       string  `protobuf:"bytes,19,opt,name=place_id,json=placeId,proto3" json:"place_id,omitempty"`
+	AddressState  string  `protobuf:"bytes,20,opt,name=address_state,json=addressState,proto3" json:"address_state,omitempty"`    // e.g. "Maharashtra"
+	AddressNation string  `protobuf:"bytes,21,opt,name=address_nation,json=addressNation,proto3" json:"address_nation,omitempty"` // e.g. "India"
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -523,6 +525,20 @@ func (x *CompleteOnboardingRequest) GetLongitude() float64 {
 func (x *CompleteOnboardingRequest) GetPlaceId() string {
 	if x != nil {
 		return x.PlaceId
+	}
+	return ""
+}
+
+func (x *CompleteOnboardingRequest) GetAddressState() string {
+	if x != nil {
+		return x.AddressState
+	}
+	return ""
+}
+
+func (x *CompleteOnboardingRequest) GetAddressNation() string {
+	if x != nil {
+		return x.AddressNation
 	}
 	return ""
 }
@@ -2233,6 +2249,672 @@ func (x *UploadBlogImageResponse) GetUrl() string {
 	return ""
 }
 
+type User struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	Id                  string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Email               string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	Name                string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Phone               string                 `protobuf:"bytes,4,opt,name=phone,proto3" json:"phone,omitempty"`
+	State               string                 `protobuf:"bytes,5,opt,name=state,proto3" json:"state,omitempty"`
+	Nation              string                 `protobuf:"bytes,6,opt,name=nation,proto3" json:"nation,omitempty"`
+	LookingFor          []string               `protobuf:"bytes,7,rep,name=looking_for,json=lookingFor,proto3" json:"looking_for,omitempty"`
+	OnboardingCompleted bool                   `protobuf:"varint,8,opt,name=onboarding_completed,json=onboardingCompleted,proto3" json:"onboarding_completed,omitempty"`
+	CreatedAt           string                 `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *User) Reset() {
+	*x = User{}
+	mi := &file_proto_therapist_proto_msgTypes[35]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *User) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*User) ProtoMessage() {}
+
+func (x *User) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[35]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use User.ProtoReflect.Descriptor instead.
+func (*User) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{35}
+}
+
+func (x *User) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *User) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *User) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *User) GetPhone() string {
+	if x != nil {
+		return x.Phone
+	}
+	return ""
+}
+
+func (x *User) GetState() string {
+	if x != nil {
+		return x.State
+	}
+	return ""
+}
+
+func (x *User) GetNation() string {
+	if x != nil {
+		return x.Nation
+	}
+	return ""
+}
+
+func (x *User) GetLookingFor() []string {
+	if x != nil {
+		return x.LookingFor
+	}
+	return nil
+}
+
+func (x *User) GetOnboardingCompleted() bool {
+	if x != nil {
+		return x.OnboardingCompleted
+	}
+	return false
+}
+
+func (x *User) GetCreatedAt() string {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return ""
+}
+
+// UserAuthCallback
+type UserAuthCallbackRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SupabaseToken string                 `protobuf:"bytes,1,opt,name=supabase_token,json=supabaseToken,proto3" json:"supabase_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserAuthCallbackRequest) Reset() {
+	*x = UserAuthCallbackRequest{}
+	mi := &file_proto_therapist_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserAuthCallbackRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserAuthCallbackRequest) ProtoMessage() {}
+
+func (x *UserAuthCallbackRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserAuthCallbackRequest.ProtoReflect.Descriptor instead.
+func (*UserAuthCallbackRequest) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{36}
+}
+
+func (x *UserAuthCallbackRequest) GetSupabaseToken() string {
+	if x != nil {
+		return x.SupabaseToken
+	}
+	return ""
+}
+
+type UserAuthCallbackResponse struct {
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	UserId string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// "needs_onboarding" | "active"
+	Status              string `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
+	OnboardingCompleted bool   `protobuf:"varint,3,opt,name=onboarding_completed,json=onboardingCompleted,proto3" json:"onboarding_completed,omitempty"`
+	AccessToken         string `protobuf:"bytes,4,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	RefreshToken        string `protobuf:"bytes,5,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	ExpiresAt           int64  `protobuf:"varint,6,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"` // Unix timestamp
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *UserAuthCallbackResponse) Reset() {
+	*x = UserAuthCallbackResponse{}
+	mi := &file_proto_therapist_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserAuthCallbackResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserAuthCallbackResponse) ProtoMessage() {}
+
+func (x *UserAuthCallbackResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserAuthCallbackResponse.ProtoReflect.Descriptor instead.
+func (*UserAuthCallbackResponse) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *UserAuthCallbackResponse) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *UserAuthCallbackResponse) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *UserAuthCallbackResponse) GetOnboardingCompleted() bool {
+	if x != nil {
+		return x.OnboardingCompleted
+	}
+	return false
+}
+
+func (x *UserAuthCallbackResponse) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+func (x *UserAuthCallbackResponse) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
+}
+
+func (x *UserAuthCallbackResponse) GetExpiresAt() int64 {
+	if x != nil {
+		return x.ExpiresAt
+	}
+	return 0
+}
+
+// CompleteUserOnboarding
+type CompleteUserOnboardingRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                               // required
+	Phone         string                 `protobuf:"bytes,3,opt,name=phone,proto3" json:"phone,omitempty"`                             // optional
+	State         string                 `protobuf:"bytes,4,opt,name=state,proto3" json:"state,omitempty"`                             // e.g. "Maharashtra"
+	Nation        string                 `protobuf:"bytes,5,opt,name=nation,proto3" json:"nation,omitempty"`                           // e.g. "India"
+	LookingFor    []string               `protobuf:"bytes,6,rep,name=looking_for,json=lookingFor,proto3" json:"looking_for,omitempty"` // e.g. ["Anxiety", "Depression"]
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CompleteUserOnboardingRequest) Reset() {
+	*x = CompleteUserOnboardingRequest{}
+	mi := &file_proto_therapist_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CompleteUserOnboardingRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CompleteUserOnboardingRequest) ProtoMessage() {}
+
+func (x *CompleteUserOnboardingRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CompleteUserOnboardingRequest.ProtoReflect.Descriptor instead.
+func (*CompleteUserOnboardingRequest) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *CompleteUserOnboardingRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *CompleteUserOnboardingRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CompleteUserOnboardingRequest) GetPhone() string {
+	if x != nil {
+		return x.Phone
+	}
+	return ""
+}
+
+func (x *CompleteUserOnboardingRequest) GetState() string {
+	if x != nil {
+		return x.State
+	}
+	return ""
+}
+
+func (x *CompleteUserOnboardingRequest) GetNation() string {
+	if x != nil {
+		return x.Nation
+	}
+	return ""
+}
+
+func (x *CompleteUserOnboardingRequest) GetLookingFor() []string {
+	if x != nil {
+		return x.LookingFor
+	}
+	return nil
+}
+
+type CompleteUserOnboardingResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CompleteUserOnboardingResponse) Reset() {
+	*x = CompleteUserOnboardingResponse{}
+	mi := &file_proto_therapist_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CompleteUserOnboardingResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CompleteUserOnboardingResponse) ProtoMessage() {}
+
+func (x *CompleteUserOnboardingResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CompleteUserOnboardingResponse.ProtoReflect.Descriptor instead.
+func (*CompleteUserOnboardingResponse) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *CompleteUserOnboardingResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+// GetUserProfile
+type GetUserProfileRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserProfileRequest) Reset() {
+	*x = GetUserProfileRequest{}
+	mi := &file_proto_therapist_proto_msgTypes[40]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserProfileRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserProfileRequest) ProtoMessage() {}
+
+func (x *GetUserProfileRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[40]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserProfileRequest.ProtoReflect.Descriptor instead.
+func (*GetUserProfileRequest) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *GetUserProfileRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type GetUserProfileResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserProfileResponse) Reset() {
+	*x = GetUserProfileResponse{}
+	mi := &file_proto_therapist_proto_msgTypes[41]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserProfileResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserProfileResponse) ProtoMessage() {}
+
+func (x *GetUserProfileResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[41]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserProfileResponse.ProtoReflect.Descriptor instead.
+func (*GetUserProfileResponse) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *GetUserProfileResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
+// UserRefreshSession
+type UserRefreshSessionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RefreshToken  string                 `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserRefreshSessionRequest) Reset() {
+	*x = UserRefreshSessionRequest{}
+	mi := &file_proto_therapist_proto_msgTypes[42]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserRefreshSessionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserRefreshSessionRequest) ProtoMessage() {}
+
+func (x *UserRefreshSessionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[42]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserRefreshSessionRequest.ProtoReflect.Descriptor instead.
+func (*UserRefreshSessionRequest) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{42}
+}
+
+func (x *UserRefreshSessionRequest) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
+}
+
+type UserRefreshSessionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Status        string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
+	AccessToken   string                 `protobuf:"bytes,3,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	RefreshToken  string                 `protobuf:"bytes,4,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	ExpiresAt     int64                  `protobuf:"varint,5,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserRefreshSessionResponse) Reset() {
+	*x = UserRefreshSessionResponse{}
+	mi := &file_proto_therapist_proto_msgTypes[43]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserRefreshSessionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserRefreshSessionResponse) ProtoMessage() {}
+
+func (x *UserRefreshSessionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[43]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserRefreshSessionResponse.ProtoReflect.Descriptor instead.
+func (*UserRefreshSessionResponse) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{43}
+}
+
+func (x *UserRefreshSessionResponse) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *UserRefreshSessionResponse) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *UserRefreshSessionResponse) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+func (x *UserRefreshSessionResponse) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
+}
+
+func (x *UserRefreshSessionResponse) GetExpiresAt() int64 {
+	if x != nil {
+		return x.ExpiresAt
+	}
+	return 0
+}
+
+// UserLogout
+type UserLogoutRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RefreshToken  string                 `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserLogoutRequest) Reset() {
+	*x = UserLogoutRequest{}
+	mi := &file_proto_therapist_proto_msgTypes[44]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserLogoutRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserLogoutRequest) ProtoMessage() {}
+
+func (x *UserLogoutRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[44]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserLogoutRequest.ProtoReflect.Descriptor instead.
+func (*UserLogoutRequest) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{44}
+}
+
+func (x *UserLogoutRequest) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
+}
+
+type UserLogoutResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserLogoutResponse) Reset() {
+	*x = UserLogoutResponse{}
+	mi := &file_proto_therapist_proto_msgTypes[45]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserLogoutResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserLogoutResponse) ProtoMessage() {}
+
+func (x *UserLogoutResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_therapist_proto_msgTypes[45]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserLogoutResponse.ProtoReflect.Descriptor instead.
+func (*UserLogoutResponse) Descriptor() ([]byte, []int) {
+	return file_proto_therapist_proto_rawDescGZIP(), []int{45}
+}
+
+func (x *UserLogoutResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
 var File_proto_therapist_proto protoreflect.FileDescriptor
 
 const file_proto_therapist_proto_rawDesc = "" +
@@ -2259,7 +2941,7 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\x14onboarding_completed\x18\x03 \x01(\bR\x13onboardingCompleted\x12\x1f\n" +
 	"\vreferral_id\x18\x04 \x01(\tR\n" +
 	"referralId\x12)\n" +
-	"\x10rejection_reason\x18\x05 \x01(\tR\x0frejectionReason\"\xb8\x05\n" +
+	"\x10rejection_reason\x18\x05 \x01(\tR\x0frejectionReason\"\x84\x06\n" +
 	"\x19CompleteOnboardingRequest\x12!\n" +
 	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\x12\x1b\n" +
 	"\tfull_name\x18\x02 \x01(\tR\bfullName\x12)\n" +
@@ -2281,7 +2963,9 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\faddress_text\x18\x10 \x01(\tR\vaddressText\x12\x1a\n" +
 	"\blatitude\x18\x11 \x01(\x01R\blatitude\x12\x1c\n" +
 	"\tlongitude\x18\x12 \x01(\x01R\tlongitude\x12\x19\n" +
-	"\bplace_id\x18\x13 \x01(\tR\aplaceId\"6\n" +
+	"\bplace_id\x18\x13 \x01(\tR\aplaceId\x12#\n" +
+	"\raddress_state\x18\x14 \x01(\tR\faddressState\x12%\n" +
+	"\x0eaddress_nation\x18\x15 \x01(\tR\raddressNation\"6\n" +
 	"\x1aCompleteOnboardingResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\"<\n" +
 	"\x17ApproveTherapistRequest\x12!\n" +
@@ -2396,13 +3080,61 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\tfile_name\x18\x03 \x01(\tR\bfileName\x12!\n" +
 	"\fcontent_type\x18\x04 \x01(\tR\vcontentType\"+\n" +
 	"\x17UploadBlogImageResponse\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url*[\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\"\xf7\x01\n" +
+	"\x04User\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x14\n" +
+	"\x05phone\x18\x04 \x01(\tR\x05phone\x12\x14\n" +
+	"\x05state\x18\x05 \x01(\tR\x05state\x12\x16\n" +
+	"\x06nation\x18\x06 \x01(\tR\x06nation\x12\x1f\n" +
+	"\vlooking_for\x18\a \x03(\tR\n" +
+	"lookingFor\x121\n" +
+	"\x14onboarding_completed\x18\b \x01(\bR\x13onboardingCompleted\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\t \x01(\tR\tcreatedAt\"@\n" +
+	"\x17UserAuthCallbackRequest\x12%\n" +
+	"\x0esupabase_token\x18\x01 \x01(\tR\rsupabaseToken\"\xe5\x01\n" +
+	"\x18UserAuthCallbackResponse\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x16\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\x121\n" +
+	"\x14onboarding_completed\x18\x03 \x01(\bR\x13onboardingCompleted\x12!\n" +
+	"\faccess_token\x18\x04 \x01(\tR\vaccessToken\x12#\n" +
+	"\rrefresh_token\x18\x05 \x01(\tR\frefreshToken\x12\x1d\n" +
+	"\n" +
+	"expires_at\x18\x06 \x01(\x03R\texpiresAt\"\xb1\x01\n" +
+	"\x1dCompleteUserOnboardingRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
+	"\x05phone\x18\x03 \x01(\tR\x05phone\x12\x14\n" +
+	"\x05state\x18\x04 \x01(\tR\x05state\x12\x16\n" +
+	"\x06nation\x18\x05 \x01(\tR\x06nation\x12\x1f\n" +
+	"\vlooking_for\x18\x06 \x03(\tR\n" +
+	"lookingFor\":\n" +
+	"\x1eCompleteUserOnboardingResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"0\n" +
+	"\x15GetUserProfileRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"=\n" +
+	"\x16GetUserProfileResponse\x12#\n" +
+	"\x04user\x18\x01 \x01(\v2\x0f.therapist.UserR\x04user\"@\n" +
+	"\x19UserRefreshSessionRequest\x12#\n" +
+	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"\xb4\x01\n" +
+	"\x1aUserRefreshSessionResponse\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x16\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\x12!\n" +
+	"\faccess_token\x18\x03 \x01(\tR\vaccessToken\x12#\n" +
+	"\rrefresh_token\x18\x04 \x01(\tR\frefreshToken\x12\x1d\n" +
+	"\n" +
+	"expires_at\x18\x05 \x01(\x03R\texpiresAt\"8\n" +
+	"\x11UserLogoutRequest\x12#\n" +
+	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\".\n" +
+	"\x12UserLogoutResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess*[\n" +
 	"\n" +
 	"BlogStatus\x12\x1b\n" +
 	"\x17BLOG_STATUS_UNSPECIFIED\x10\x00\x12\x15\n" +
 	"\x11BLOG_STATUS_DRAFT\x10\x01\x12\x19\n" +
-	"\x15BLOG_STATUS_PUBLISHED\x10\x022\xde\n" +
-	"\n" +
+	"\x15BLOG_STATUS_PUBLISHED\x10\x022\xaf\x0e\n" +
 	"\x10TherapistService\x12O\n" +
 	"\fAuthCallback\x12\x1e.therapist.AuthCallbackRequest\x1a\x1f.therapist.AuthCallbackResponse\x12F\n" +
 	"\tGetStatus\x12\x1b.therapist.GetStatusRequest\x1a\x1c.therapist.GetStatusResponse\x12a\n" +
@@ -2412,7 +3144,13 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\n" +
 	"UploadFile\x12\x1c.therapist.UploadFileRequest\x1a\x1d.therapist.UploadFileResponse\x12U\n" +
 	"\x0eRefreshSession\x12 .therapist.RefreshSessionRequest\x1a!.therapist.RefreshSessionResponse\x12=\n" +
-	"\x06Logout\x12\x18.therapist.LogoutRequest\x1a\x19.therapist.LogoutResponse\x12I\n" +
+	"\x06Logout\x12\x18.therapist.LogoutRequest\x1a\x19.therapist.LogoutResponse\x12[\n" +
+	"\x10UserAuthCallback\x12\".therapist.UserAuthCallbackRequest\x1a#.therapist.UserAuthCallbackResponse\x12m\n" +
+	"\x16CompleteUserOnboarding\x12(.therapist.CompleteUserOnboardingRequest\x1a).therapist.CompleteUserOnboardingResponse\x12U\n" +
+	"\x0eGetUserProfile\x12 .therapist.GetUserProfileRequest\x1a!.therapist.GetUserProfileResponse\x12a\n" +
+	"\x12UserRefreshSession\x12$.therapist.UserRefreshSessionRequest\x1a%.therapist.UserRefreshSessionResponse\x12I\n" +
+	"\n" +
+	"UserLogout\x12\x1c.therapist.UserLogoutRequest\x1a\x1d.therapist.UserLogoutResponse\x12I\n" +
 	"\n" +
 	"CreateBlog\x12\x1c.therapist.CreateBlogRequest\x1a\x1d.therapist.CreateBlogResponse\x12I\n" +
 	"\n" +
@@ -2439,44 +3177,55 @@ func file_proto_therapist_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_therapist_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_proto_therapist_proto_msgTypes = make([]protoimpl.MessageInfo, 35)
+var file_proto_therapist_proto_msgTypes = make([]protoimpl.MessageInfo, 46)
 var file_proto_therapist_proto_goTypes = []any{
-	(BlogStatus)(0),                    // 0: therapist.BlogStatus
-	(*AuthCallbackRequest)(nil),        // 1: therapist.AuthCallbackRequest
-	(*AuthCallbackResponse)(nil),       // 2: therapist.AuthCallbackResponse
-	(*GetStatusRequest)(nil),           // 3: therapist.GetStatusRequest
-	(*GetStatusResponse)(nil),          // 4: therapist.GetStatusResponse
-	(*CompleteOnboardingRequest)(nil),  // 5: therapist.CompleteOnboardingRequest
-	(*CompleteOnboardingResponse)(nil), // 6: therapist.CompleteOnboardingResponse
-	(*ApproveTherapistRequest)(nil),    // 7: therapist.ApproveTherapistRequest
-	(*ApproveTherapistResponse)(nil),   // 8: therapist.ApproveTherapistResponse
-	(*RejectTherapistRequest)(nil),     // 9: therapist.RejectTherapistRequest
-	(*RejectTherapistResponse)(nil),    // 10: therapist.RejectTherapistResponse
-	(*UploadFileRequest)(nil),          // 11: therapist.UploadFileRequest
-	(*UploadFileResponse)(nil),         // 12: therapist.UploadFileResponse
-	(*RefreshSessionRequest)(nil),      // 13: therapist.RefreshSessionRequest
-	(*RefreshSessionResponse)(nil),     // 14: therapist.RefreshSessionResponse
-	(*LogoutRequest)(nil),              // 15: therapist.LogoutRequest
-	(*LogoutResponse)(nil),             // 16: therapist.LogoutResponse
-	(*Blog)(nil),                       // 17: therapist.Blog
-	(*CreateBlogRequest)(nil),          // 18: therapist.CreateBlogRequest
-	(*CreateBlogResponse)(nil),         // 19: therapist.CreateBlogResponse
-	(*UpdateBlogRequest)(nil),          // 20: therapist.UpdateBlogRequest
-	(*UpdateBlogResponse)(nil),         // 21: therapist.UpdateBlogResponse
-	(*PublishBlogRequest)(nil),         // 22: therapist.PublishBlogRequest
-	(*PublishBlogResponse)(nil),        // 23: therapist.PublishBlogResponse
-	(*DeleteBlogRequest)(nil),          // 24: therapist.DeleteBlogRequest
-	(*DeleteBlogResponse)(nil),         // 25: therapist.DeleteBlogResponse
-	(*GetBlogRequest)(nil),             // 26: therapist.GetBlogRequest
-	(*GetBlogResponse)(nil),            // 27: therapist.GetBlogResponse
-	(*ListBlogsRequest)(nil),           // 28: therapist.ListBlogsRequest
-	(*ListBlogsResponse)(nil),          // 29: therapist.ListBlogsResponse
-	(*ListMyBlogsRequest)(nil),         // 30: therapist.ListMyBlogsRequest
-	(*ListMyBlogsResponse)(nil),        // 31: therapist.ListMyBlogsResponse
-	(*ToggleLikeBlogRequest)(nil),      // 32: therapist.ToggleLikeBlogRequest
-	(*ToggleLikeBlogResponse)(nil),     // 33: therapist.ToggleLikeBlogResponse
-	(*UploadBlogImageRequest)(nil),     // 34: therapist.UploadBlogImageRequest
-	(*UploadBlogImageResponse)(nil),    // 35: therapist.UploadBlogImageResponse
+	(BlogStatus)(0),                        // 0: therapist.BlogStatus
+	(*AuthCallbackRequest)(nil),            // 1: therapist.AuthCallbackRequest
+	(*AuthCallbackResponse)(nil),           // 2: therapist.AuthCallbackResponse
+	(*GetStatusRequest)(nil),               // 3: therapist.GetStatusRequest
+	(*GetStatusResponse)(nil),              // 4: therapist.GetStatusResponse
+	(*CompleteOnboardingRequest)(nil),      // 5: therapist.CompleteOnboardingRequest
+	(*CompleteOnboardingResponse)(nil),     // 6: therapist.CompleteOnboardingResponse
+	(*ApproveTherapistRequest)(nil),        // 7: therapist.ApproveTherapistRequest
+	(*ApproveTherapistResponse)(nil),       // 8: therapist.ApproveTherapistResponse
+	(*RejectTherapistRequest)(nil),         // 9: therapist.RejectTherapistRequest
+	(*RejectTherapistResponse)(nil),        // 10: therapist.RejectTherapistResponse
+	(*UploadFileRequest)(nil),              // 11: therapist.UploadFileRequest
+	(*UploadFileResponse)(nil),             // 12: therapist.UploadFileResponse
+	(*RefreshSessionRequest)(nil),          // 13: therapist.RefreshSessionRequest
+	(*RefreshSessionResponse)(nil),         // 14: therapist.RefreshSessionResponse
+	(*LogoutRequest)(nil),                  // 15: therapist.LogoutRequest
+	(*LogoutResponse)(nil),                 // 16: therapist.LogoutResponse
+	(*Blog)(nil),                           // 17: therapist.Blog
+	(*CreateBlogRequest)(nil),              // 18: therapist.CreateBlogRequest
+	(*CreateBlogResponse)(nil),             // 19: therapist.CreateBlogResponse
+	(*UpdateBlogRequest)(nil),              // 20: therapist.UpdateBlogRequest
+	(*UpdateBlogResponse)(nil),             // 21: therapist.UpdateBlogResponse
+	(*PublishBlogRequest)(nil),             // 22: therapist.PublishBlogRequest
+	(*PublishBlogResponse)(nil),            // 23: therapist.PublishBlogResponse
+	(*DeleteBlogRequest)(nil),              // 24: therapist.DeleteBlogRequest
+	(*DeleteBlogResponse)(nil),             // 25: therapist.DeleteBlogResponse
+	(*GetBlogRequest)(nil),                 // 26: therapist.GetBlogRequest
+	(*GetBlogResponse)(nil),                // 27: therapist.GetBlogResponse
+	(*ListBlogsRequest)(nil),               // 28: therapist.ListBlogsRequest
+	(*ListBlogsResponse)(nil),              // 29: therapist.ListBlogsResponse
+	(*ListMyBlogsRequest)(nil),             // 30: therapist.ListMyBlogsRequest
+	(*ListMyBlogsResponse)(nil),            // 31: therapist.ListMyBlogsResponse
+	(*ToggleLikeBlogRequest)(nil),          // 32: therapist.ToggleLikeBlogRequest
+	(*ToggleLikeBlogResponse)(nil),         // 33: therapist.ToggleLikeBlogResponse
+	(*UploadBlogImageRequest)(nil),         // 34: therapist.UploadBlogImageRequest
+	(*UploadBlogImageResponse)(nil),        // 35: therapist.UploadBlogImageResponse
+	(*User)(nil),                           // 36: therapist.User
+	(*UserAuthCallbackRequest)(nil),        // 37: therapist.UserAuthCallbackRequest
+	(*UserAuthCallbackResponse)(nil),       // 38: therapist.UserAuthCallbackResponse
+	(*CompleteUserOnboardingRequest)(nil),  // 39: therapist.CompleteUserOnboardingRequest
+	(*CompleteUserOnboardingResponse)(nil), // 40: therapist.CompleteUserOnboardingResponse
+	(*GetUserProfileRequest)(nil),          // 41: therapist.GetUserProfileRequest
+	(*GetUserProfileResponse)(nil),         // 42: therapist.GetUserProfileResponse
+	(*UserRefreshSessionRequest)(nil),      // 43: therapist.UserRefreshSessionRequest
+	(*UserRefreshSessionResponse)(nil),     // 44: therapist.UserRefreshSessionResponse
+	(*UserLogoutRequest)(nil),              // 45: therapist.UserLogoutRequest
+	(*UserLogoutResponse)(nil),             // 46: therapist.UserLogoutResponse
 }
 var file_proto_therapist_proto_depIdxs = []int32{
 	0,  // 0: therapist.Blog.status:type_name -> therapist.BlogStatus
@@ -2486,45 +3235,56 @@ var file_proto_therapist_proto_depIdxs = []int32{
 	17, // 4: therapist.GetBlogResponse.blog:type_name -> therapist.Blog
 	17, // 5: therapist.ListBlogsResponse.blogs:type_name -> therapist.Blog
 	17, // 6: therapist.ListMyBlogsResponse.blogs:type_name -> therapist.Blog
-	1,  // 7: therapist.TherapistService.AuthCallback:input_type -> therapist.AuthCallbackRequest
-	3,  // 8: therapist.TherapistService.GetStatus:input_type -> therapist.GetStatusRequest
-	5,  // 9: therapist.TherapistService.CompleteOnboarding:input_type -> therapist.CompleteOnboardingRequest
-	7,  // 10: therapist.TherapistService.ApproveTherapist:input_type -> therapist.ApproveTherapistRequest
-	9,  // 11: therapist.TherapistService.RejectTherapist:input_type -> therapist.RejectTherapistRequest
-	11, // 12: therapist.TherapistService.UploadFile:input_type -> therapist.UploadFileRequest
-	13, // 13: therapist.TherapistService.RefreshSession:input_type -> therapist.RefreshSessionRequest
-	15, // 14: therapist.TherapistService.Logout:input_type -> therapist.LogoutRequest
-	18, // 15: therapist.TherapistService.CreateBlog:input_type -> therapist.CreateBlogRequest
-	20, // 16: therapist.TherapistService.UpdateBlog:input_type -> therapist.UpdateBlogRequest
-	22, // 17: therapist.TherapistService.PublishBlog:input_type -> therapist.PublishBlogRequest
-	24, // 18: therapist.TherapistService.DeleteBlog:input_type -> therapist.DeleteBlogRequest
-	26, // 19: therapist.TherapistService.GetBlog:input_type -> therapist.GetBlogRequest
-	28, // 20: therapist.TherapistService.ListBlogs:input_type -> therapist.ListBlogsRequest
-	30, // 21: therapist.TherapistService.ListMyBlogs:input_type -> therapist.ListMyBlogsRequest
-	32, // 22: therapist.TherapistService.ToggleLikeBlog:input_type -> therapist.ToggleLikeBlogRequest
-	34, // 23: therapist.TherapistService.UploadBlogImage:input_type -> therapist.UploadBlogImageRequest
-	2,  // 24: therapist.TherapistService.AuthCallback:output_type -> therapist.AuthCallbackResponse
-	4,  // 25: therapist.TherapistService.GetStatus:output_type -> therapist.GetStatusResponse
-	6,  // 26: therapist.TherapistService.CompleteOnboarding:output_type -> therapist.CompleteOnboardingResponse
-	8,  // 27: therapist.TherapistService.ApproveTherapist:output_type -> therapist.ApproveTherapistResponse
-	10, // 28: therapist.TherapistService.RejectTherapist:output_type -> therapist.RejectTherapistResponse
-	12, // 29: therapist.TherapistService.UploadFile:output_type -> therapist.UploadFileResponse
-	14, // 30: therapist.TherapistService.RefreshSession:output_type -> therapist.RefreshSessionResponse
-	16, // 31: therapist.TherapistService.Logout:output_type -> therapist.LogoutResponse
-	19, // 32: therapist.TherapistService.CreateBlog:output_type -> therapist.CreateBlogResponse
-	21, // 33: therapist.TherapistService.UpdateBlog:output_type -> therapist.UpdateBlogResponse
-	23, // 34: therapist.TherapistService.PublishBlog:output_type -> therapist.PublishBlogResponse
-	25, // 35: therapist.TherapistService.DeleteBlog:output_type -> therapist.DeleteBlogResponse
-	27, // 36: therapist.TherapistService.GetBlog:output_type -> therapist.GetBlogResponse
-	29, // 37: therapist.TherapistService.ListBlogs:output_type -> therapist.ListBlogsResponse
-	31, // 38: therapist.TherapistService.ListMyBlogs:output_type -> therapist.ListMyBlogsResponse
-	33, // 39: therapist.TherapistService.ToggleLikeBlog:output_type -> therapist.ToggleLikeBlogResponse
-	35, // 40: therapist.TherapistService.UploadBlogImage:output_type -> therapist.UploadBlogImageResponse
-	24, // [24:41] is the sub-list for method output_type
-	7,  // [7:24] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	36, // 7: therapist.GetUserProfileResponse.user:type_name -> therapist.User
+	1,  // 8: therapist.TherapistService.AuthCallback:input_type -> therapist.AuthCallbackRequest
+	3,  // 9: therapist.TherapistService.GetStatus:input_type -> therapist.GetStatusRequest
+	5,  // 10: therapist.TherapistService.CompleteOnboarding:input_type -> therapist.CompleteOnboardingRequest
+	7,  // 11: therapist.TherapistService.ApproveTherapist:input_type -> therapist.ApproveTherapistRequest
+	9,  // 12: therapist.TherapistService.RejectTherapist:input_type -> therapist.RejectTherapistRequest
+	11, // 13: therapist.TherapistService.UploadFile:input_type -> therapist.UploadFileRequest
+	13, // 14: therapist.TherapistService.RefreshSession:input_type -> therapist.RefreshSessionRequest
+	15, // 15: therapist.TherapistService.Logout:input_type -> therapist.LogoutRequest
+	37, // 16: therapist.TherapistService.UserAuthCallback:input_type -> therapist.UserAuthCallbackRequest
+	39, // 17: therapist.TherapistService.CompleteUserOnboarding:input_type -> therapist.CompleteUserOnboardingRequest
+	41, // 18: therapist.TherapistService.GetUserProfile:input_type -> therapist.GetUserProfileRequest
+	43, // 19: therapist.TherapistService.UserRefreshSession:input_type -> therapist.UserRefreshSessionRequest
+	45, // 20: therapist.TherapistService.UserLogout:input_type -> therapist.UserLogoutRequest
+	18, // 21: therapist.TherapistService.CreateBlog:input_type -> therapist.CreateBlogRequest
+	20, // 22: therapist.TherapistService.UpdateBlog:input_type -> therapist.UpdateBlogRequest
+	22, // 23: therapist.TherapistService.PublishBlog:input_type -> therapist.PublishBlogRequest
+	24, // 24: therapist.TherapistService.DeleteBlog:input_type -> therapist.DeleteBlogRequest
+	26, // 25: therapist.TherapistService.GetBlog:input_type -> therapist.GetBlogRequest
+	28, // 26: therapist.TherapistService.ListBlogs:input_type -> therapist.ListBlogsRequest
+	30, // 27: therapist.TherapistService.ListMyBlogs:input_type -> therapist.ListMyBlogsRequest
+	32, // 28: therapist.TherapistService.ToggleLikeBlog:input_type -> therapist.ToggleLikeBlogRequest
+	34, // 29: therapist.TherapistService.UploadBlogImage:input_type -> therapist.UploadBlogImageRequest
+	2,  // 30: therapist.TherapistService.AuthCallback:output_type -> therapist.AuthCallbackResponse
+	4,  // 31: therapist.TherapistService.GetStatus:output_type -> therapist.GetStatusResponse
+	6,  // 32: therapist.TherapistService.CompleteOnboarding:output_type -> therapist.CompleteOnboardingResponse
+	8,  // 33: therapist.TherapistService.ApproveTherapist:output_type -> therapist.ApproveTherapistResponse
+	10, // 34: therapist.TherapistService.RejectTherapist:output_type -> therapist.RejectTherapistResponse
+	12, // 35: therapist.TherapistService.UploadFile:output_type -> therapist.UploadFileResponse
+	14, // 36: therapist.TherapistService.RefreshSession:output_type -> therapist.RefreshSessionResponse
+	16, // 37: therapist.TherapistService.Logout:output_type -> therapist.LogoutResponse
+	38, // 38: therapist.TherapistService.UserAuthCallback:output_type -> therapist.UserAuthCallbackResponse
+	40, // 39: therapist.TherapistService.CompleteUserOnboarding:output_type -> therapist.CompleteUserOnboardingResponse
+	42, // 40: therapist.TherapistService.GetUserProfile:output_type -> therapist.GetUserProfileResponse
+	44, // 41: therapist.TherapistService.UserRefreshSession:output_type -> therapist.UserRefreshSessionResponse
+	46, // 42: therapist.TherapistService.UserLogout:output_type -> therapist.UserLogoutResponse
+	19, // 43: therapist.TherapistService.CreateBlog:output_type -> therapist.CreateBlogResponse
+	21, // 44: therapist.TherapistService.UpdateBlog:output_type -> therapist.UpdateBlogResponse
+	23, // 45: therapist.TherapistService.PublishBlog:output_type -> therapist.PublishBlogResponse
+	25, // 46: therapist.TherapistService.DeleteBlog:output_type -> therapist.DeleteBlogResponse
+	27, // 47: therapist.TherapistService.GetBlog:output_type -> therapist.GetBlogResponse
+	29, // 48: therapist.TherapistService.ListBlogs:output_type -> therapist.ListBlogsResponse
+	31, // 49: therapist.TherapistService.ListMyBlogs:output_type -> therapist.ListMyBlogsResponse
+	33, // 50: therapist.TherapistService.ToggleLikeBlog:output_type -> therapist.ToggleLikeBlogResponse
+	35, // 51: therapist.TherapistService.UploadBlogImage:output_type -> therapist.UploadBlogImageResponse
+	30, // [30:52] is the sub-list for method output_type
+	8,  // [8:30] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_proto_therapist_proto_init() }
@@ -2538,7 +3298,7 @@ func file_proto_therapist_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_therapist_proto_rawDesc), len(file_proto_therapist_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   35,
+			NumMessages:   46,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
