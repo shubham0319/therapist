@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package therapist;
+
+option go_package = "therapist/pkg/proto/therapistpb;therapistpb";
+
+// ─────────────────────────────────────────────
+// Blog
+// ─────────────────────────────────────────────
+
+enum BlogStatus {
+  BLOG_STATUS_UNSPECIFIED = 0;
+  BLOG_STATUS_DRAFT       = 1;
+  BLOG_STATUS_PUBLISHED   = 2;
+}
+
+message Blog {
+  string     id              = 1;
+  string     therapist_id    = 2;
+  string     title           = 3;
+  string     slug            = 4;
+  string     cover_image_url = 5;
+  string     content         = 6;  // plain text / markdown, max 50 000 chars
+  repeated string image_urls = 7;  // max 2 inline images
+  BlogStatus status          = 8;
+  int64      views           = 9;
+  int64      likes           = 10;
+  bool       liked_by_me     = 11;
+  string     created_at      = 12;
+  string     updated_at      = 13;
+  string     published_at    = 14;
+  repeated string tags       = 15; // e.g. ["anxiety","depression","stress"]
+}
+
+// CreateBlog — verified therapists only; creates a draft.
+message CreateBlogRequest {
+  string          therapist_id    = 1;
+  string          title           = 2;
+  string          content         = 3;
+  string          cover_image_url = 4;
+  repeated string image_urls      = 5;
+  repeated string tags            = 6;
+}
+message CreateBlogResponse { Blog blog = 1; }
+
+// UpdateBlog — own draft only.
+message UpdateBlogRequest {
+  string          therapist_id    = 1;
+  string          blog_id         = 2;
+  string          title           = 3;
+  string          content         = 4;
+  string          cover_image_url = 5;
+  repeated string image_urls      = 6;
+  repeated string tags            = 7;
+}
+message UpdateBlogResponse { Blog blog = 1; }
+
+// PublishBlog — move draft → published.
+message PublishBlogRequest {
+  string therapist_id = 1;
+  string blog_id      = 2;
+}
+message PublishBlogResponse { Blog blog = 1; }
+
+// DeleteBlog — own blog (any status).
+message DeleteBlogRequest {
+  string therapist_id = 1;
+  string blog_id      = 2;
+}
+message DeleteBlogResponse { bool success = 1; }
+
+// GetBlog — fetch one blog; increments views when published.
+message GetBlogRequest {
+  string blog_id   = 1;
+  string viewer_id = 2; // optional — therapist_id of the viewer, used for liked_by_me
+}
+message GetBlogResponse { Blog blog = 1; }
+
+// ListBlogs — paginated list of published blogs (optionally filtered by therapist).
+message ListBlogsRequest {
+  string therapist_id = 1; // optional filter
+  string viewer_id    = 2; // optional — for liked_by_me
+  int32  page         = 3; // 1-based
+  int32  page_size    = 4; // max 50
+}
+message ListBlogsResponse {
+  repeated Blog blogs = 1;
+  int32         total = 2;
+}
+
+// ListMyBlogs — all blogs (draft + published) for the authenticated therapist.
+message ListMyBlogsRequest {
+  string therapist_id = 1;
+  int32  page         = 2; // 1-based
+  int32  page_size    = 3; // max 50
+}
+message ListMyBlogsResponse {
+  repeated Blog blogs = 1;
+  int32         total = 2;
+}
+
+// ToggleLikeBlog — like or unlike a published blog.
+message ToggleLikeBlogRequest {
+  string therapist_id = 1; // the liker
+  string blog_id      = 2;
+}
+message ToggleLikeBlogResponse {
+  bool  liked = 1;
+  int64 likes = 2;
+}
+
+// UploadBlogImage — upload one inline blog image (max 2 MB).
+message UploadBlogImageRequest {
+  string therapist_id  = 1;
+  bytes  data          = 2;
+  string file_name     = 3;
+  string content_type  = 4; // image/jpeg | image/png | image/webp
+}
+message UploadBlogImageResponse { string url = 1; }

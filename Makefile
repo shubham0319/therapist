@@ -25,6 +25,10 @@ FLUTTER      := $(HOME)/flutter/bin/flutter
 GO           := /usr/local/go/bin/go
 PROTO_DIR    := proto
 PROTO_OUT    := $(BACKEND_DIR)/pkg/proto/therapistpb
+PROTO_FILES  := $(PROTO_DIR)/therapist.proto \
+                $(PROTO_DIR)/user.proto \
+                $(PROTO_DIR)/blog.proto \
+                $(PROTO_DIR)/discovery.proto
 ENV_FILE     := $(BACKEND_DIR)/etc/config.local.env
 DOCKER_IMAGE := therapist-backend
 DOCKER_TAG   := latest
@@ -154,8 +158,8 @@ mobile-device:
 # Code generation
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Regenerate Go protobuf + gRPC stubs from proto/therapist.proto
-# Requires: protoc, protoc-gen-go, protoc-gen-go-grpc
+# Regenerate Go + Dart protobuf / gRPC stubs from proto/*.proto
+# Requires: protoc, protoc-gen-go, protoc-gen-go-grpc, protoc-gen-dart
 # Install once:
 #   go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 #   go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
@@ -164,22 +168,29 @@ proto: proto-go proto-dart
 proto-go:
 	@echo -e "$(CYAN)▶ Generating Go protobuf stubs...$(RESET)"
 	@PATH="$$PATH:$$HOME/go/bin" protoc \
+		-I . \
 		--go_out=$(BACKEND_DIR) \
 		--go_opt=paths=source_relative \
-		--go_opt=M$(PROTO_DIR)/therapist.proto=therapist/pkg/proto/therapistpb \
+		--go_opt=Mproto/therapist.proto=therapist/pkg/proto/therapistpb \
+		--go_opt=Mproto/user.proto=therapist/pkg/proto/therapistpb \
+		--go_opt=Mproto/blog.proto=therapist/pkg/proto/therapistpb \
+		--go_opt=Mproto/discovery.proto=therapist/pkg/proto/therapistpb \
 		--go-grpc_out=$(BACKEND_DIR) \
 		--go-grpc_opt=paths=source_relative \
-		--go-grpc_opt=M$(PROTO_DIR)/therapist.proto=therapist/pkg/proto/therapistpb \
-		$(PROTO_DIR)/therapist.proto
+		--go-grpc_opt=Mproto/therapist.proto=therapist/pkg/proto/therapistpb \
+		--go-grpc_opt=Mproto/user.proto=therapist/pkg/proto/therapistpb \
+		--go-grpc_opt=Mproto/blog.proto=therapist/pkg/proto/therapistpb \
+		--go-grpc_opt=Mproto/discovery.proto=therapist/pkg/proto/therapistpb \
+		$(PROTO_FILES)
 	@mv $(BACKEND_DIR)/proto/*.pb.go $(PROTO_OUT)/
 	@echo -e "$(GREEN)✔ Go stubs → $(PROTO_OUT)$(RESET)"
 
 proto-dart:
 	@echo -e "$(CYAN)▶ Generating Dart protobuf stubs...$(RESET)"
 	@PATH="$$PATH:$$HOME/.pub-cache/bin" protoc \
-		--dart_out=grpc:$(MOBILE_DIR)/lib/core/proto \
-		-I $(PROTO_DIR) \
-		$(PROTO_DIR)/therapist.proto
+		-I . \
+		--dart_out=grpc:$(MOBILE_DIR)/lib/core \
+		$(PROTO_FILES)
 	@echo -e "$(GREEN)✔ Dart stubs → $(MOBILE_DIR)/lib/core/proto$(RESET)"
 
 # Regenerate sqlc query code from SQL files

@@ -3,6 +3,7 @@ import 'package:therapist/core/error/failures.dart';
 import 'package:therapist/core/error/result.dart';
 import 'package:therapist/core/network/grpc_client.dart';
 import 'package:therapist/core/proto/therapist.pbgrpc.dart';
+import 'package:therapist/core/proto/user.pb.dart';
 import 'package:therapist/core/session/session_store.dart';
 
 const _kRpcTimeout = Duration(seconds: 15);

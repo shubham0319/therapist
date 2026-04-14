@@ -1,6 +1,6 @@
 // This is a generated file - do not edit.
 //
-// Generated from proto/therapist.proto.
+// Generated from proto/user.proto.
 
 // @dart = 3.3
 

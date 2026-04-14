@@ -1,6 +1,6 @@
 // This is a generated file - do not edit.
 //
-// Generated from therapist.proto.
+// Generated from proto/therapist.proto.
 
 // @dart = 3.3
 
@@ -16,7 +16,10 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'blog.pb.dart' as $3;
+import 'discovery.pb.dart' as $2;
 import 'therapist.pb.dart' as $0;
+import 'user.pb.dart' as $1;
 
 export 'therapist.pb.dart';
 
@@ -100,17 +103,17 @@ class TherapistServiceClient extends $grpc.Client {
 
   /// ── User (client/patient) auth / onboarding ───────────────────────────────
   /// Called after Supabase auth for users (clients looking for a therapist).
-  $grpc.ResponseFuture<$0.UserAuthCallbackResponse> userAuthCallback(
-    $0.UserAuthCallbackRequest request, {
+  $grpc.ResponseFuture<$1.UserAuthCallbackResponse> userAuthCallback(
+    $1.UserAuthCallbackRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$userAuthCallback, request, options: options);
   }
 
   /// Saves the user onboarding form.
-  $grpc.ResponseFuture<$0.CompleteUserOnboardingResponse>
+  $grpc.ResponseFuture<$1.CompleteUserOnboardingResponse>
       completeUserOnboarding(
-    $0.CompleteUserOnboardingRequest request, {
+    $1.CompleteUserOnboardingRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$completeUserOnboarding, request,
@@ -118,24 +121,24 @@ class TherapistServiceClient extends $grpc.Client {
   }
 
   /// Fetch the authenticated user's own profile.
-  $grpc.ResponseFuture<$0.GetUserProfileResponse> getUserProfile(
-    $0.GetUserProfileRequest request, {
+  $grpc.ResponseFuture<$1.GetUserProfileResponse> getUserProfile(
+    $1.GetUserProfileRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$getUserProfile, request, options: options);
   }
 
   /// Exchange a user refresh token for a new access + refresh token pair.
-  $grpc.ResponseFuture<$0.UserRefreshSessionResponse> userRefreshSession(
-    $0.UserRefreshSessionRequest request, {
+  $grpc.ResponseFuture<$1.UserRefreshSessionResponse> userRefreshSession(
+    $1.UserRefreshSessionRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$userRefreshSession, request, options: options);
   }
 
   /// Invalidate the user refresh token (log out this device).
-  $grpc.ResponseFuture<$0.UserLogoutResponse> userLogout(
-    $0.UserLogoutRequest request, {
+  $grpc.ResponseFuture<$1.UserLogoutResponse> userLogout(
+    $1.UserLogoutRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$userLogout, request, options: options);
@@ -143,17 +146,17 @@ class TherapistServiceClient extends $grpc.Client {
 
   /// ── Discovery (user-facing) ───────────────────────────────────────────────
   /// Full-text search across verified therapists.
-  $grpc.ResponseFuture<$0.SearchTherapistsResponse> searchTherapists(
-    $0.SearchTherapistsRequest request, {
+  $grpc.ResponseFuture<$2.SearchTherapistsResponse> searchTherapists(
+    $2.SearchTherapistsRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$searchTherapists, request, options: options);
   }
 
   /// Location + rating-based recommendations for a user.
-  $grpc.ResponseFuture<$0.GetRecommendedTherapistsResponse>
+  $grpc.ResponseFuture<$2.GetRecommendedTherapistsResponse>
       getRecommendedTherapists(
-    $0.GetRecommendedTherapistsRequest request, {
+    $2.GetRecommendedTherapistsRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$getRecommendedTherapists, request,
@@ -162,72 +165,72 @@ class TherapistServiceClient extends $grpc.Client {
 
   /// ── Blog ──────────────────────────────────────────────────────────────────
   /// Create a draft blog (verified therapists only).
-  $grpc.ResponseFuture<$0.CreateBlogResponse> createBlog(
-    $0.CreateBlogRequest request, {
+  $grpc.ResponseFuture<$3.CreateBlogResponse> createBlog(
+    $3.CreateBlogRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$createBlog, request, options: options);
   }
 
   /// Update a draft blog (owner only).
-  $grpc.ResponseFuture<$0.UpdateBlogResponse> updateBlog(
-    $0.UpdateBlogRequest request, {
+  $grpc.ResponseFuture<$3.UpdateBlogResponse> updateBlog(
+    $3.UpdateBlogRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$updateBlog, request, options: options);
   }
 
   /// Publish a draft blog (owner only).
-  $grpc.ResponseFuture<$0.PublishBlogResponse> publishBlog(
-    $0.PublishBlogRequest request, {
+  $grpc.ResponseFuture<$3.PublishBlogResponse> publishBlog(
+    $3.PublishBlogRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$publishBlog, request, options: options);
   }
 
   /// Delete a blog (owner only).
-  $grpc.ResponseFuture<$0.DeleteBlogResponse> deleteBlog(
-    $0.DeleteBlogRequest request, {
+  $grpc.ResponseFuture<$3.DeleteBlogResponse> deleteBlog(
+    $3.DeleteBlogRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$deleteBlog, request, options: options);
   }
 
   /// Fetch a single blog; increments view count for published blogs.
-  $grpc.ResponseFuture<$0.GetBlogResponse> getBlog(
-    $0.GetBlogRequest request, {
+  $grpc.ResponseFuture<$3.GetBlogResponse> getBlog(
+    $3.GetBlogRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$getBlog, request, options: options);
   }
 
   /// List published blogs (optionally filtered by therapist).
-  $grpc.ResponseFuture<$0.ListBlogsResponse> listBlogs(
-    $0.ListBlogsRequest request, {
+  $grpc.ResponseFuture<$3.ListBlogsResponse> listBlogs(
+    $3.ListBlogsRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$listBlogs, request, options: options);
   }
 
   /// List all blogs (draft + published) for the authenticated therapist.
-  $grpc.ResponseFuture<$0.ListMyBlogsResponse> listMyBlogs(
-    $0.ListMyBlogsRequest request, {
+  $grpc.ResponseFuture<$3.ListMyBlogsResponse> listMyBlogs(
+    $3.ListMyBlogsRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$listMyBlogs, request, options: options);
   }
 
   /// Toggle like on a published blog.
-  $grpc.ResponseFuture<$0.ToggleLikeBlogResponse> toggleLikeBlog(
-    $0.ToggleLikeBlogRequest request, {
+  $grpc.ResponseFuture<$3.ToggleLikeBlogResponse> toggleLikeBlog(
+    $3.ToggleLikeBlogRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$toggleLikeBlog, request, options: options);
   }
 
   /// Upload a single inline blog image (max 2 MB).
-  $grpc.ResponseFuture<$0.UploadBlogImageResponse> uploadBlogImage(
-    $0.UploadBlogImageRequest request, {
+  $grpc.ResponseFuture<$3.UploadBlogImageResponse> uploadBlogImage(
+    $3.UploadBlogImageRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$uploadBlogImage, request, options: options);
@@ -276,86 +279,86 @@ class TherapistServiceClient extends $grpc.Client {
           ($0.LogoutRequest value) => value.writeToBuffer(),
           $0.LogoutResponse.fromBuffer);
   static final _$userAuthCallback = $grpc.ClientMethod<
-          $0.UserAuthCallbackRequest, $0.UserAuthCallbackResponse>(
+          $1.UserAuthCallbackRequest, $1.UserAuthCallbackResponse>(
       '/therapist.TherapistService/UserAuthCallback',
-      ($0.UserAuthCallbackRequest value) => value.writeToBuffer(),
-      $0.UserAuthCallbackResponse.fromBuffer);
+      ($1.UserAuthCallbackRequest value) => value.writeToBuffer(),
+      $1.UserAuthCallbackResponse.fromBuffer);
   static final _$completeUserOnboarding = $grpc.ClientMethod<
-          $0.CompleteUserOnboardingRequest, $0.CompleteUserOnboardingResponse>(
+          $1.CompleteUserOnboardingRequest, $1.CompleteUserOnboardingResponse>(
       '/therapist.TherapistService/CompleteUserOnboarding',
-      ($0.CompleteUserOnboardingRequest value) => value.writeToBuffer(),
-      $0.CompleteUserOnboardingResponse.fromBuffer);
+      ($1.CompleteUserOnboardingRequest value) => value.writeToBuffer(),
+      $1.CompleteUserOnboardingResponse.fromBuffer);
   static final _$getUserProfile =
-      $grpc.ClientMethod<$0.GetUserProfileRequest, $0.GetUserProfileResponse>(
+      $grpc.ClientMethod<$1.GetUserProfileRequest, $1.GetUserProfileResponse>(
           '/therapist.TherapistService/GetUserProfile',
-          ($0.GetUserProfileRequest value) => value.writeToBuffer(),
-          $0.GetUserProfileResponse.fromBuffer);
+          ($1.GetUserProfileRequest value) => value.writeToBuffer(),
+          $1.GetUserProfileResponse.fromBuffer);
   static final _$userRefreshSession = $grpc.ClientMethod<
-          $0.UserRefreshSessionRequest, $0.UserRefreshSessionResponse>(
+          $1.UserRefreshSessionRequest, $1.UserRefreshSessionResponse>(
       '/therapist.TherapistService/UserRefreshSession',
-      ($0.UserRefreshSessionRequest value) => value.writeToBuffer(),
-      $0.UserRefreshSessionResponse.fromBuffer);
+      ($1.UserRefreshSessionRequest value) => value.writeToBuffer(),
+      $1.UserRefreshSessionResponse.fromBuffer);
   static final _$userLogout =
-      $grpc.ClientMethod<$0.UserLogoutRequest, $0.UserLogoutResponse>(
+      $grpc.ClientMethod<$1.UserLogoutRequest, $1.UserLogoutResponse>(
           '/therapist.TherapistService/UserLogout',
-          ($0.UserLogoutRequest value) => value.writeToBuffer(),
-          $0.UserLogoutResponse.fromBuffer);
+          ($1.UserLogoutRequest value) => value.writeToBuffer(),
+          $1.UserLogoutResponse.fromBuffer);
   static final _$searchTherapists = $grpc.ClientMethod<
-          $0.SearchTherapistsRequest, $0.SearchTherapistsResponse>(
+          $2.SearchTherapistsRequest, $2.SearchTherapistsResponse>(
       '/therapist.TherapistService/SearchTherapists',
-      ($0.SearchTherapistsRequest value) => value.writeToBuffer(),
-      $0.SearchTherapistsResponse.fromBuffer);
+      ($2.SearchTherapistsRequest value) => value.writeToBuffer(),
+      $2.SearchTherapistsResponse.fromBuffer);
   static final _$getRecommendedTherapists = $grpc.ClientMethod<
-          $0.GetRecommendedTherapistsRequest,
-          $0.GetRecommendedTherapistsResponse>(
+          $2.GetRecommendedTherapistsRequest,
+          $2.GetRecommendedTherapistsResponse>(
       '/therapist.TherapistService/GetRecommendedTherapists',
-      ($0.GetRecommendedTherapistsRequest value) => value.writeToBuffer(),
-      $0.GetRecommendedTherapistsResponse.fromBuffer);
+      ($2.GetRecommendedTherapistsRequest value) => value.writeToBuffer(),
+      $2.GetRecommendedTherapistsResponse.fromBuffer);
   static final _$createBlog =
-      $grpc.ClientMethod<$0.CreateBlogRequest, $0.CreateBlogResponse>(
+      $grpc.ClientMethod<$3.CreateBlogRequest, $3.CreateBlogResponse>(
           '/therapist.TherapistService/CreateBlog',
-          ($0.CreateBlogRequest value) => value.writeToBuffer(),
-          $0.CreateBlogResponse.fromBuffer);
+          ($3.CreateBlogRequest value) => value.writeToBuffer(),
+          $3.CreateBlogResponse.fromBuffer);
   static final _$updateBlog =
-      $grpc.ClientMethod<$0.UpdateBlogRequest, $0.UpdateBlogResponse>(
+      $grpc.ClientMethod<$3.UpdateBlogRequest, $3.UpdateBlogResponse>(
           '/therapist.TherapistService/UpdateBlog',
-          ($0.UpdateBlogRequest value) => value.writeToBuffer(),
-          $0.UpdateBlogResponse.fromBuffer);
+          ($3.UpdateBlogRequest value) => value.writeToBuffer(),
+          $3.UpdateBlogResponse.fromBuffer);
   static final _$publishBlog =
-      $grpc.ClientMethod<$0.PublishBlogRequest, $0.PublishBlogResponse>(
+      $grpc.ClientMethod<$3.PublishBlogRequest, $3.PublishBlogResponse>(
           '/therapist.TherapistService/PublishBlog',
-          ($0.PublishBlogRequest value) => value.writeToBuffer(),
-          $0.PublishBlogResponse.fromBuffer);
+          ($3.PublishBlogRequest value) => value.writeToBuffer(),
+          $3.PublishBlogResponse.fromBuffer);
   static final _$deleteBlog =
-      $grpc.ClientMethod<$0.DeleteBlogRequest, $0.DeleteBlogResponse>(
+      $grpc.ClientMethod<$3.DeleteBlogRequest, $3.DeleteBlogResponse>(
           '/therapist.TherapistService/DeleteBlog',
-          ($0.DeleteBlogRequest value) => value.writeToBuffer(),
-          $0.DeleteBlogResponse.fromBuffer);
+          ($3.DeleteBlogRequest value) => value.writeToBuffer(),
+          $3.DeleteBlogResponse.fromBuffer);
   static final _$getBlog =
-      $grpc.ClientMethod<$0.GetBlogRequest, $0.GetBlogResponse>(
+      $grpc.ClientMethod<$3.GetBlogRequest, $3.GetBlogResponse>(
           '/therapist.TherapistService/GetBlog',
-          ($0.GetBlogRequest value) => value.writeToBuffer(),
-          $0.GetBlogResponse.fromBuffer);
+          ($3.GetBlogRequest value) => value.writeToBuffer(),
+          $3.GetBlogResponse.fromBuffer);
   static final _$listBlogs =
-      $grpc.ClientMethod<$0.ListBlogsRequest, $0.ListBlogsResponse>(
+      $grpc.ClientMethod<$3.ListBlogsRequest, $3.ListBlogsResponse>(
           '/therapist.TherapistService/ListBlogs',
-          ($0.ListBlogsRequest value) => value.writeToBuffer(),
-          $0.ListBlogsResponse.fromBuffer);
+          ($3.ListBlogsRequest value) => value.writeToBuffer(),
+          $3.ListBlogsResponse.fromBuffer);
   static final _$listMyBlogs =
-      $grpc.ClientMethod<$0.ListMyBlogsRequest, $0.ListMyBlogsResponse>(
+      $grpc.ClientMethod<$3.ListMyBlogsRequest, $3.ListMyBlogsResponse>(
           '/therapist.TherapistService/ListMyBlogs',
-          ($0.ListMyBlogsRequest value) => value.writeToBuffer(),
-          $0.ListMyBlogsResponse.fromBuffer);
+          ($3.ListMyBlogsRequest value) => value.writeToBuffer(),
+          $3.ListMyBlogsResponse.fromBuffer);
   static final _$toggleLikeBlog =
-      $grpc.ClientMethod<$0.ToggleLikeBlogRequest, $0.ToggleLikeBlogResponse>(
+      $grpc.ClientMethod<$3.ToggleLikeBlogRequest, $3.ToggleLikeBlogResponse>(
           '/therapist.TherapistService/ToggleLikeBlog',
-          ($0.ToggleLikeBlogRequest value) => value.writeToBuffer(),
-          $0.ToggleLikeBlogResponse.fromBuffer);
+          ($3.ToggleLikeBlogRequest value) => value.writeToBuffer(),
+          $3.ToggleLikeBlogResponse.fromBuffer);
   static final _$uploadBlogImage =
-      $grpc.ClientMethod<$0.UploadBlogImageRequest, $0.UploadBlogImageResponse>(
+      $grpc.ClientMethod<$3.UploadBlogImageRequest, $3.UploadBlogImageResponse>(
           '/therapist.TherapistService/UploadBlogImage',
-          ($0.UploadBlogImageRequest value) => value.writeToBuffer(),
-          $0.UploadBlogImageResponse.fromBuffer);
+          ($3.UploadBlogImageRequest value) => value.writeToBuffer(),
+          $3.UploadBlogImageResponse.fromBuffer);
 }
 
 @$pb.GrpcServiceName('therapist.TherapistService')
@@ -429,138 +432,138 @@ abstract class TherapistServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.LogoutRequest.fromBuffer(value),
         ($0.LogoutResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.UserAuthCallbackRequest,
-            $0.UserAuthCallbackResponse>(
+    $addMethod($grpc.ServiceMethod<$1.UserAuthCallbackRequest,
+            $1.UserAuthCallbackResponse>(
         'UserAuthCallback',
         userAuthCallback_Pre,
         false,
         false,
         ($core.List<$core.int> value) =>
-            $0.UserAuthCallbackRequest.fromBuffer(value),
-        ($0.UserAuthCallbackResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.CompleteUserOnboardingRequest,
-            $0.CompleteUserOnboardingResponse>(
+            $1.UserAuthCallbackRequest.fromBuffer(value),
+        ($1.UserAuthCallbackResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.CompleteUserOnboardingRequest,
+            $1.CompleteUserOnboardingResponse>(
         'CompleteUserOnboarding',
         completeUserOnboarding_Pre,
         false,
         false,
         ($core.List<$core.int> value) =>
-            $0.CompleteUserOnboardingRequest.fromBuffer(value),
-        ($0.CompleteUserOnboardingResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.GetUserProfileRequest,
-            $0.GetUserProfileResponse>(
+            $1.CompleteUserOnboardingRequest.fromBuffer(value),
+        ($1.CompleteUserOnboardingResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.GetUserProfileRequest,
+            $1.GetUserProfileResponse>(
         'GetUserProfile',
         getUserProfile_Pre,
         false,
         false,
         ($core.List<$core.int> value) =>
-            $0.GetUserProfileRequest.fromBuffer(value),
-        ($0.GetUserProfileResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.UserRefreshSessionRequest,
-            $0.UserRefreshSessionResponse>(
+            $1.GetUserProfileRequest.fromBuffer(value),
+        ($1.GetUserProfileResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.UserRefreshSessionRequest,
+            $1.UserRefreshSessionResponse>(
         'UserRefreshSession',
         userRefreshSession_Pre,
         false,
         false,
         ($core.List<$core.int> value) =>
-            $0.UserRefreshSessionRequest.fromBuffer(value),
-        ($0.UserRefreshSessionResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.UserLogoutRequest, $0.UserLogoutResponse>(
+            $1.UserRefreshSessionRequest.fromBuffer(value),
+        ($1.UserRefreshSessionResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.UserLogoutRequest, $1.UserLogoutResponse>(
         'UserLogout',
         userLogout_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.UserLogoutRequest.fromBuffer(value),
-        ($0.UserLogoutResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.SearchTherapistsRequest,
-            $0.SearchTherapistsResponse>(
+        ($core.List<$core.int> value) => $1.UserLogoutRequest.fromBuffer(value),
+        ($1.UserLogoutResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.SearchTherapistsRequest,
+            $2.SearchTherapistsResponse>(
         'SearchTherapists',
         searchTherapists_Pre,
         false,
         false,
         ($core.List<$core.int> value) =>
-            $0.SearchTherapistsRequest.fromBuffer(value),
-        ($0.SearchTherapistsResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.GetRecommendedTherapistsRequest,
-            $0.GetRecommendedTherapistsResponse>(
+            $2.SearchTherapistsRequest.fromBuffer(value),
+        ($2.SearchTherapistsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.GetRecommendedTherapistsRequest,
+            $2.GetRecommendedTherapistsResponse>(
         'GetRecommendedTherapists',
         getRecommendedTherapists_Pre,
         false,
         false,
         ($core.List<$core.int> value) =>
-            $0.GetRecommendedTherapistsRequest.fromBuffer(value),
-        ($0.GetRecommendedTherapistsResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.CreateBlogRequest, $0.CreateBlogResponse>(
+            $2.GetRecommendedTherapistsRequest.fromBuffer(value),
+        ($2.GetRecommendedTherapistsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.CreateBlogRequest, $3.CreateBlogResponse>(
         'CreateBlog',
         createBlog_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.CreateBlogRequest.fromBuffer(value),
-        ($0.CreateBlogResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.UpdateBlogRequest, $0.UpdateBlogResponse>(
+        ($core.List<$core.int> value) => $3.CreateBlogRequest.fromBuffer(value),
+        ($3.CreateBlogResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.UpdateBlogRequest, $3.UpdateBlogResponse>(
         'UpdateBlog',
         updateBlog_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.UpdateBlogRequest.fromBuffer(value),
-        ($0.UpdateBlogResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $3.UpdateBlogRequest.fromBuffer(value),
+        ($3.UpdateBlogResponse value) => value.writeToBuffer()));
     $addMethod(
-        $grpc.ServiceMethod<$0.PublishBlogRequest, $0.PublishBlogResponse>(
+        $grpc.ServiceMethod<$3.PublishBlogRequest, $3.PublishBlogResponse>(
             'PublishBlog',
             publishBlog_Pre,
             false,
             false,
             ($core.List<$core.int> value) =>
-                $0.PublishBlogRequest.fromBuffer(value),
-            ($0.PublishBlogResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.DeleteBlogRequest, $0.DeleteBlogResponse>(
+                $3.PublishBlogRequest.fromBuffer(value),
+            ($3.PublishBlogResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.DeleteBlogRequest, $3.DeleteBlogResponse>(
         'DeleteBlog',
         deleteBlog_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.DeleteBlogRequest.fromBuffer(value),
-        ($0.DeleteBlogResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.GetBlogRequest, $0.GetBlogResponse>(
+        ($core.List<$core.int> value) => $3.DeleteBlogRequest.fromBuffer(value),
+        ($3.DeleteBlogResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.GetBlogRequest, $3.GetBlogResponse>(
         'GetBlog',
         getBlog_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.GetBlogRequest.fromBuffer(value),
-        ($0.GetBlogResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ListBlogsRequest, $0.ListBlogsResponse>(
+        ($core.List<$core.int> value) => $3.GetBlogRequest.fromBuffer(value),
+        ($3.GetBlogResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.ListBlogsRequest, $3.ListBlogsResponse>(
         'ListBlogs',
         listBlogs_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.ListBlogsRequest.fromBuffer(value),
-        ($0.ListBlogsResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $3.ListBlogsRequest.fromBuffer(value),
+        ($3.ListBlogsResponse value) => value.writeToBuffer()));
     $addMethod(
-        $grpc.ServiceMethod<$0.ListMyBlogsRequest, $0.ListMyBlogsResponse>(
+        $grpc.ServiceMethod<$3.ListMyBlogsRequest, $3.ListMyBlogsResponse>(
             'ListMyBlogs',
             listMyBlogs_Pre,
             false,
             false,
             ($core.List<$core.int> value) =>
-                $0.ListMyBlogsRequest.fromBuffer(value),
-            ($0.ListMyBlogsResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ToggleLikeBlogRequest,
-            $0.ToggleLikeBlogResponse>(
+                $3.ListMyBlogsRequest.fromBuffer(value),
+            ($3.ListMyBlogsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.ToggleLikeBlogRequest,
+            $3.ToggleLikeBlogResponse>(
         'ToggleLikeBlog',
         toggleLikeBlog_Pre,
         false,
         false,
         ($core.List<$core.int> value) =>
-            $0.ToggleLikeBlogRequest.fromBuffer(value),
-        ($0.ToggleLikeBlogResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.UploadBlogImageRequest,
-            $0.UploadBlogImageResponse>(
+            $3.ToggleLikeBlogRequest.fromBuffer(value),
+        ($3.ToggleLikeBlogResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.UploadBlogImageRequest,
+            $3.UploadBlogImageResponse>(
         'UploadBlogImage',
         uploadBlogImage_Pre,
         false,
         false,
         ($core.List<$core.int> value) =>
-            $0.UploadBlogImageRequest.fromBuffer(value),
-        ($0.UploadBlogImageResponse value) => value.writeToBuffer()));
+            $3.UploadBlogImageRequest.fromBuffer(value),
+        ($3.UploadBlogImageResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.AuthCallbackResponse> authCallback_Pre(
@@ -632,139 +635,139 @@ abstract class TherapistServiceBase extends $grpc.Service {
   $async.Future<$0.LogoutResponse> logout(
       $grpc.ServiceCall call, $0.LogoutRequest request);
 
-  $async.Future<$0.UserAuthCallbackResponse> userAuthCallback_Pre(
+  $async.Future<$1.UserAuthCallbackResponse> userAuthCallback_Pre(
       $grpc.ServiceCall $call,
-      $async.Future<$0.UserAuthCallbackRequest> $request) async {
+      $async.Future<$1.UserAuthCallbackRequest> $request) async {
     return userAuthCallback($call, await $request);
   }
 
-  $async.Future<$0.UserAuthCallbackResponse> userAuthCallback(
-      $grpc.ServiceCall call, $0.UserAuthCallbackRequest request);
+  $async.Future<$1.UserAuthCallbackResponse> userAuthCallback(
+      $grpc.ServiceCall call, $1.UserAuthCallbackRequest request);
 
-  $async.Future<$0.CompleteUserOnboardingResponse> completeUserOnboarding_Pre(
+  $async.Future<$1.CompleteUserOnboardingResponse> completeUserOnboarding_Pre(
       $grpc.ServiceCall $call,
-      $async.Future<$0.CompleteUserOnboardingRequest> $request) async {
+      $async.Future<$1.CompleteUserOnboardingRequest> $request) async {
     return completeUserOnboarding($call, await $request);
   }
 
-  $async.Future<$0.CompleteUserOnboardingResponse> completeUserOnboarding(
-      $grpc.ServiceCall call, $0.CompleteUserOnboardingRequest request);
+  $async.Future<$1.CompleteUserOnboardingResponse> completeUserOnboarding(
+      $grpc.ServiceCall call, $1.CompleteUserOnboardingRequest request);
 
-  $async.Future<$0.GetUserProfileResponse> getUserProfile_Pre(
+  $async.Future<$1.GetUserProfileResponse> getUserProfile_Pre(
       $grpc.ServiceCall $call,
-      $async.Future<$0.GetUserProfileRequest> $request) async {
+      $async.Future<$1.GetUserProfileRequest> $request) async {
     return getUserProfile($call, await $request);
   }
 
-  $async.Future<$0.GetUserProfileResponse> getUserProfile(
-      $grpc.ServiceCall call, $0.GetUserProfileRequest request);
+  $async.Future<$1.GetUserProfileResponse> getUserProfile(
+      $grpc.ServiceCall call, $1.GetUserProfileRequest request);
 
-  $async.Future<$0.UserRefreshSessionResponse> userRefreshSession_Pre(
+  $async.Future<$1.UserRefreshSessionResponse> userRefreshSession_Pre(
       $grpc.ServiceCall $call,
-      $async.Future<$0.UserRefreshSessionRequest> $request) async {
+      $async.Future<$1.UserRefreshSessionRequest> $request) async {
     return userRefreshSession($call, await $request);
   }
 
-  $async.Future<$0.UserRefreshSessionResponse> userRefreshSession(
-      $grpc.ServiceCall call, $0.UserRefreshSessionRequest request);
+  $async.Future<$1.UserRefreshSessionResponse> userRefreshSession(
+      $grpc.ServiceCall call, $1.UserRefreshSessionRequest request);
 
-  $async.Future<$0.UserLogoutResponse> userLogout_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.UserLogoutRequest> $request) async {
+  $async.Future<$1.UserLogoutResponse> userLogout_Pre($grpc.ServiceCall $call,
+      $async.Future<$1.UserLogoutRequest> $request) async {
     return userLogout($call, await $request);
   }
 
-  $async.Future<$0.UserLogoutResponse> userLogout(
-      $grpc.ServiceCall call, $0.UserLogoutRequest request);
+  $async.Future<$1.UserLogoutResponse> userLogout(
+      $grpc.ServiceCall call, $1.UserLogoutRequest request);
 
-  $async.Future<$0.SearchTherapistsResponse> searchTherapists_Pre(
+  $async.Future<$2.SearchTherapistsResponse> searchTherapists_Pre(
       $grpc.ServiceCall $call,
-      $async.Future<$0.SearchTherapistsRequest> $request) async {
+      $async.Future<$2.SearchTherapistsRequest> $request) async {
     return searchTherapists($call, await $request);
   }
 
-  $async.Future<$0.SearchTherapistsResponse> searchTherapists(
-      $grpc.ServiceCall call, $0.SearchTherapistsRequest request);
+  $async.Future<$2.SearchTherapistsResponse> searchTherapists(
+      $grpc.ServiceCall call, $2.SearchTherapistsRequest request);
 
-  $async.Future<$0.GetRecommendedTherapistsResponse>
+  $async.Future<$2.GetRecommendedTherapistsResponse>
       getRecommendedTherapists_Pre($grpc.ServiceCall $call,
-          $async.Future<$0.GetRecommendedTherapistsRequest> $request) async {
+          $async.Future<$2.GetRecommendedTherapistsRequest> $request) async {
     return getRecommendedTherapists($call, await $request);
   }
 
-  $async.Future<$0.GetRecommendedTherapistsResponse> getRecommendedTherapists(
-      $grpc.ServiceCall call, $0.GetRecommendedTherapistsRequest request);
+  $async.Future<$2.GetRecommendedTherapistsResponse> getRecommendedTherapists(
+      $grpc.ServiceCall call, $2.GetRecommendedTherapistsRequest request);
 
-  $async.Future<$0.CreateBlogResponse> createBlog_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.CreateBlogRequest> $request) async {
+  $async.Future<$3.CreateBlogResponse> createBlog_Pre($grpc.ServiceCall $call,
+      $async.Future<$3.CreateBlogRequest> $request) async {
     return createBlog($call, await $request);
   }
 
-  $async.Future<$0.CreateBlogResponse> createBlog(
-      $grpc.ServiceCall call, $0.CreateBlogRequest request);
+  $async.Future<$3.CreateBlogResponse> createBlog(
+      $grpc.ServiceCall call, $3.CreateBlogRequest request);
 
-  $async.Future<$0.UpdateBlogResponse> updateBlog_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.UpdateBlogRequest> $request) async {
+  $async.Future<$3.UpdateBlogResponse> updateBlog_Pre($grpc.ServiceCall $call,
+      $async.Future<$3.UpdateBlogRequest> $request) async {
     return updateBlog($call, await $request);
   }
 
-  $async.Future<$0.UpdateBlogResponse> updateBlog(
-      $grpc.ServiceCall call, $0.UpdateBlogRequest request);
+  $async.Future<$3.UpdateBlogResponse> updateBlog(
+      $grpc.ServiceCall call, $3.UpdateBlogRequest request);
 
-  $async.Future<$0.PublishBlogResponse> publishBlog_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.PublishBlogRequest> $request) async {
+  $async.Future<$3.PublishBlogResponse> publishBlog_Pre($grpc.ServiceCall $call,
+      $async.Future<$3.PublishBlogRequest> $request) async {
     return publishBlog($call, await $request);
   }
 
-  $async.Future<$0.PublishBlogResponse> publishBlog(
-      $grpc.ServiceCall call, $0.PublishBlogRequest request);
+  $async.Future<$3.PublishBlogResponse> publishBlog(
+      $grpc.ServiceCall call, $3.PublishBlogRequest request);
 
-  $async.Future<$0.DeleteBlogResponse> deleteBlog_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.DeleteBlogRequest> $request) async {
+  $async.Future<$3.DeleteBlogResponse> deleteBlog_Pre($grpc.ServiceCall $call,
+      $async.Future<$3.DeleteBlogRequest> $request) async {
     return deleteBlog($call, await $request);
   }
 
-  $async.Future<$0.DeleteBlogResponse> deleteBlog(
-      $grpc.ServiceCall call, $0.DeleteBlogRequest request);
+  $async.Future<$3.DeleteBlogResponse> deleteBlog(
+      $grpc.ServiceCall call, $3.DeleteBlogRequest request);
 
-  $async.Future<$0.GetBlogResponse> getBlog_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.GetBlogRequest> $request) async {
+  $async.Future<$3.GetBlogResponse> getBlog_Pre($grpc.ServiceCall $call,
+      $async.Future<$3.GetBlogRequest> $request) async {
     return getBlog($call, await $request);
   }
 
-  $async.Future<$0.GetBlogResponse> getBlog(
-      $grpc.ServiceCall call, $0.GetBlogRequest request);
+  $async.Future<$3.GetBlogResponse> getBlog(
+      $grpc.ServiceCall call, $3.GetBlogRequest request);
 
-  $async.Future<$0.ListBlogsResponse> listBlogs_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.ListBlogsRequest> $request) async {
+  $async.Future<$3.ListBlogsResponse> listBlogs_Pre($grpc.ServiceCall $call,
+      $async.Future<$3.ListBlogsRequest> $request) async {
     return listBlogs($call, await $request);
   }
 
-  $async.Future<$0.ListBlogsResponse> listBlogs(
-      $grpc.ServiceCall call, $0.ListBlogsRequest request);
+  $async.Future<$3.ListBlogsResponse> listBlogs(
+      $grpc.ServiceCall call, $3.ListBlogsRequest request);
 
-  $async.Future<$0.ListMyBlogsResponse> listMyBlogs_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.ListMyBlogsRequest> $request) async {
+  $async.Future<$3.ListMyBlogsResponse> listMyBlogs_Pre($grpc.ServiceCall $call,
+      $async.Future<$3.ListMyBlogsRequest> $request) async {
     return listMyBlogs($call, await $request);
   }
 
-  $async.Future<$0.ListMyBlogsResponse> listMyBlogs(
-      $grpc.ServiceCall call, $0.ListMyBlogsRequest request);
+  $async.Future<$3.ListMyBlogsResponse> listMyBlogs(
+      $grpc.ServiceCall call, $3.ListMyBlogsRequest request);
 
-  $async.Future<$0.ToggleLikeBlogResponse> toggleLikeBlog_Pre(
+  $async.Future<$3.ToggleLikeBlogResponse> toggleLikeBlog_Pre(
       $grpc.ServiceCall $call,
-      $async.Future<$0.ToggleLikeBlogRequest> $request) async {
+      $async.Future<$3.ToggleLikeBlogRequest> $request) async {
     return toggleLikeBlog($call, await $request);
   }
 
-  $async.Future<$0.ToggleLikeBlogResponse> toggleLikeBlog(
-      $grpc.ServiceCall call, $0.ToggleLikeBlogRequest request);
+  $async.Future<$3.ToggleLikeBlogResponse> toggleLikeBlog(
+      $grpc.ServiceCall call, $3.ToggleLikeBlogRequest request);
 
-  $async.Future<$0.UploadBlogImageResponse> uploadBlogImage_Pre(
+  $async.Future<$3.UploadBlogImageResponse> uploadBlogImage_Pre(
       $grpc.ServiceCall $call,
-      $async.Future<$0.UploadBlogImageRequest> $request) async {
+      $async.Future<$3.UploadBlogImageRequest> $request) async {
     return uploadBlogImage($call, await $request);
   }
 
-  $async.Future<$0.UploadBlogImageResponse> uploadBlogImage(
-      $grpc.ServiceCall call, $0.UploadBlogImageRequest request);
+  $async.Future<$3.UploadBlogImageResponse> uploadBlogImage(
+      $grpc.ServiceCall call, $3.UploadBlogImageRequest request);
 }
