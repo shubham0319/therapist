@@ -10,6 +10,9 @@ import 'package:therapist/features/home/presentation/home_page.dart';
 import 'package:therapist/features/onboarding/presentation/onboarding_page.dart';
 import 'package:therapist/features/status/presentation/pending_page.dart';
 import 'package:therapist/features/status/presentation/rejected_page.dart';
+import 'package:therapist/features/discovery/data/discovery_repository.dart';
+import 'package:therapist/features/discovery/presentation/therapist_profile_page.dart';
+import 'package:therapist/features/user/presentation/user_home_page.dart';
 import 'package:therapist/features/user/presentation/user_onboarding_page.dart';
 import 'package:therapist/shared/widgets/scaffold_with_nav.dart';
 
@@ -28,8 +31,9 @@ abstract class AppRoutes {
   static const blogCreate = '/blog/create';
   static const blogEdit   = '/blog/edit';
   // ── User (client/patient) ─────────────────────────────────────────────────
-  static const userOnboarding = '/user/onboarding';
-  static const userHome       = '/user/home';
+  static const userOnboarding      = '/user/onboarding';
+  static const userHome            = '/user/home';
+  static const therapistProfile    = '/user/therapist';
 }
 
 /// Routes that are only accessible when unauthenticated.
@@ -102,8 +106,14 @@ GoRouter buildRouter(AuthBloc authBloc) => GoRouter(
         ),
         GoRoute(
           path: AppRoutes.userHome,
-          // Placeholder until a dedicated user home is built.
-          pageBuilder: (ctx, state) => _fade(const _UserHomePlaceholder()),
+          pageBuilder: (ctx, state) => _fade(const UserHomePage()),
+        ),
+        GoRoute(
+          path: AppRoutes.therapistProfile,
+          pageBuilder: (ctx, state) {
+            final card = state.extra as TherapistCardModel;
+            return _fade(TherapistProfilePage(card: card));
+          },
         ),
       ],
     );
@@ -190,37 +200,6 @@ bool _isTherapistRoute(String location) =>
     location == AppRoutes.profile      ||
     location.startsWith(AppRoutes.blog);
 
-// ─────────────────────────────────────────────────────────────────────────────
-// User home placeholder — shown after user onboarding until a full home is built
-// ─────────────────────────────────────────────────────────────────────────────
-
-class _UserHomePlaceholder extends StatelessWidget {
-  const _UserHomePlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(title: const Text('Find a Therapist')),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.search, size: 64,
-                color: theme.colorScheme.primary),
-            const SizedBox(height: 16),
-            Text('Therapist discovery coming soon!',
-                style: theme.textTheme.titleMedium),
-            const SizedBox(height: 8),
-            Text('We\'re building the therapist search experience.',
-                style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant)),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 CustomTransitionPage<void> _fade(Widget child) => CustomTransitionPage<void>(
       child: child,

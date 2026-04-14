@@ -21,6 +21,8 @@ type UserResult struct {
 	UserID              string
 	Status              string // "needs_onboarding" | "active"
 	OnboardingCompleted bool
+	State               string
+	Nation              string
 }
 
 // UserOnboardingInput is the handler-facing input for CompleteUserOnboarding.
@@ -201,6 +203,8 @@ func toUserResult(u schema.User) *UserResult {
 		UserID:              u.ID.String(),
 		Status:              status,
 		OnboardingCompleted: u.OnboardingCompleted,
+		State:               u.State,
+		Nation:              u.Nation,
 	}
 }
 

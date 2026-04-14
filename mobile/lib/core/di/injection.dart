@@ -7,9 +7,12 @@ import 'package:therapist/features/auth/bloc/auth_bloc.dart';
 import 'package:therapist/features/auth/data/auth_repository.dart';
 import 'package:therapist/features/blog/bloc/blog_bloc.dart';
 import 'package:therapist/features/blog/data/blog_repository.dart';
+import 'package:therapist/features/discovery/bloc/discovery_bloc.dart';
+import 'package:therapist/features/discovery/data/discovery_repository.dart';
 import 'package:therapist/features/onboarding/bloc/onboarding_bloc.dart';
 import 'package:therapist/features/onboarding/data/onboarding_repository.dart';
 import 'package:therapist/features/user/bloc/user_onboarding_bloc.dart';
+import 'package:therapist/features/user/bloc/user_profile_cubit.dart';
 import 'package:therapist/features/user/data/user_repository.dart';
 
 final sl = GetIt.instance;
@@ -44,10 +47,15 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton<UserRepository>(
     () => UserRepository(grpc: sl()),
   );
+  sl.registerLazySingleton<DiscoveryRepository>(
+    () => DiscoveryRepository(grpc: sl()),
+  );
 
   // ── BLoCs (registered as factories so each creation gets a fresh instance)
   sl.registerFactory<AuthBloc>(() => AuthBloc());
   sl.registerFactory<OnboardingBloc>(() => OnboardingBloc());
   sl.registerFactory<BlogBloc>(() => BlogBloc());
   sl.registerFactory<UserOnboardingBloc>(() => UserOnboardingBloc());
+  sl.registerFactory<DiscoveryBloc>(() => DiscoveryBloc());
+  sl.registerFactory<UserProfileCubit>(() => UserProfileCubit());
 }

@@ -51,6 +51,12 @@ service TherapistService {
   // Invalidate the user refresh token (log out this device).
   rpc UserLogout (UserLogoutRequest) returns (UserLogoutResponse);
 
+  // ── Discovery (user-facing) ───────────────────────────────────────────────
+  // Full-text search across verified therapists.
+  rpc SearchTherapists (SearchTherapistsRequest) returns (SearchTherapistsResponse);
+  // Location + rating-based recommendations for a user.
+  rpc GetRecommendedTherapists (GetRecommendedTherapistsRequest) returns (GetRecommendedTherapistsResponse);
+
   // ── Blog ──────────────────────────────────────────────────────────────────
   // Create a draft blog (verified therapists only).
   rpc CreateBlog (CreateBlogRequest) returns (CreateBlogResponse);
@@ -394,4 +400,46 @@ message UserLogoutRequest {
 }
 message UserLogoutResponse {
   bool success = 1;
+}
+
+// ─────────────────────────────────────────────
+// Discovery
+// ─────────────────────────────────────────────
+
+message TherapistCard {
+  string          therapist_id     = 1;
+  string          full_name        = 2;
+  string          bio              = 3;
+  string          profile_photo    = 4;
+  repeated string specializations  = 5;
+  double          session_fee      = 6;
+  repeated string session_types    = 7;  // "video" | "in_person"
+  double          rating           = 8;
+  int32           total_sessions   = 9;
+  string          state            = 10;
+  string          nation           = 11;
+  string          address_text     = 12;
+}
+
+// SearchTherapists
+message SearchTherapistsRequest {
+  string query        = 1;  // searched in name / bio / specializations
+  string session_type = 2;  // optional: "video" | "in_person"
+  int32  page         = 3;
+  int32  page_size    = 4;
+}
+message SearchTherapistsResponse {
+  repeated TherapistCard therapists = 1;
+  int64                  total      = 2;
+}
+
+// GetRecommendedTherapists
+message GetRecommendedTherapistsRequest {
+  string state     = 1;  // user's state — used for location scoring
+  string nation    = 2;  // user's nation
+  int32  page      = 3;
+  int32  page_size = 4;
+}
+message GetRecommendedTherapistsResponse {
+  repeated TherapistCard therapists = 1;
 }

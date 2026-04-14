@@ -141,6 +141,25 @@ class TherapistServiceClient extends $grpc.Client {
     return $createUnaryCall(_$userLogout, request, options: options);
   }
 
+  /// ── Discovery (user-facing) ───────────────────────────────────────────────
+  /// Full-text search across verified therapists.
+  $grpc.ResponseFuture<$0.SearchTherapistsResponse> searchTherapists(
+    $0.SearchTherapistsRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$searchTherapists, request, options: options);
+  }
+
+  /// Location + rating-based recommendations for a user.
+  $grpc.ResponseFuture<$0.GetRecommendedTherapistsResponse>
+      getRecommendedTherapists(
+    $0.GetRecommendedTherapistsRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getRecommendedTherapists, request,
+        options: options);
+  }
+
   /// ── Blog ──────────────────────────────────────────────────────────────────
   /// Create a draft blog (verified therapists only).
   $grpc.ResponseFuture<$0.CreateBlogResponse> createBlog(
@@ -281,6 +300,17 @@ class TherapistServiceClient extends $grpc.Client {
           '/therapist.TherapistService/UserLogout',
           ($0.UserLogoutRequest value) => value.writeToBuffer(),
           $0.UserLogoutResponse.fromBuffer);
+  static final _$searchTherapists = $grpc.ClientMethod<
+          $0.SearchTherapistsRequest, $0.SearchTherapistsResponse>(
+      '/therapist.TherapistService/SearchTherapists',
+      ($0.SearchTherapistsRequest value) => value.writeToBuffer(),
+      $0.SearchTherapistsResponse.fromBuffer);
+  static final _$getRecommendedTherapists = $grpc.ClientMethod<
+          $0.GetRecommendedTherapistsRequest,
+          $0.GetRecommendedTherapistsResponse>(
+      '/therapist.TherapistService/GetRecommendedTherapists',
+      ($0.GetRecommendedTherapistsRequest value) => value.writeToBuffer(),
+      $0.GetRecommendedTherapistsResponse.fromBuffer);
   static final _$createBlog =
       $grpc.ClientMethod<$0.CreateBlogRequest, $0.CreateBlogResponse>(
           '/therapist.TherapistService/CreateBlog',
@@ -442,6 +472,24 @@ abstract class TherapistServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.UserLogoutRequest.fromBuffer(value),
         ($0.UserLogoutResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SearchTherapistsRequest,
+            $0.SearchTherapistsResponse>(
+        'SearchTherapists',
+        searchTherapists_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.SearchTherapistsRequest.fromBuffer(value),
+        ($0.SearchTherapistsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetRecommendedTherapistsRequest,
+            $0.GetRecommendedTherapistsResponse>(
+        'GetRecommendedTherapists',
+        getRecommendedTherapists_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.GetRecommendedTherapistsRequest.fromBuffer(value),
+        ($0.GetRecommendedTherapistsResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.CreateBlogRequest, $0.CreateBlogResponse>(
         'CreateBlog',
         createBlog_Pre,
@@ -627,6 +675,24 @@ abstract class TherapistServiceBase extends $grpc.Service {
 
   $async.Future<$0.UserLogoutResponse> userLogout(
       $grpc.ServiceCall call, $0.UserLogoutRequest request);
+
+  $async.Future<$0.SearchTherapistsResponse> searchTherapists_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.SearchTherapistsRequest> $request) async {
+    return searchTherapists($call, await $request);
+  }
+
+  $async.Future<$0.SearchTherapistsResponse> searchTherapists(
+      $grpc.ServiceCall call, $0.SearchTherapistsRequest request);
+
+  $async.Future<$0.GetRecommendedTherapistsResponse>
+      getRecommendedTherapists_Pre($grpc.ServiceCall $call,
+          $async.Future<$0.GetRecommendedTherapistsRequest> $request) async {
+    return getRecommendedTherapists($call, await $request);
+  }
+
+  $async.Future<$0.GetRecommendedTherapistsResponse> getRecommendedTherapists(
+      $grpc.ServiceCall call, $0.GetRecommendedTherapistsRequest request);
 
   $async.Future<$0.CreateBlogResponse> createBlog_Pre($grpc.ServiceCall $call,
       $async.Future<$0.CreateBlogRequest> $request) async {

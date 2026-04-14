@@ -80,6 +80,8 @@ func (h *TherapistHandler) GetUserProfile(ctx context.Context, req *therapistpb.
 	return &therapistpb.GetUserProfileResponse{
 		User: &therapistpb.User{
 			Id:                  result.UserID,
+			State:               result.State,
+			Nation:              result.Nation,
 			OnboardingCompleted: result.OnboardingCompleted,
 		},
 	}, nil

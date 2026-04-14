@@ -19,28 +19,30 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TherapistService_AuthCallback_FullMethodName           = "/therapist.TherapistService/AuthCallback"
-	TherapistService_GetStatus_FullMethodName              = "/therapist.TherapistService/GetStatus"
-	TherapistService_CompleteOnboarding_FullMethodName     = "/therapist.TherapistService/CompleteOnboarding"
-	TherapistService_ApproveTherapist_FullMethodName       = "/therapist.TherapistService/ApproveTherapist"
-	TherapistService_RejectTherapist_FullMethodName        = "/therapist.TherapistService/RejectTherapist"
-	TherapistService_UploadFile_FullMethodName             = "/therapist.TherapistService/UploadFile"
-	TherapistService_RefreshSession_FullMethodName         = "/therapist.TherapistService/RefreshSession"
-	TherapistService_Logout_FullMethodName                 = "/therapist.TherapistService/Logout"
-	TherapistService_UserAuthCallback_FullMethodName       = "/therapist.TherapistService/UserAuthCallback"
-	TherapistService_CompleteUserOnboarding_FullMethodName = "/therapist.TherapistService/CompleteUserOnboarding"
-	TherapistService_GetUserProfile_FullMethodName         = "/therapist.TherapistService/GetUserProfile"
-	TherapistService_UserRefreshSession_FullMethodName     = "/therapist.TherapistService/UserRefreshSession"
-	TherapistService_UserLogout_FullMethodName             = "/therapist.TherapistService/UserLogout"
-	TherapistService_CreateBlog_FullMethodName             = "/therapist.TherapistService/CreateBlog"
-	TherapistService_UpdateBlog_FullMethodName             = "/therapist.TherapistService/UpdateBlog"
-	TherapistService_PublishBlog_FullMethodName            = "/therapist.TherapistService/PublishBlog"
-	TherapistService_DeleteBlog_FullMethodName             = "/therapist.TherapistService/DeleteBlog"
-	TherapistService_GetBlog_FullMethodName                = "/therapist.TherapistService/GetBlog"
-	TherapistService_ListBlogs_FullMethodName              = "/therapist.TherapistService/ListBlogs"
-	TherapistService_ListMyBlogs_FullMethodName            = "/therapist.TherapistService/ListMyBlogs"
-	TherapistService_ToggleLikeBlog_FullMethodName         = "/therapist.TherapistService/ToggleLikeBlog"
-	TherapistService_UploadBlogImage_FullMethodName        = "/therapist.TherapistService/UploadBlogImage"
+	TherapistService_AuthCallback_FullMethodName             = "/therapist.TherapistService/AuthCallback"
+	TherapistService_GetStatus_FullMethodName                = "/therapist.TherapistService/GetStatus"
+	TherapistService_CompleteOnboarding_FullMethodName       = "/therapist.TherapistService/CompleteOnboarding"
+	TherapistService_ApproveTherapist_FullMethodName         = "/therapist.TherapistService/ApproveTherapist"
+	TherapistService_RejectTherapist_FullMethodName          = "/therapist.TherapistService/RejectTherapist"
+	TherapistService_UploadFile_FullMethodName               = "/therapist.TherapistService/UploadFile"
+	TherapistService_RefreshSession_FullMethodName           = "/therapist.TherapistService/RefreshSession"
+	TherapistService_Logout_FullMethodName                   = "/therapist.TherapistService/Logout"
+	TherapistService_UserAuthCallback_FullMethodName         = "/therapist.TherapistService/UserAuthCallback"
+	TherapistService_CompleteUserOnboarding_FullMethodName   = "/therapist.TherapistService/CompleteUserOnboarding"
+	TherapistService_GetUserProfile_FullMethodName           = "/therapist.TherapistService/GetUserProfile"
+	TherapistService_UserRefreshSession_FullMethodName       = "/therapist.TherapistService/UserRefreshSession"
+	TherapistService_UserLogout_FullMethodName               = "/therapist.TherapistService/UserLogout"
+	TherapistService_SearchTherapists_FullMethodName         = "/therapist.TherapistService/SearchTherapists"
+	TherapistService_GetRecommendedTherapists_FullMethodName = "/therapist.TherapistService/GetRecommendedTherapists"
+	TherapistService_CreateBlog_FullMethodName               = "/therapist.TherapistService/CreateBlog"
+	TherapistService_UpdateBlog_FullMethodName               = "/therapist.TherapistService/UpdateBlog"
+	TherapistService_PublishBlog_FullMethodName              = "/therapist.TherapistService/PublishBlog"
+	TherapistService_DeleteBlog_FullMethodName               = "/therapist.TherapistService/DeleteBlog"
+	TherapistService_GetBlog_FullMethodName                  = "/therapist.TherapistService/GetBlog"
+	TherapistService_ListBlogs_FullMethodName                = "/therapist.TherapistService/ListBlogs"
+	TherapistService_ListMyBlogs_FullMethodName              = "/therapist.TherapistService/ListMyBlogs"
+	TherapistService_ToggleLikeBlog_FullMethodName           = "/therapist.TherapistService/ToggleLikeBlog"
+	TherapistService_UploadBlogImage_FullMethodName          = "/therapist.TherapistService/UploadBlogImage"
 )
 
 // TherapistServiceClient is the client API for TherapistService service.
@@ -76,6 +78,11 @@ type TherapistServiceClient interface {
 	UserRefreshSession(ctx context.Context, in *UserRefreshSessionRequest, opts ...grpc.CallOption) (*UserRefreshSessionResponse, error)
 	// Invalidate the user refresh token (log out this device).
 	UserLogout(ctx context.Context, in *UserLogoutRequest, opts ...grpc.CallOption) (*UserLogoutResponse, error)
+	// ── Discovery (user-facing) ───────────────────────────────────────────────
+	// Full-text search across verified therapists.
+	SearchTherapists(ctx context.Context, in *SearchTherapistsRequest, opts ...grpc.CallOption) (*SearchTherapistsResponse, error)
+	// Location + rating-based recommendations for a user.
+	GetRecommendedTherapists(ctx context.Context, in *GetRecommendedTherapistsRequest, opts ...grpc.CallOption) (*GetRecommendedTherapistsResponse, error)
 	// ── Blog ──────────────────────────────────────────────────────────────────
 	// Create a draft blog (verified therapists only).
 	CreateBlog(ctx context.Context, in *CreateBlogRequest, opts ...grpc.CallOption) (*CreateBlogResponse, error)
@@ -235,6 +242,26 @@ func (c *therapistServiceClient) UserLogout(ctx context.Context, in *UserLogoutR
 	return out, nil
 }
 
+func (c *therapistServiceClient) SearchTherapists(ctx context.Context, in *SearchTherapistsRequest, opts ...grpc.CallOption) (*SearchTherapistsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SearchTherapistsResponse)
+	err := c.cc.Invoke(ctx, TherapistService_SearchTherapists_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) GetRecommendedTherapists(ctx context.Context, in *GetRecommendedTherapistsRequest, opts ...grpc.CallOption) (*GetRecommendedTherapistsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetRecommendedTherapistsResponse)
+	err := c.cc.Invoke(ctx, TherapistService_GetRecommendedTherapists_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *therapistServiceClient) CreateBlog(ctx context.Context, in *CreateBlogRequest, opts ...grpc.CallOption) (*CreateBlogResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateBlogResponse)
@@ -358,6 +385,11 @@ type TherapistServiceServer interface {
 	UserRefreshSession(context.Context, *UserRefreshSessionRequest) (*UserRefreshSessionResponse, error)
 	// Invalidate the user refresh token (log out this device).
 	UserLogout(context.Context, *UserLogoutRequest) (*UserLogoutResponse, error)
+	// ── Discovery (user-facing) ───────────────────────────────────────────────
+	// Full-text search across verified therapists.
+	SearchTherapists(context.Context, *SearchTherapistsRequest) (*SearchTherapistsResponse, error)
+	// Location + rating-based recommendations for a user.
+	GetRecommendedTherapists(context.Context, *GetRecommendedTherapistsRequest) (*GetRecommendedTherapistsResponse, error)
 	// ── Blog ──────────────────────────────────────────────────────────────────
 	// Create a draft blog (verified therapists only).
 	CreateBlog(context.Context, *CreateBlogRequest) (*CreateBlogResponse, error)
@@ -425,6 +457,12 @@ func (UnimplementedTherapistServiceServer) UserRefreshSession(context.Context, *
 }
 func (UnimplementedTherapistServiceServer) UserLogout(context.Context, *UserLogoutRequest) (*UserLogoutResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UserLogout not implemented")
+}
+func (UnimplementedTherapistServiceServer) SearchTherapists(context.Context, *SearchTherapistsRequest) (*SearchTherapistsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SearchTherapists not implemented")
+}
+func (UnimplementedTherapistServiceServer) GetRecommendedTherapists(context.Context, *GetRecommendedTherapistsRequest) (*GetRecommendedTherapistsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetRecommendedTherapists not implemented")
 }
 func (UnimplementedTherapistServiceServer) CreateBlog(context.Context, *CreateBlogRequest) (*CreateBlogResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateBlog not implemented")
@@ -708,6 +746,42 @@ func _TherapistService_UserLogout_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TherapistService_SearchTherapists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchTherapistsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).SearchTherapists(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_SearchTherapists_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).SearchTherapists(ctx, req.(*SearchTherapistsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_GetRecommendedTherapists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRecommendedTherapistsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).GetRecommendedTherapists(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_GetRecommendedTherapists_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).GetRecommendedTherapists(ctx, req.(*GetRecommendedTherapistsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _TherapistService_CreateBlog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateBlogRequest)
 	if err := dec(in); err != nil {
@@ -928,6 +1002,14 @@ var TherapistService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UserLogout",
 			Handler:    _TherapistService_UserLogout_Handler,
+		},
+		{
+			MethodName: "SearchTherapists",
+			Handler:    _TherapistService_SearchTherapists_Handler,
+		},
+		{
+			MethodName: "GetRecommendedTherapists",
+			Handler:    _TherapistService_GetRecommendedTherapists_Handler,
 		},
 		{
 			MethodName: "CreateBlog",

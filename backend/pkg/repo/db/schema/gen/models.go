@@ -251,3 +251,19 @@ type TherapistSessionRow struct {
 	ExpiresAt    pgtype.Timestamptz
 	CreatedAt    pgtype.Timestamptz
 }
+
+// TherapistCardRow is a join of therapists + therapist_addresses for discovery.
+type TherapistCardRow struct {
+	ID              pgtype.UUID
+	FullName        string
+	Bio             pgtype.Text
+	ProfilePhoto    pgtype.Text
+	Specializations []string
+	SessionFee      pgtype.Numeric
+	SessionTypes    []SessionTypeEnum
+	Rating          pgtype.Numeric
+	TotalSessions   int32
+	State           string
+	Nation          string
+	AddressText     string
+}

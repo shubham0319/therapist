@@ -52,6 +52,10 @@ type dbHelper interface {
 	ToggleBlogLike(ctx context.Context, blogID, therapistID pgtype.UUID) (bool, int64, error)
 	IsBlogLikedBy(ctx context.Context, blogID, therapistID pgtype.UUID) (bool, error)
 	CountBlogLikes(ctx context.Context, blogID pgtype.UUID) (int64, error)
+	// ── Discovery (user-facing) ───────────────────────────────────────────────
+	SearchTherapists(ctx context.Context, p db.SearchTherapistsParams) ([]schema.TherapistCardRow, error)
+	CountSearchTherapists(ctx context.Context, query, sessionType string) (int64, error)
+	GetRecommendedTherapists(ctx context.Context, state, nation string, limit, offset int32) ([]schema.TherapistCardRow, error)
 }
 
 // storageHelper abstracts the file-storage backend (S3 stub for now).
