@@ -183,3 +183,46 @@ func (q *Queries) GetRecommendedTherapists(ctx context.Context, arg GetRecommend
 	}
 	return items, rows.Err()
 }
+
+// ─── GetTherapistCardByID ─────────────────────────────────────────────────────
+
+const getTherapistCardByID = `
+SELECT
+    t.id,
+    t.full_name,
+    t.bio,
+    t.profile_photo,
+    t.specializations,
+    t.session_fee,
+    t.session_types,
+    t.rating,
+    t.total_sessions,
+    COALESCE(a.state, '')        AS state,
+    COALESCE(a.nation, '')       AS nation,
+    COALESCE(a.address_text, '') AS address_text
+FROM therapists t
+LEFT JOIN therapist_addresses a ON a.therapist_id = t.id
+WHERE t.id = $1
+  AND t.status = 'verified'
+  AND t.onboarding_completed = TRUE
+`
+
+func (q *Queries) GetTherapistCardByID(ctx context.Context, id pgtype.UUID) (TherapistCardRow, error) {
+	row := q.db.QueryRow(ctx, getTherapistCardByID, id)
+	var i TherapistCardRow
+	err := row.Scan(
+		&i.ID,
+		&i.FullName,
+		&i.Bio,
+		&i.ProfilePhoto,
+		&i.Specializations,
+		&i.SessionFee,
+		&i.SessionTypes,
+		&i.Rating,
+		&i.TotalSessions,
+		&i.State,
+		&i.Nation,
+		&i.AddressText,
+	)
+	return i, err
+}

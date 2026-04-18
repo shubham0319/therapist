@@ -230,6 +230,49 @@ func (q *Queries) CountBlogLikes(ctx context.Context, blogID pgtype.UUID) (int64
 	return n, err
 }
 
+// ─── user_blog_likes ─────────────────────────────────────────────────────────
+
+const upsertUserBlogLike = `-- name: UpsertUserBlogLike :one
+INSERT INTO user_blog_likes (blog_id, user_id) VALUES ($1, $2)
+ON CONFLICT (blog_id, user_id) DO NOTHING
+RETURNING id
+`
+
+func (q *Queries) UpsertUserBlogLike(ctx context.Context, blogID, userID pgtype.UUID) (pgtype.UUID, error) {
+	var id pgtype.UUID
+	err := q.db.QueryRow(ctx, upsertUserBlogLike, blogID, userID).Scan(&id)
+	return id, err
+}
+
+const deleteUserBlogLike = `-- name: DeleteUserBlogLike :exec
+DELETE FROM user_blog_likes WHERE blog_id = $1 AND user_id = $2
+`
+
+func (q *Queries) DeleteUserBlogLike(ctx context.Context, blogID, userID pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, deleteUserBlogLike, blogID, userID)
+	return err
+}
+
+const getUserBlogLike = `-- name: GetUserBlogLike :one
+SELECT id FROM user_blog_likes WHERE blog_id = $1 AND user_id = $2
+`
+
+func (q *Queries) GetUserBlogLike(ctx context.Context, blogID, userID pgtype.UUID) (pgtype.UUID, error) {
+	var id pgtype.UUID
+	err := q.db.QueryRow(ctx, getUserBlogLike, blogID, userID).Scan(&id)
+	return id, err
+}
+
+const countUserBlogLikes = `-- name: CountUserBlogLikes :one
+SELECT COUNT(*) FROM user_blog_likes WHERE blog_id = $1
+`
+
+func (q *Queries) CountUserBlogLikes(ctx context.Context, blogID pgtype.UUID) (int64, error) {
+	var n int64
+	err := q.db.QueryRow(ctx, countUserBlogLikes, blogID).Scan(&n)
+	return n, err
+}
+
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
 // coalesceStrings returns an empty non-nil slice when s is nil, preventing

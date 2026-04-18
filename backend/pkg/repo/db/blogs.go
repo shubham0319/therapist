@@ -154,11 +154,62 @@ func (d *DB) ToggleBlogLike(ctx context.Context, blogID, therapistID pgtype.UUID
 func (d *DB) IsBlogLikedBy(ctx context.Context, blogID, therapistID pgtype.UUID) (bool, error) {
 	_, err := d.query.GetBlogLike(ctx, blogID, therapistID)
 	if err != nil {
-		return false, nil // not liked (or not found)
+		return false, nil
 	}
 	return true, nil
 }
 
+// CountBlogLikes returns total likes from both therapists and users.
 func (d *DB) CountBlogLikes(ctx context.Context, blogID pgtype.UUID) (int64, error) {
-	return d.query.CountBlogLikes(ctx, blogID)
+	therapistCount, err := d.query.CountBlogLikes(ctx, blogID)
+	if err != nil {
+		return 0, err
+	}
+	userCount, err := d.query.CountUserBlogLikes(ctx, blogID)
+	if err != nil {
+		return 0, err
+	}
+	return therapistCount + userCount, nil
+}
+
+// ToggleUserBlogLike inserts or removes a user like. Returns (liked, totalLikes) after the operation.
+func (d *DB) ToggleUserBlogLike(ctx context.Context, blogID, userID pgtype.UUID) (bool, int64, error) {
+	d.log.Debug("ToggleUserBlogLike",
+		zap.String("blog_id", blogID.String()),
+		zap.String("user_id", userID.String()),
+	)
+
+	_, err := d.query.GetUserBlogLike(ctx, blogID, userID)
+	alreadyLiked := err == nil
+
+	if alreadyLiked {
+		if err := d.query.DeleteUserBlogLike(ctx, blogID, userID); err != nil {
+			d.log.Error("DeleteUserBlogLike failed", zap.Error(err))
+			return false, 0, err
+		}
+	} else {
+		if _, err := d.query.UpsertUserBlogLike(ctx, blogID, userID); err != nil {
+			d.log.Error("UpsertUserBlogLike failed", zap.Error(err))
+			return false, 0, err
+		}
+	}
+
+	count, err := d.CountBlogLikes(ctx, blogID)
+	if err != nil {
+		d.log.Error("CountBlogLikes failed after user toggle", zap.Error(err))
+		return false, 0, err
+	}
+
+	liked := !alreadyLiked
+	d.log.Debug("ToggleUserBlogLike done", zap.Bool("liked", liked), zap.Int64("total", count))
+	return liked, count, nil
+}
+
+// IsUserBlogLikedBy checks if a user has liked a blog.
+func (d *DB) IsUserBlogLikedBy(ctx context.Context, blogID, userID pgtype.UUID) (bool, error) {
+	_, err := d.query.GetUserBlogLike(ctx, blogID, userID)
+	if err != nil {
+		return false, nil
+	}
+	return true, nil
 }

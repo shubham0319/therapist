@@ -92,6 +92,20 @@ class DiscoveryRepository {
     }
   }
 
+  Future<Result<TherapistCardModel>> getTherapistProfile({
+    required String therapistId,
+  }) async {
+    try {
+      final res = await _stub.getTherapistProfile(
+        GetTherapistProfileRequest()..therapistId = therapistId,
+        options: CallOptions(timeout: _kRpcTimeout),
+      );
+      return Result.success(TherapistCardModel.fromProto(res.therapist));
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
+  }
+
   Future<Result<List<TherapistCardModel>>> getRecommendedTherapists({
     required String state,
     required String nation,

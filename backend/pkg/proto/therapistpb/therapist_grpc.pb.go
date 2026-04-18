@@ -43,6 +43,8 @@ const (
 	TherapistService_ListMyBlogs_FullMethodName              = "/therapist.TherapistService/ListMyBlogs"
 	TherapistService_ToggleLikeBlog_FullMethodName           = "/therapist.TherapistService/ToggleLikeBlog"
 	TherapistService_UploadBlogImage_FullMethodName          = "/therapist.TherapistService/UploadBlogImage"
+	TherapistService_UserToggleLikeBlog_FullMethodName       = "/therapist.TherapistService/UserToggleLikeBlog"
+	TherapistService_GetTherapistProfile_FullMethodName      = "/therapist.TherapistService/GetTherapistProfile"
 )
 
 // TherapistServiceClient is the client API for TherapistService service.
@@ -102,6 +104,11 @@ type TherapistServiceClient interface {
 	ToggleLikeBlog(ctx context.Context, in *ToggleLikeBlogRequest, opts ...grpc.CallOption) (*ToggleLikeBlogResponse, error)
 	// Upload a single inline blog image (max 2 MB).
 	UploadBlogImage(ctx context.Context, in *UploadBlogImageRequest, opts ...grpc.CallOption) (*UploadBlogImageResponse, error)
+	// Toggle like on a published blog (user/client accounts).
+	UserToggleLikeBlog(ctx context.Context, in *UserToggleLikeBlogRequest, opts ...grpc.CallOption) (*UserToggleLikeBlogResponse, error)
+	// ── Therapist profile (public) ────────────────────────────────────────────
+	// Fetch a single verified therapist's public profile card.
+	GetTherapistProfile(ctx context.Context, in *GetTherapistProfileRequest, opts ...grpc.CallOption) (*GetTherapistProfileResponse, error)
 }
 
 type therapistServiceClient struct {
@@ -352,6 +359,26 @@ func (c *therapistServiceClient) UploadBlogImage(ctx context.Context, in *Upload
 	return out, nil
 }
 
+func (c *therapistServiceClient) UserToggleLikeBlog(ctx context.Context, in *UserToggleLikeBlogRequest, opts ...grpc.CallOption) (*UserToggleLikeBlogResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserToggleLikeBlogResponse)
+	err := c.cc.Invoke(ctx, TherapistService_UserToggleLikeBlog_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *therapistServiceClient) GetTherapistProfile(ctx context.Context, in *GetTherapistProfileRequest, opts ...grpc.CallOption) (*GetTherapistProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetTherapistProfileResponse)
+	err := c.cc.Invoke(ctx, TherapistService_GetTherapistProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TherapistServiceServer is the server API for TherapistService service.
 // All implementations must embed UnimplementedTherapistServiceServer
 // for forward compatibility.
@@ -409,6 +436,11 @@ type TherapistServiceServer interface {
 	ToggleLikeBlog(context.Context, *ToggleLikeBlogRequest) (*ToggleLikeBlogResponse, error)
 	// Upload a single inline blog image (max 2 MB).
 	UploadBlogImage(context.Context, *UploadBlogImageRequest) (*UploadBlogImageResponse, error)
+	// Toggle like on a published blog (user/client accounts).
+	UserToggleLikeBlog(context.Context, *UserToggleLikeBlogRequest) (*UserToggleLikeBlogResponse, error)
+	// ── Therapist profile (public) ────────────────────────────────────────────
+	// Fetch a single verified therapist's public profile card.
+	GetTherapistProfile(context.Context, *GetTherapistProfileRequest) (*GetTherapistProfileResponse, error)
 	mustEmbedUnimplementedTherapistServiceServer()
 }
 
@@ -490,6 +522,12 @@ func (UnimplementedTherapistServiceServer) ToggleLikeBlog(context.Context, *Togg
 }
 func (UnimplementedTherapistServiceServer) UploadBlogImage(context.Context, *UploadBlogImageRequest) (*UploadBlogImageResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UploadBlogImage not implemented")
+}
+func (UnimplementedTherapistServiceServer) UserToggleLikeBlog(context.Context, *UserToggleLikeBlogRequest) (*UserToggleLikeBlogResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UserToggleLikeBlog not implemented")
+}
+func (UnimplementedTherapistServiceServer) GetTherapistProfile(context.Context, *GetTherapistProfileRequest) (*GetTherapistProfileResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetTherapistProfile not implemented")
 }
 func (UnimplementedTherapistServiceServer) mustEmbedUnimplementedTherapistServiceServer() {}
 func (UnimplementedTherapistServiceServer) testEmbeddedByValue()                          {}
@@ -944,6 +982,42 @@ func _TherapistService_UploadBlogImage_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TherapistService_UserToggleLikeBlog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserToggleLikeBlogRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).UserToggleLikeBlog(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_UserToggleLikeBlog_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).UserToggleLikeBlog(ctx, req.(*UserToggleLikeBlogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TherapistService_GetTherapistProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTherapistProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TherapistServiceServer).GetTherapistProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TherapistService_GetTherapistProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TherapistServiceServer).GetTherapistProfile(ctx, req.(*GetTherapistProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TherapistService_ServiceDesc is the grpc.ServiceDesc for TherapistService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1046,6 +1120,14 @@ var TherapistService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UploadBlogImage",
 			Handler:    _TherapistService_UploadBlogImage_Handler,
+		},
+		{
+			MethodName: "UserToggleLikeBlog",
+			Handler:    _TherapistService_UserToggleLikeBlog_Handler,
+		},
+		{
+			MethodName: "GetTherapistProfile",
+			Handler:    _TherapistService_GetTherapistProfile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

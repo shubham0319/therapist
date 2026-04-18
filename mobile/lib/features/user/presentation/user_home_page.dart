@@ -133,6 +133,12 @@ class _UserHomePageState extends State<_UserHomeView> {
                     ),
                   ),
                   IconButton(
+                    icon: const Icon(Icons.article_outlined),
+                    color: AppColors.subtle,
+                    tooltip: 'Blogs',
+                    onPressed: () => context.push(AppRoutes.userBlog),
+                  ),
+                  IconButton(
                     icon: const Icon(Icons.logout_outlined),
                     color: AppColors.subtle,
                     tooltip: 'Sign out',

@@ -65,6 +65,19 @@ func toTherapistCard(r schema.TherapistCardRow) TherapistCard {
 	}
 }
 
+func (s *Service) GetTherapistProfile(ctx context.Context, therapistID string) (*TherapistCard, error) {
+	tid, err := parseUUID(therapistID)
+	if err != nil {
+		return nil, ErrBadInput
+	}
+	row, err := s.db.GetTherapistCardByID(ctx, tid)
+	if err != nil {
+		return nil, ErrDBRecordNotFound
+	}
+	card := toTherapistCard(row)
+	return &card, nil
+}
+
 func (s *Service) SearchTherapists(ctx context.Context, query, sessionType string, page, pageSize int32) ([]TherapistCard, int64, error) {
 	if pageSize <= 0 {
 		pageSize = 20

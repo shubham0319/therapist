@@ -236,6 +236,23 @@ class TherapistServiceClient extends $grpc.Client {
     return $createUnaryCall(_$uploadBlogImage, request, options: options);
   }
 
+  /// Toggle like on a published blog (user/client accounts).
+  $grpc.ResponseFuture<$3.UserToggleLikeBlogResponse> userToggleLikeBlog(
+    $3.UserToggleLikeBlogRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$userToggleLikeBlog, request, options: options);
+  }
+
+  /// ── Therapist profile (public) ────────────────────────────────────────────
+  /// Fetch a single verified therapist's public profile card.
+  $grpc.ResponseFuture<$2.GetTherapistProfileResponse> getTherapistProfile(
+    $2.GetTherapistProfileRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getTherapistProfile, request, options: options);
+  }
+
   // method descriptors
 
   static final _$authCallback =
@@ -359,6 +376,16 @@ class TherapistServiceClient extends $grpc.Client {
           '/therapist.TherapistService/UploadBlogImage',
           ($3.UploadBlogImageRequest value) => value.writeToBuffer(),
           $3.UploadBlogImageResponse.fromBuffer);
+  static final _$userToggleLikeBlog = $grpc.ClientMethod<
+          $3.UserToggleLikeBlogRequest, $3.UserToggleLikeBlogResponse>(
+      '/therapist.TherapistService/UserToggleLikeBlog',
+      ($3.UserToggleLikeBlogRequest value) => value.writeToBuffer(),
+      $3.UserToggleLikeBlogResponse.fromBuffer);
+  static final _$getTherapistProfile = $grpc.ClientMethod<
+          $2.GetTherapistProfileRequest, $2.GetTherapistProfileResponse>(
+      '/therapist.TherapistService/GetTherapistProfile',
+      ($2.GetTherapistProfileRequest value) => value.writeToBuffer(),
+      $2.GetTherapistProfileResponse.fromBuffer);
 }
 
 @$pb.GrpcServiceName('therapist.TherapistService')
@@ -564,6 +591,24 @@ abstract class TherapistServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $3.UploadBlogImageRequest.fromBuffer(value),
         ($3.UploadBlogImageResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.UserToggleLikeBlogRequest,
+            $3.UserToggleLikeBlogResponse>(
+        'UserToggleLikeBlog',
+        userToggleLikeBlog_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $3.UserToggleLikeBlogRequest.fromBuffer(value),
+        ($3.UserToggleLikeBlogResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.GetTherapistProfileRequest,
+            $2.GetTherapistProfileResponse>(
+        'GetTherapistProfile',
+        getTherapistProfile_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $2.GetTherapistProfileRequest.fromBuffer(value),
+        ($2.GetTherapistProfileResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.AuthCallbackResponse> authCallback_Pre(
@@ -770,4 +815,22 @@ abstract class TherapistServiceBase extends $grpc.Service {
 
   $async.Future<$3.UploadBlogImageResponse> uploadBlogImage(
       $grpc.ServiceCall call, $3.UploadBlogImageRequest request);
+
+  $async.Future<$3.UserToggleLikeBlogResponse> userToggleLikeBlog_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$3.UserToggleLikeBlogRequest> $request) async {
+    return userToggleLikeBlog($call, await $request);
+  }
+
+  $async.Future<$3.UserToggleLikeBlogResponse> userToggleLikeBlog(
+      $grpc.ServiceCall call, $3.UserToggleLikeBlogRequest request);
+
+  $async.Future<$2.GetTherapistProfileResponse> getTherapistProfile_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$2.GetTherapistProfileRequest> $request) async {
+    return getTherapistProfile($call, await $request);
+  }
+
+  $async.Future<$2.GetTherapistProfileResponse> getTherapistProfile(
+      $grpc.ServiceCall call, $2.GetTherapistProfileRequest request);
 }

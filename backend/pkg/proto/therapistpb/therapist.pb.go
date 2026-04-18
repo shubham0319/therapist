@@ -1116,7 +1116,7 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\rLogoutRequest\x12#\n" +
 	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"*\n" +
 	"\x0eLogoutResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\x81\x10\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess2\xca\x11\n" +
 	"\x10TherapistService\x12O\n" +
 	"\fAuthCallback\x12\x1e.therapist.AuthCallbackRequest\x1a\x1f.therapist.AuthCallbackResponse\x12F\n" +
 	"\tGetStatus\x12\x1b.therapist.GetStatusRequest\x1a\x1c.therapist.GetStatusResponse\x12a\n" +
@@ -1146,7 +1146,9 @@ const file_proto_therapist_proto_rawDesc = "" +
 	"\tListBlogs\x12\x1b.therapist.ListBlogsRequest\x1a\x1c.therapist.ListBlogsResponse\x12L\n" +
 	"\vListMyBlogs\x12\x1d.therapist.ListMyBlogsRequest\x1a\x1e.therapist.ListMyBlogsResponse\x12U\n" +
 	"\x0eToggleLikeBlog\x12 .therapist.ToggleLikeBlogRequest\x1a!.therapist.ToggleLikeBlogResponse\x12X\n" +
-	"\x0fUploadBlogImage\x12!.therapist.UploadBlogImageRequest\x1a\".therapist.UploadBlogImageResponseB-Z+therapist/pkg/proto/therapistpb;therapistpbb\x06proto3"
+	"\x0fUploadBlogImage\x12!.therapist.UploadBlogImageRequest\x1a\".therapist.UploadBlogImageResponse\x12a\n" +
+	"\x12UserToggleLikeBlog\x12$.therapist.UserToggleLikeBlogRequest\x1a%.therapist.UserToggleLikeBlogResponse\x12d\n" +
+	"\x13GetTherapistProfile\x12%.therapist.GetTherapistProfileRequest\x1a&.therapist.GetTherapistProfileResponseB-Z+therapist/pkg/proto/therapistpb;therapistpbb\x06proto3"
 
 var (
 	file_proto_therapist_proto_rawDescOnce sync.Once
@@ -1194,22 +1196,26 @@ var file_proto_therapist_proto_goTypes = []any{
 	(*ListMyBlogsRequest)(nil),               // 29: therapist.ListMyBlogsRequest
 	(*ToggleLikeBlogRequest)(nil),            // 30: therapist.ToggleLikeBlogRequest
 	(*UploadBlogImageRequest)(nil),           // 31: therapist.UploadBlogImageRequest
-	(*UserAuthCallbackResponse)(nil),         // 32: therapist.UserAuthCallbackResponse
-	(*CompleteUserOnboardingResponse)(nil),   // 33: therapist.CompleteUserOnboardingResponse
-	(*GetUserProfileResponse)(nil),           // 34: therapist.GetUserProfileResponse
-	(*UserRefreshSessionResponse)(nil),       // 35: therapist.UserRefreshSessionResponse
-	(*UserLogoutResponse)(nil),               // 36: therapist.UserLogoutResponse
-	(*SearchTherapistsResponse)(nil),         // 37: therapist.SearchTherapistsResponse
-	(*GetRecommendedTherapistsResponse)(nil), // 38: therapist.GetRecommendedTherapistsResponse
-	(*CreateBlogResponse)(nil),               // 39: therapist.CreateBlogResponse
-	(*UpdateBlogResponse)(nil),               // 40: therapist.UpdateBlogResponse
-	(*PublishBlogResponse)(nil),              // 41: therapist.PublishBlogResponse
-	(*DeleteBlogResponse)(nil),               // 42: therapist.DeleteBlogResponse
-	(*GetBlogResponse)(nil),                  // 43: therapist.GetBlogResponse
-	(*ListBlogsResponse)(nil),                // 44: therapist.ListBlogsResponse
-	(*ListMyBlogsResponse)(nil),              // 45: therapist.ListMyBlogsResponse
-	(*ToggleLikeBlogResponse)(nil),           // 46: therapist.ToggleLikeBlogResponse
-	(*UploadBlogImageResponse)(nil),          // 47: therapist.UploadBlogImageResponse
+	(*UserToggleLikeBlogRequest)(nil),        // 32: therapist.UserToggleLikeBlogRequest
+	(*GetTherapistProfileRequest)(nil),       // 33: therapist.GetTherapistProfileRequest
+	(*UserAuthCallbackResponse)(nil),         // 34: therapist.UserAuthCallbackResponse
+	(*CompleteUserOnboardingResponse)(nil),   // 35: therapist.CompleteUserOnboardingResponse
+	(*GetUserProfileResponse)(nil),           // 36: therapist.GetUserProfileResponse
+	(*UserRefreshSessionResponse)(nil),       // 37: therapist.UserRefreshSessionResponse
+	(*UserLogoutResponse)(nil),               // 38: therapist.UserLogoutResponse
+	(*SearchTherapistsResponse)(nil),         // 39: therapist.SearchTherapistsResponse
+	(*GetRecommendedTherapistsResponse)(nil), // 40: therapist.GetRecommendedTherapistsResponse
+	(*CreateBlogResponse)(nil),               // 41: therapist.CreateBlogResponse
+	(*UpdateBlogResponse)(nil),               // 42: therapist.UpdateBlogResponse
+	(*PublishBlogResponse)(nil),              // 43: therapist.PublishBlogResponse
+	(*DeleteBlogResponse)(nil),               // 44: therapist.DeleteBlogResponse
+	(*GetBlogResponse)(nil),                  // 45: therapist.GetBlogResponse
+	(*ListBlogsResponse)(nil),                // 46: therapist.ListBlogsResponse
+	(*ListMyBlogsResponse)(nil),              // 47: therapist.ListMyBlogsResponse
+	(*ToggleLikeBlogResponse)(nil),           // 48: therapist.ToggleLikeBlogResponse
+	(*UploadBlogImageResponse)(nil),          // 49: therapist.UploadBlogImageResponse
+	(*UserToggleLikeBlogResponse)(nil),       // 50: therapist.UserToggleLikeBlogResponse
+	(*GetTherapistProfileResponse)(nil),      // 51: therapist.GetTherapistProfileResponse
 }
 var file_proto_therapist_proto_depIdxs = []int32{
 	0,  // 0: therapist.TherapistService.AuthCallback:input_type -> therapist.AuthCallbackRequest
@@ -1236,32 +1242,36 @@ var file_proto_therapist_proto_depIdxs = []int32{
 	29, // 21: therapist.TherapistService.ListMyBlogs:input_type -> therapist.ListMyBlogsRequest
 	30, // 22: therapist.TherapistService.ToggleLikeBlog:input_type -> therapist.ToggleLikeBlogRequest
 	31, // 23: therapist.TherapistService.UploadBlogImage:input_type -> therapist.UploadBlogImageRequest
-	1,  // 24: therapist.TherapistService.AuthCallback:output_type -> therapist.AuthCallbackResponse
-	3,  // 25: therapist.TherapistService.GetStatus:output_type -> therapist.GetStatusResponse
-	5,  // 26: therapist.TherapistService.CompleteOnboarding:output_type -> therapist.CompleteOnboardingResponse
-	7,  // 27: therapist.TherapistService.ApproveTherapist:output_type -> therapist.ApproveTherapistResponse
-	9,  // 28: therapist.TherapistService.RejectTherapist:output_type -> therapist.RejectTherapistResponse
-	11, // 29: therapist.TherapistService.UploadFile:output_type -> therapist.UploadFileResponse
-	13, // 30: therapist.TherapistService.RefreshSession:output_type -> therapist.RefreshSessionResponse
-	15, // 31: therapist.TherapistService.Logout:output_type -> therapist.LogoutResponse
-	32, // 32: therapist.TherapistService.UserAuthCallback:output_type -> therapist.UserAuthCallbackResponse
-	33, // 33: therapist.TherapistService.CompleteUserOnboarding:output_type -> therapist.CompleteUserOnboardingResponse
-	34, // 34: therapist.TherapistService.GetUserProfile:output_type -> therapist.GetUserProfileResponse
-	35, // 35: therapist.TherapistService.UserRefreshSession:output_type -> therapist.UserRefreshSessionResponse
-	36, // 36: therapist.TherapistService.UserLogout:output_type -> therapist.UserLogoutResponse
-	37, // 37: therapist.TherapistService.SearchTherapists:output_type -> therapist.SearchTherapistsResponse
-	38, // 38: therapist.TherapistService.GetRecommendedTherapists:output_type -> therapist.GetRecommendedTherapistsResponse
-	39, // 39: therapist.TherapistService.CreateBlog:output_type -> therapist.CreateBlogResponse
-	40, // 40: therapist.TherapistService.UpdateBlog:output_type -> therapist.UpdateBlogResponse
-	41, // 41: therapist.TherapistService.PublishBlog:output_type -> therapist.PublishBlogResponse
-	42, // 42: therapist.TherapistService.DeleteBlog:output_type -> therapist.DeleteBlogResponse
-	43, // 43: therapist.TherapistService.GetBlog:output_type -> therapist.GetBlogResponse
-	44, // 44: therapist.TherapistService.ListBlogs:output_type -> therapist.ListBlogsResponse
-	45, // 45: therapist.TherapistService.ListMyBlogs:output_type -> therapist.ListMyBlogsResponse
-	46, // 46: therapist.TherapistService.ToggleLikeBlog:output_type -> therapist.ToggleLikeBlogResponse
-	47, // 47: therapist.TherapistService.UploadBlogImage:output_type -> therapist.UploadBlogImageResponse
-	24, // [24:48] is the sub-list for method output_type
-	0,  // [0:24] is the sub-list for method input_type
+	32, // 24: therapist.TherapistService.UserToggleLikeBlog:input_type -> therapist.UserToggleLikeBlogRequest
+	33, // 25: therapist.TherapistService.GetTherapistProfile:input_type -> therapist.GetTherapistProfileRequest
+	1,  // 26: therapist.TherapistService.AuthCallback:output_type -> therapist.AuthCallbackResponse
+	3,  // 27: therapist.TherapistService.GetStatus:output_type -> therapist.GetStatusResponse
+	5,  // 28: therapist.TherapistService.CompleteOnboarding:output_type -> therapist.CompleteOnboardingResponse
+	7,  // 29: therapist.TherapistService.ApproveTherapist:output_type -> therapist.ApproveTherapistResponse
+	9,  // 30: therapist.TherapistService.RejectTherapist:output_type -> therapist.RejectTherapistResponse
+	11, // 31: therapist.TherapistService.UploadFile:output_type -> therapist.UploadFileResponse
+	13, // 32: therapist.TherapistService.RefreshSession:output_type -> therapist.RefreshSessionResponse
+	15, // 33: therapist.TherapistService.Logout:output_type -> therapist.LogoutResponse
+	34, // 34: therapist.TherapistService.UserAuthCallback:output_type -> therapist.UserAuthCallbackResponse
+	35, // 35: therapist.TherapistService.CompleteUserOnboarding:output_type -> therapist.CompleteUserOnboardingResponse
+	36, // 36: therapist.TherapistService.GetUserProfile:output_type -> therapist.GetUserProfileResponse
+	37, // 37: therapist.TherapistService.UserRefreshSession:output_type -> therapist.UserRefreshSessionResponse
+	38, // 38: therapist.TherapistService.UserLogout:output_type -> therapist.UserLogoutResponse
+	39, // 39: therapist.TherapistService.SearchTherapists:output_type -> therapist.SearchTherapistsResponse
+	40, // 40: therapist.TherapistService.GetRecommendedTherapists:output_type -> therapist.GetRecommendedTherapistsResponse
+	41, // 41: therapist.TherapistService.CreateBlog:output_type -> therapist.CreateBlogResponse
+	42, // 42: therapist.TherapistService.UpdateBlog:output_type -> therapist.UpdateBlogResponse
+	43, // 43: therapist.TherapistService.PublishBlog:output_type -> therapist.PublishBlogResponse
+	44, // 44: therapist.TherapistService.DeleteBlog:output_type -> therapist.DeleteBlogResponse
+	45, // 45: therapist.TherapistService.GetBlog:output_type -> therapist.GetBlogResponse
+	46, // 46: therapist.TherapistService.ListBlogs:output_type -> therapist.ListBlogsResponse
+	47, // 47: therapist.TherapistService.ListMyBlogs:output_type -> therapist.ListMyBlogsResponse
+	48, // 48: therapist.TherapistService.ToggleLikeBlog:output_type -> therapist.ToggleLikeBlogResponse
+	49, // 49: therapist.TherapistService.UploadBlogImage:output_type -> therapist.UploadBlogImageResponse
+	50, // 50: therapist.TherapistService.UserToggleLikeBlog:output_type -> therapist.UserToggleLikeBlogResponse
+	51, // 51: therapist.TherapistService.GetTherapistProfile:output_type -> therapist.GetTherapistProfileResponse
+	26, // [26:52] is the sub-list for method output_type
+	0,  // [0:26] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name
 	0,  // [0:0] is the sub-list for extension extendee
 	0,  // [0:0] is the sub-list for field type_name

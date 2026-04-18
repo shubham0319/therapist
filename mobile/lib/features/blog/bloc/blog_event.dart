@@ -75,6 +75,12 @@ class BlogLikeToggled extends BlogEvent {
   final String blogId;
 }
 
+class UserBlogLikeToggled extends BlogEvent {
+  UserBlogLikeToggled({required this.userId, required this.blogId});
+  final String userId;
+  final String blogId;
+}
+
 class BlogImageUploadRequested extends BlogEvent {
   BlogImageUploadRequested({
     required this.therapistId,

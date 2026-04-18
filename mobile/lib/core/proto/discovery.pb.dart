@@ -494,6 +494,123 @@ class GetRecommendedTherapistsResponse extends $pb.GeneratedMessage {
   $pb.PbList<TherapistCard> get therapists => $_getList(0);
 }
 
+/// GetTherapistProfile — fetch a single verified therapist's public profile.
+class GetTherapistProfileRequest extends $pb.GeneratedMessage {
+  factory GetTherapistProfileRequest({
+    $core.String? therapistId,
+  }) {
+    final result = create();
+    if (therapistId != null) result.therapistId = therapistId;
+    return result;
+  }
+
+  GetTherapistProfileRequest._();
+
+  factory GetTherapistProfileRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetTherapistProfileRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetTherapistProfileRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'therapist'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'therapistId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetTherapistProfileRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetTherapistProfileRequest copyWith(
+          void Function(GetTherapistProfileRequest) updates) =>
+      super.copyWith(
+              (message) => updates(message as GetTherapistProfileRequest))
+          as GetTherapistProfileRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetTherapistProfileRequest create() => GetTherapistProfileRequest._();
+  @$core.override
+  GetTherapistProfileRequest createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static GetTherapistProfileRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetTherapistProfileRequest>(create);
+  static GetTherapistProfileRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get therapistId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set therapistId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTherapistId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTherapistId() => $_clearField(1);
+}
+
+class GetTherapistProfileResponse extends $pb.GeneratedMessage {
+  factory GetTherapistProfileResponse({
+    TherapistCard? therapist,
+  }) {
+    final result = create();
+    if (therapist != null) result.therapist = therapist;
+    return result;
+  }
+
+  GetTherapistProfileResponse._();
+
+  factory GetTherapistProfileResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetTherapistProfileResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetTherapistProfileResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'therapist'),
+      createEmptyInstance: create)
+    ..aOM<TherapistCard>(1, _omitFieldNames ? '' : 'therapist',
+        subBuilder: TherapistCard.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetTherapistProfileResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetTherapistProfileResponse copyWith(
+          void Function(GetTherapistProfileResponse) updates) =>
+      super.copyWith(
+              (message) => updates(message as GetTherapistProfileResponse))
+          as GetTherapistProfileResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetTherapistProfileResponse create() =>
+      GetTherapistProfileResponse._();
+  @$core.override
+  GetTherapistProfileResponse createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static GetTherapistProfileResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetTherapistProfileResponse>(create);
+  static GetTherapistProfileResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  TherapistCard get therapist => $_getN(0);
+  @$pb.TagNumber(1)
+  set therapist(TherapistCard value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTherapist() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTherapist() => $_clearField(1);
+  @$pb.TagNumber(1)
+  TherapistCard ensureTherapist() => $_ensure(0);
+}
+
 const $core.bool _omitFieldNames =
     $core.bool.fromEnvironment('protobuf.omit_field_names');
 const $core.bool _omitMessageNames =

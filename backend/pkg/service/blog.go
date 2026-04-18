@@ -235,6 +235,9 @@ func (s *Service) GetBlog(ctx context.Context, blogID, viewerID string) (*BlogRe
 		vid, err := parseUUID(viewerID)
 		if err == nil {
 			likedByMe, _ = s.db.IsBlogLikedBy(ctx, bid, vid)
+			if !likedByMe {
+				likedByMe, _ = s.db.IsUserBlogLikedBy(ctx, bid, vid)
+			}
 		}
 	}
 
@@ -291,6 +294,9 @@ func (s *Service) ListBlogs(ctx context.Context, therapistID, viewerID string, p
 		var likedByMe bool
 		if hasViewer {
 			likedByMe, _ = s.db.IsBlogLikedBy(ctx, b.ID, vid)
+			if !likedByMe {
+				likedByMe, _ = s.db.IsUserBlogLikedBy(ctx, b.ID, vid)
+			}
 		}
 		results = append(results, toBlogResult(b, likes, likedByMe))
 	}
@@ -353,6 +359,33 @@ func (s *Service) ToggleLikeBlog(ctx context.Context, therapistID, blogID string
 	}
 
 	liked, count, err := s.db.ToggleBlogLike(ctx, bid, tid)
+	if err != nil {
+		return false, 0, fmt.Errorf("%w: %v", ErrDBQuery, err)
+	}
+	return liked, count, nil
+}
+
+// ─── UserToggleLikeBlog ───────────────────────────────────────────────────────
+
+func (s *Service) UserToggleLikeBlog(ctx context.Context, userID, blogID string) (bool, int64, error) {
+	uid, err := parseUUID(userID)
+	if err != nil {
+		return false, 0, ErrBadInput
+	}
+	bid, err := parseUUID(blogID)
+	if err != nil {
+		return false, 0, ErrBadInput
+	}
+
+	blog, err := s.db.GetBlogByID(ctx, bid)
+	if err != nil {
+		return false, 0, ErrDBRecordNotFound
+	}
+	if blog.Status != schema.BlogStatusEnumPublished {
+		return false, 0, fmt.Errorf("%w: can only like published blogs", ErrBadInput)
+	}
+
+	liked, count, err := s.db.ToggleUserBlogLike(ctx, bid, uid)
 	if err != nil {
 		return false, 0, fmt.Errorf("%w: %v", ErrDBQuery, err)
 	}

@@ -36,7 +36,9 @@ type therapistService interface {
 	ListMyBlogs(ctx context.Context, therapistID string, page, pageSize int32) ([]*service.BlogResult, int64, error)
 	ToggleLikeBlog(ctx context.Context, therapistID, blogID string) (bool, int64, error)
 	UploadBlogImage(ctx context.Context, therapistID, fileName, contentType string, data []byte) (string, error)
+	UserToggleLikeBlog(ctx context.Context, userID, blogID string) (bool, int64, error)
 	// ── Discovery (user-facing) ───────────────────────────────────────────────
 	SearchTherapists(ctx context.Context, query, sessionType string, page, pageSize int32) ([]service.TherapistCard, int64, error)
 	GetRecommendedTherapists(ctx context.Context, state, nation string, page, pageSize int32) ([]service.TherapistCard, error)
+	GetTherapistProfile(ctx context.Context, therapistID string) (*service.TherapistCard, error)
 }

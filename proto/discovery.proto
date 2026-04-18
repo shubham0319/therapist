@@ -45,3 +45,11 @@ message GetRecommendedTherapistsRequest {
 message GetRecommendedTherapistsResponse {
   repeated TherapistCard therapists = 1;
 }
+
+// GetTherapistProfile — fetch a single verified therapist's public profile.
+message GetTherapistProfileRequest {
+  string therapist_id = 1;
+}
+message GetTherapistProfileResponse {
+  TherapistCard therapist = 1;
+}

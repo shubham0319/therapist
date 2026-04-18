@@ -18,6 +18,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
     on<BlogPublishRequested>(_onPublishRequested);
     on<BlogDeleteRequested>(_onDeleteRequested);
     on<BlogLikeToggled>(_onLikeToggled);
+    on<UserBlogLikeToggled>(_onUserLikeToggled);
     on<BlogImageUploadRequested>(_onImageUploadRequested);
   }
 
@@ -171,6 +172,14 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
 
   Future<void> _onLikeToggled(BlogLikeToggled e, Emitter<BlogState> emit) async {
     final result = await _repo.toggleLike(therapistId: e.therapistId, blogId: e.blogId);
+    result.fold(
+      (f) => emit(BlogError(f.message)),
+      (data) => emit(BlogLikeUpdated(liked: data.liked, likes: data.likes, blogId: e.blogId)),
+    );
+  }
+
+  Future<void> _onUserLikeToggled(UserBlogLikeToggled e, Emitter<BlogState> emit) async {
+    final result = await _repo.userToggleLike(userId: e.userId, blogId: e.blogId);
     result.fold(
       (f) => emit(BlogError(f.message)),
       (data) => emit(BlogLikeUpdated(liked: data.liked, likes: data.likes, blogId: e.blogId)),

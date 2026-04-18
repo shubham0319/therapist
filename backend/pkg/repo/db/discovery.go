@@ -46,3 +46,7 @@ func (d *DB) GetRecommendedTherapists(ctx context.Context, state, nation string,
 		Offset: offset,
 	})
 }
+
+func (d *DB) GetTherapistCardByID(ctx context.Context, id pgtype.UUID) (schema.TherapistCardRow, error) {
+	return d.query.GetTherapistCardByID(ctx, id)
+}

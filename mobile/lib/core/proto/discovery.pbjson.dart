@@ -122,3 +122,38 @@ final $typed_data.Uint8List getRecommendedTherapistsResponseDescriptor =
     $convert.base64Decode(
         'CiBHZXRSZWNvbW1lbmRlZFRoZXJhcGlzdHNSZXNwb25zZRI4Cgp0aGVyYXBpc3RzGAEgAygLMh'
         'gudGhlcmFwaXN0LlRoZXJhcGlzdENhcmRSCnRoZXJhcGlzdHM=');
+
+@$core.Deprecated('Use getTherapistProfileRequestDescriptor instead')
+const GetTherapistProfileRequest$json = {
+  '1': 'GetTherapistProfileRequest',
+  '2': [
+    {'1': 'therapist_id', '3': 1, '4': 1, '5': 9, '10': 'therapistId'},
+  ],
+};
+
+/// Descriptor for `GetTherapistProfileRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getTherapistProfileRequestDescriptor =
+    $convert.base64Decode(
+        'ChpHZXRUaGVyYXBpc3RQcm9maWxlUmVxdWVzdBIhCgx0aGVyYXBpc3RfaWQYASABKAlSC3RoZX'
+        'JhcGlzdElk');
+
+@$core.Deprecated('Use getTherapistProfileResponseDescriptor instead')
+const GetTherapistProfileResponse$json = {
+  '1': 'GetTherapistProfileResponse',
+  '2': [
+    {
+      '1': 'therapist',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.therapist.TherapistCard',
+      '10': 'therapist'
+    },
+  ],
+};
+
+/// Descriptor for `GetTherapistProfileResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getTherapistProfileResponseDescriptor =
+    $convert.base64Decode(
+        'ChtHZXRUaGVyYXBpc3RQcm9maWxlUmVzcG9uc2USNgoJdGhlcmFwaXN0GAEgASgLMhgudGhlcm'
+        'FwaXN0LlRoZXJhcGlzdENhcmRSCXRoZXJhcGlzdA==');

@@ -387,6 +387,95 @@ func (x *GetRecommendedTherapistsResponse) GetTherapists() []*TherapistCard {
 	return nil
 }
 
+// GetTherapistProfile — fetch a single verified therapist's public profile.
+type GetTherapistProfileRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TherapistId   string                 `protobuf:"bytes,1,opt,name=therapist_id,json=therapistId,proto3" json:"therapist_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetTherapistProfileRequest) Reset() {
+	*x = GetTherapistProfileRequest{}
+	mi := &file_proto_discovery_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetTherapistProfileRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTherapistProfileRequest) ProtoMessage() {}
+
+func (x *GetTherapistProfileRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_discovery_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTherapistProfileRequest.ProtoReflect.Descriptor instead.
+func (*GetTherapistProfileRequest) Descriptor() ([]byte, []int) {
+	return file_proto_discovery_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetTherapistProfileRequest) GetTherapistId() string {
+	if x != nil {
+		return x.TherapistId
+	}
+	return ""
+}
+
+type GetTherapistProfileResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Therapist     *TherapistCard         `protobuf:"bytes,1,opt,name=therapist,proto3" json:"therapist,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetTherapistProfileResponse) Reset() {
+	*x = GetTherapistProfileResponse{}
+	mi := &file_proto_discovery_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetTherapistProfileResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTherapistProfileResponse) ProtoMessage() {}
+
+func (x *GetTherapistProfileResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_discovery_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTherapistProfileResponse.ProtoReflect.Descriptor instead.
+func (*GetTherapistProfileResponse) Descriptor() ([]byte, []int) {
+	return file_proto_discovery_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetTherapistProfileResponse) GetTherapist() *TherapistCard {
+	if x != nil {
+		return x.Therapist
+	}
+	return nil
+}
+
 var File_proto_discovery_proto protoreflect.FileDescriptor
 
 const file_proto_discovery_proto_rawDesc = "" +
@@ -425,7 +514,11 @@ const file_proto_discovery_proto_rawDesc = "" +
 	" GetRecommendedTherapistsResponse\x128\n" +
 	"\n" +
 	"therapists\x18\x01 \x03(\v2\x18.therapist.TherapistCardR\n" +
-	"therapistsB-Z+therapist/pkg/proto/therapistpb;therapistpbb\x06proto3"
+	"therapists\"?\n" +
+	"\x1aGetTherapistProfileRequest\x12!\n" +
+	"\ftherapist_id\x18\x01 \x01(\tR\vtherapistId\"U\n" +
+	"\x1bGetTherapistProfileResponse\x126\n" +
+	"\ttherapist\x18\x01 \x01(\v2\x18.therapist.TherapistCardR\ttherapistB-Z+therapist/pkg/proto/therapistpb;therapistpbb\x06proto3"
 
 var (
 	file_proto_discovery_proto_rawDescOnce sync.Once
@@ -439,22 +532,25 @@ func file_proto_discovery_proto_rawDescGZIP() []byte {
 	return file_proto_discovery_proto_rawDescData
 }
 
-var file_proto_discovery_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_proto_discovery_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_proto_discovery_proto_goTypes = []any{
 	(*TherapistCard)(nil),                    // 0: therapist.TherapistCard
 	(*SearchTherapistsRequest)(nil),          // 1: therapist.SearchTherapistsRequest
 	(*SearchTherapistsResponse)(nil),         // 2: therapist.SearchTherapistsResponse
 	(*GetRecommendedTherapistsRequest)(nil),  // 3: therapist.GetRecommendedTherapistsRequest
 	(*GetRecommendedTherapistsResponse)(nil), // 4: therapist.GetRecommendedTherapistsResponse
+	(*GetTherapistProfileRequest)(nil),       // 5: therapist.GetTherapistProfileRequest
+	(*GetTherapistProfileResponse)(nil),      // 6: therapist.GetTherapistProfileResponse
 }
 var file_proto_discovery_proto_depIdxs = []int32{
 	0, // 0: therapist.SearchTherapistsResponse.therapists:type_name -> therapist.TherapistCard
 	0, // 1: therapist.GetRecommendedTherapistsResponse.therapists:type_name -> therapist.TherapistCard
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0, // 2: therapist.GetTherapistProfileResponse.therapist:type_name -> therapist.TherapistCard
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_discovery_proto_init() }
@@ -468,7 +564,7 @@ func file_proto_discovery_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_discovery_proto_rawDesc), len(file_proto_discovery_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

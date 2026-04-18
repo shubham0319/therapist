@@ -80,6 +80,12 @@ service TherapistService {
   rpc ToggleLikeBlog (ToggleLikeBlogRequest) returns (ToggleLikeBlogResponse);
   // Upload a single inline blog image (max 2 MB).
   rpc UploadBlogImage (UploadBlogImageRequest) returns (UploadBlogImageResponse);
+  // Toggle like on a published blog (user/client accounts).
+  rpc UserToggleLikeBlog (UserToggleLikeBlogRequest) returns (UserToggleLikeBlogResponse);
+
+  // ── Therapist profile (public) ────────────────────────────────────────────
+  // Fetch a single verified therapist's public profile card.
+  rpc GetTherapistProfile (GetTherapistProfileRequest) returns (GetTherapistProfileResponse);
 }
 
 // ─────────────────────────────────────────────

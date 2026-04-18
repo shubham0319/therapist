@@ -58,6 +58,24 @@ func (h *TherapistHandler) GetRecommendedTherapists(ctx context.Context, req *th
 	}, nil
 }
 
+func (h *TherapistHandler) GetTherapistProfile(ctx context.Context, req *therapistpb.GetTherapistProfileRequest) (*therapistpb.GetTherapistProfileResponse, error) {
+	log := logger.Named("handler.discovery")
+
+	if req.TherapistId == "" {
+		return nil, status.Error(codes.InvalidArgument, "therapist_id is required")
+	}
+
+	card, err := h.svc.GetTherapistProfile(ctx, req.TherapistId)
+	if err != nil {
+		log.Error("GetTherapistProfile failed", zap.Error(err))
+		return nil, status.Error(codes.NotFound, "therapist not found")
+	}
+
+	return &therapistpb.GetTherapistProfileResponse{
+		Therapist: cardsToProto([]service.TherapistCard{*card})[0],
+	}, nil
+}
+
 func cardsToProto(cards []service.TherapistCard) []*therapistpb.TherapistCard {
 	pb := make([]*therapistpb.TherapistCard, len(cards))
 	for i, c := range cards {

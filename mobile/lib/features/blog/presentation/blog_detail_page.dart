@@ -65,10 +65,31 @@ class _BlogDetailPageState extends State<BlogDetailPage> {
         },
         builder: (ctx, state) {
           if (state is BlogDetailLoaded) _lastBlogModel = state.blog;
+          if (state is BlogLikeUpdated) {
+            final prev = _lastBlogModel;
+            if (prev != null && state.blogId == prev.id) {
+              _lastBlogModel = BlogModel(
+                id: prev.id,
+                therapistId: prev.therapistId,
+                title: prev.title,
+                slug: prev.slug,
+                coverImageUrl: prev.coverImageUrl,
+                content: prev.content,
+                imageUrls: prev.imageUrls,
+                tags: prev.tags,
+                status: prev.status,
+                views: prev.views,
+                likes: state.likes,
+                likedByMe: state.liked,
+                createdAt: prev.createdAt,
+                updatedAt: prev.updatedAt,
+                publishedAt: prev.publishedAt,
+              );
+            }
+          }
 
           final blog = switch (state) {
             BlogDetailLoaded(blog: final b) => b,
-            BlogLikeUpdated() => _lastBlogModel,
             BlogPublished(blog: final b) => b,
             _ => _lastBlogModel,
           };

@@ -252,6 +252,25 @@ class BlogRepository {
     }
   }
 
+  // ── User like (user/client accounts) ────────────────────────────────────────
+
+  Future<Result<({bool liked, int likes})>> userToggleLike({
+    required String userId,
+    required String blogId,
+  }) async {
+    try {
+      final res = await _stub.userToggleLikeBlog(
+        UserToggleLikeBlogRequest()
+          ..userId = userId
+          ..blogId = blogId,
+        options: CallOptions(timeout: _kRpcTimeout),
+      );
+      return Result.success((liked: res.liked, likes: res.likes.toInt()));
+    } catch (e) {
+      return Result.error(ServerFailure(e.toString()));
+    }
+  }
+
   // ── Upload image ──────────────────────────────────────────────────────────
 
   Future<Result<String>> uploadBlogImage({

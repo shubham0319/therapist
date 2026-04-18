@@ -14,6 +14,8 @@ import 'package:therapist/features/discovery/data/discovery_repository.dart';
 import 'package:therapist/features/discovery/presentation/therapist_profile_page.dart';
 import 'package:therapist/features/user/presentation/user_home_page.dart';
 import 'package:therapist/features/user/presentation/user_onboarding_page.dart';
+import 'package:therapist/features/user/presentation/user_blog_list_page.dart';
+import 'package:therapist/features/user/presentation/user_blog_detail_page.dart';
 import 'package:therapist/shared/widgets/scaffold_with_nav.dart';
 
 /// Named route constants — use these everywhere instead of raw strings.
@@ -33,6 +35,8 @@ abstract class AppRoutes {
   // ── User (client/patient) ─────────────────────────────────────────────────
   static const userOnboarding      = '/user/onboarding';
   static const userHome            = '/user/home';
+  static const userBlog            = '/user/blog';
+  static const userBlogDetail      = '/user/blog/detail';
   static const therapistProfile    = '/user/therapist';
 }
 
@@ -107,6 +111,17 @@ GoRouter buildRouter(AuthBloc authBloc) => GoRouter(
         GoRoute(
           path: AppRoutes.userHome,
           pageBuilder: (ctx, state) => _fade(const UserHomePage()),
+        ),
+        GoRoute(
+          path: AppRoutes.userBlog,
+          pageBuilder: (ctx, state) => _fade(const UserBlogListPage()),
+        ),
+        GoRoute(
+          path: AppRoutes.userBlogDetail,
+          pageBuilder: (ctx, state) {
+            final blogId = state.extra as String;
+            return _fade(UserBlogDetailPage(blogId: blogId));
+          },
         ),
         GoRoute(
           path: AppRoutes.therapistProfile,
@@ -198,7 +213,10 @@ bool _isTherapistRoute(String location) =>
     location == AppRoutes.rejected     ||
     location == AppRoutes.home         ||
     location == AppRoutes.profile      ||
-    location.startsWith(AppRoutes.blog);
+    // Only the therapist-side /blog routes are blocked for users.
+    // User-side /user/blog routes are explicitly allowed.
+    (location.startsWith(AppRoutes.blog) &&
+     !location.startsWith(AppRoutes.userBlog));
 
 
 CustomTransitionPage<void> _fade(Widget child) => CustomTransitionPage<void>(

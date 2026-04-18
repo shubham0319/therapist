@@ -1235,6 +1235,111 @@ func (x *UploadBlogImageResponse) GetUrl() string {
 	return ""
 }
 
+// UserToggleLikeBlog — like or unlike a published blog (user/client accounts).
+type UserToggleLikeBlogRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // the liker (user account)
+	BlogId        string                 `protobuf:"bytes,2,opt,name=blog_id,json=blogId,proto3" json:"blog_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserToggleLikeBlogRequest) Reset() {
+	*x = UserToggleLikeBlogRequest{}
+	mi := &file_proto_blog_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserToggleLikeBlogRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserToggleLikeBlogRequest) ProtoMessage() {}
+
+func (x *UserToggleLikeBlogRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_blog_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserToggleLikeBlogRequest.ProtoReflect.Descriptor instead.
+func (*UserToggleLikeBlogRequest) Descriptor() ([]byte, []int) {
+	return file_proto_blog_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *UserToggleLikeBlogRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *UserToggleLikeBlogRequest) GetBlogId() string {
+	if x != nil {
+		return x.BlogId
+	}
+	return ""
+}
+
+type UserToggleLikeBlogResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Liked         bool                   `protobuf:"varint,1,opt,name=liked,proto3" json:"liked,omitempty"`
+	Likes         int64                  `protobuf:"varint,2,opt,name=likes,proto3" json:"likes,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserToggleLikeBlogResponse) Reset() {
+	*x = UserToggleLikeBlogResponse{}
+	mi := &file_proto_blog_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserToggleLikeBlogResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserToggleLikeBlogResponse) ProtoMessage() {}
+
+func (x *UserToggleLikeBlogResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_blog_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserToggleLikeBlogResponse.ProtoReflect.Descriptor instead.
+func (*UserToggleLikeBlogResponse) Descriptor() ([]byte, []int) {
+	return file_proto_blog_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *UserToggleLikeBlogResponse) GetLiked() bool {
+	if x != nil {
+		return x.Liked
+	}
+	return false
+}
+
+func (x *UserToggleLikeBlogResponse) GetLikes() int64 {
+	if x != nil {
+		return x.Likes
+	}
+	return 0
+}
+
 var File_proto_blog_proto protoreflect.FileDescriptor
 
 const file_proto_blog_proto_rawDesc = "" +
@@ -1323,7 +1428,13 @@ const file_proto_blog_proto_rawDesc = "" +
 	"\tfile_name\x18\x03 \x01(\tR\bfileName\x12!\n" +
 	"\fcontent_type\x18\x04 \x01(\tR\vcontentType\"+\n" +
 	"\x17UploadBlogImageResponse\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url*[\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\"M\n" +
+	"\x19UserToggleLikeBlogRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x17\n" +
+	"\ablog_id\x18\x02 \x01(\tR\x06blogId\"H\n" +
+	"\x1aUserToggleLikeBlogResponse\x12\x14\n" +
+	"\x05liked\x18\x01 \x01(\bR\x05liked\x12\x14\n" +
+	"\x05likes\x18\x02 \x01(\x03R\x05likes*[\n" +
 	"\n" +
 	"BlogStatus\x12\x1b\n" +
 	"\x17BLOG_STATUS_UNSPECIFIED\x10\x00\x12\x15\n" +
@@ -1343,28 +1454,30 @@ func file_proto_blog_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_blog_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_proto_blog_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
+var file_proto_blog_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_proto_blog_proto_goTypes = []any{
-	(BlogStatus)(0),                 // 0: therapist.BlogStatus
-	(*Blog)(nil),                    // 1: therapist.Blog
-	(*CreateBlogRequest)(nil),       // 2: therapist.CreateBlogRequest
-	(*CreateBlogResponse)(nil),      // 3: therapist.CreateBlogResponse
-	(*UpdateBlogRequest)(nil),       // 4: therapist.UpdateBlogRequest
-	(*UpdateBlogResponse)(nil),      // 5: therapist.UpdateBlogResponse
-	(*PublishBlogRequest)(nil),      // 6: therapist.PublishBlogRequest
-	(*PublishBlogResponse)(nil),     // 7: therapist.PublishBlogResponse
-	(*DeleteBlogRequest)(nil),       // 8: therapist.DeleteBlogRequest
-	(*DeleteBlogResponse)(nil),      // 9: therapist.DeleteBlogResponse
-	(*GetBlogRequest)(nil),          // 10: therapist.GetBlogRequest
-	(*GetBlogResponse)(nil),         // 11: therapist.GetBlogResponse
-	(*ListBlogsRequest)(nil),        // 12: therapist.ListBlogsRequest
-	(*ListBlogsResponse)(nil),       // 13: therapist.ListBlogsResponse
-	(*ListMyBlogsRequest)(nil),      // 14: therapist.ListMyBlogsRequest
-	(*ListMyBlogsResponse)(nil),     // 15: therapist.ListMyBlogsResponse
-	(*ToggleLikeBlogRequest)(nil),   // 16: therapist.ToggleLikeBlogRequest
-	(*ToggleLikeBlogResponse)(nil),  // 17: therapist.ToggleLikeBlogResponse
-	(*UploadBlogImageRequest)(nil),  // 18: therapist.UploadBlogImageRequest
-	(*UploadBlogImageResponse)(nil), // 19: therapist.UploadBlogImageResponse
+	(BlogStatus)(0),                    // 0: therapist.BlogStatus
+	(*Blog)(nil),                       // 1: therapist.Blog
+	(*CreateBlogRequest)(nil),          // 2: therapist.CreateBlogRequest
+	(*CreateBlogResponse)(nil),         // 3: therapist.CreateBlogResponse
+	(*UpdateBlogRequest)(nil),          // 4: therapist.UpdateBlogRequest
+	(*UpdateBlogResponse)(nil),         // 5: therapist.UpdateBlogResponse
+	(*PublishBlogRequest)(nil),         // 6: therapist.PublishBlogRequest
+	(*PublishBlogResponse)(nil),        // 7: therapist.PublishBlogResponse
+	(*DeleteBlogRequest)(nil),          // 8: therapist.DeleteBlogRequest
+	(*DeleteBlogResponse)(nil),         // 9: therapist.DeleteBlogResponse
+	(*GetBlogRequest)(nil),             // 10: therapist.GetBlogRequest
+	(*GetBlogResponse)(nil),            // 11: therapist.GetBlogResponse
+	(*ListBlogsRequest)(nil),           // 12: therapist.ListBlogsRequest
+	(*ListBlogsResponse)(nil),          // 13: therapist.ListBlogsResponse
+	(*ListMyBlogsRequest)(nil),         // 14: therapist.ListMyBlogsRequest
+	(*ListMyBlogsResponse)(nil),        // 15: therapist.ListMyBlogsResponse
+	(*ToggleLikeBlogRequest)(nil),      // 16: therapist.ToggleLikeBlogRequest
+	(*ToggleLikeBlogResponse)(nil),     // 17: therapist.ToggleLikeBlogResponse
+	(*UploadBlogImageRequest)(nil),     // 18: therapist.UploadBlogImageRequest
+	(*UploadBlogImageResponse)(nil),    // 19: therapist.UploadBlogImageResponse
+	(*UserToggleLikeBlogRequest)(nil),  // 20: therapist.UserToggleLikeBlogRequest
+	(*UserToggleLikeBlogResponse)(nil), // 21: therapist.UserToggleLikeBlogResponse
 }
 var file_proto_blog_proto_depIdxs = []int32{
 	0, // 0: therapist.Blog.status:type_name -> therapist.BlogStatus
@@ -1392,7 +1505,7 @@ func file_proto_blog_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_blog_proto_rawDesc), len(file_proto_blog_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   19,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

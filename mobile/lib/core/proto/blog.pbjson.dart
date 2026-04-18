@@ -377,3 +377,33 @@ const UploadBlogImageResponse$json = {
 final $typed_data.Uint8List uploadBlogImageResponseDescriptor =
     $convert.base64Decode(
         'ChdVcGxvYWRCbG9nSW1hZ2VSZXNwb25zZRIQCgN1cmwYASABKAlSA3VybA==');
+
+@$core.Deprecated('Use userToggleLikeBlogRequestDescriptor instead')
+const UserToggleLikeBlogRequest$json = {
+  '1': 'UserToggleLikeBlogRequest',
+  '2': [
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+    {'1': 'blog_id', '3': 2, '4': 1, '5': 9, '10': 'blogId'},
+  ],
+};
+
+/// Descriptor for `UserToggleLikeBlogRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List userToggleLikeBlogRequestDescriptor =
+    $convert.base64Decode(
+        'ChlVc2VyVG9nZ2xlTGlrZUJsb2dSZXF1ZXN0EhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIXCg'
+        'dibG9nX2lkGAIgASgJUgZibG9nSWQ=');
+
+@$core.Deprecated('Use userToggleLikeBlogResponseDescriptor instead')
+const UserToggleLikeBlogResponse$json = {
+  '1': 'UserToggleLikeBlogResponse',
+  '2': [
+    {'1': 'liked', '3': 1, '4': 1, '5': 8, '10': 'liked'},
+    {'1': 'likes', '3': 2, '4': 1, '5': 3, '10': 'likes'},
+  ],
+};
+
+/// Descriptor for `UserToggleLikeBlogResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List userToggleLikeBlogResponseDescriptor =
+    $convert.base64Decode(
+        'ChpVc2VyVG9nZ2xlTGlrZUJsb2dSZXNwb25zZRIUCgVsaWtlZBgBIAEoCFIFbGlrZWQSFAoFbG'
+        'lrZXMYAiABKANSBWxpa2Vz');

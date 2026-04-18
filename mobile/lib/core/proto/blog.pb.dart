@@ -1501,6 +1501,142 @@ class UploadBlogImageResponse extends $pb.GeneratedMessage {
   void clearUrl() => $_clearField(1);
 }
 
+/// UserToggleLikeBlog — like or unlike a published blog (user/client accounts).
+class UserToggleLikeBlogRequest extends $pb.GeneratedMessage {
+  factory UserToggleLikeBlogRequest({
+    $core.String? userId,
+    $core.String? blogId,
+  }) {
+    final result = create();
+    if (userId != null) result.userId = userId;
+    if (blogId != null) result.blogId = blogId;
+    return result;
+  }
+
+  UserToggleLikeBlogRequest._();
+
+  factory UserToggleLikeBlogRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UserToggleLikeBlogRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UserToggleLikeBlogRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'therapist'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..aOS(2, _omitFieldNames ? '' : 'blogId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserToggleLikeBlogRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserToggleLikeBlogRequest copyWith(
+          void Function(UserToggleLikeBlogRequest) updates) =>
+      super.copyWith((message) => updates(message as UserToggleLikeBlogRequest))
+          as UserToggleLikeBlogRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UserToggleLikeBlogRequest create() => UserToggleLikeBlogRequest._();
+  @$core.override
+  UserToggleLikeBlogRequest createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static UserToggleLikeBlogRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UserToggleLikeBlogRequest>(create);
+  static UserToggleLikeBlogRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get blogId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set blogId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasBlogId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearBlogId() => $_clearField(2);
+}
+
+class UserToggleLikeBlogResponse extends $pb.GeneratedMessage {
+  factory UserToggleLikeBlogResponse({
+    $core.bool? liked,
+    $fixnum.Int64? likes,
+  }) {
+    final result = create();
+    if (liked != null) result.liked = liked;
+    if (likes != null) result.likes = likes;
+    return result;
+  }
+
+  UserToggleLikeBlogResponse._();
+
+  factory UserToggleLikeBlogResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UserToggleLikeBlogResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UserToggleLikeBlogResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'therapist'),
+      createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'liked')
+    ..aInt64(2, _omitFieldNames ? '' : 'likes')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserToggleLikeBlogResponse clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserToggleLikeBlogResponse copyWith(
+          void Function(UserToggleLikeBlogResponse) updates) =>
+      super.copyWith(
+              (message) => updates(message as UserToggleLikeBlogResponse))
+          as UserToggleLikeBlogResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UserToggleLikeBlogResponse create() => UserToggleLikeBlogResponse._();
+  @$core.override
+  UserToggleLikeBlogResponse createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static UserToggleLikeBlogResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UserToggleLikeBlogResponse>(create);
+  static UserToggleLikeBlogResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get liked => $_getBF(0);
+  @$pb.TagNumber(1)
+  set liked($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasLiked() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearLiked() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get likes => $_getI64(1);
+  @$pb.TagNumber(2)
+  set likes($fixnum.Int64 value) => $_setInt64(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasLikes() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearLikes() => $_clearField(2);
+}
+
 const $core.bool _omitFieldNames =
     $core.bool.fromEnvironment('protobuf.omit_field_names');
 const $core.bool _omitMessageNames =

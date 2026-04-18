@@ -117,3 +117,13 @@ message UploadBlogImageRequest {
   string content_type  = 4; // image/jpeg | image/png | image/webp
 }
 message UploadBlogImageResponse { string url = 1; }
+
+// UserToggleLikeBlog — like or unlike a published blog (user/client accounts).
+message UserToggleLikeBlogRequest {
+  string user_id  = 1; // the liker (user account)
+  string blog_id  = 2;
+}
+message UserToggleLikeBlogResponse {
+  bool  liked = 1;
+  int64 likes = 2;
+}

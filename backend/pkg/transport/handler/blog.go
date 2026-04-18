@@ -162,6 +162,23 @@ func (h *TherapistHandler) ToggleLikeBlog(ctx context.Context, req *therapistpb.
 	return &therapistpb.ToggleLikeBlogResponse{Liked: liked, Likes: likes}, nil
 }
 
+func (h *TherapistHandler) UserToggleLikeBlog(ctx context.Context, req *therapistpb.UserToggleLikeBlogRequest) (*therapistpb.UserToggleLikeBlogResponse, error) {
+	log := logger.Named("handler.blog")
+	log.Debug("UserToggleLikeBlog called", zap.String("blog_id", req.BlogId))
+
+	if req.UserId == "" || req.BlogId == "" {
+		return nil, status.Error(codes.InvalidArgument, "user_id and blog_id are required")
+	}
+
+	liked, likes, err := h.svc.UserToggleLikeBlog(ctx, req.UserId, req.BlogId)
+	if err != nil {
+		log.Error("UserToggleLikeBlog failed", zap.Error(err))
+		return nil, grpcError(err)
+	}
+
+	return &therapistpb.UserToggleLikeBlogResponse{Liked: liked, Likes: likes}, nil
+}
+
 func (h *TherapistHandler) UploadBlogImage(ctx context.Context, req *therapistpb.UploadBlogImageRequest) (*therapistpb.UploadBlogImageResponse, error) {
 	log := logger.Named("handler.blog")
 	log.Debug("UploadBlogImage called",
